@@ -75,10 +75,10 @@ class E3ContractTests(unittest.TestCase):
         for token in (
             "13221498.11", "96478", "93358", "7826",
             "sum(item_sales_brl) FROM mart.e3_monthly_sales",
-            "sum(item_sales_brl) FROM mart.e3_category_sales",
-            "sum(item_sales_brl) FROM mart.e3_seller_sales",
-            "sum(observed_sales_brl) FROM mart.e3_customer_cohorts",
-            "sum(delivered_orders) FROM mart.e3_delivery_states",
+            "sum(item_sales_brl),0) FROM mart.e3_category_sales",
+            "sum(item_sales_brl),0) FROM mart.e3_seller_sales",
+            "sum(observed_sales_brl),0) FROM mart.e3_customer_cohorts",
+            "sum(delivered_orders),0) FROM mart.e3_delivery_states",
         ):
             with self.subTest(token=token):
                 self.assertIn(token, CHECKS)
