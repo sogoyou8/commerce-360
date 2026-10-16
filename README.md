@@ -1,4 +1,4 @@
-# Commerce 360 — E2 · Modèle relationnel PostgreSQL validé
+# Commerce 360 — PostgreSQL · E2 validé / E3 testé
 
 **Projet DATA 02 · Olist (données e-commerce historiques, Brésil 2016–2018)**
 
@@ -9,7 +9,7 @@
 - ✅ **E2 — terminé le 16 octobre 2026** : neuf tables typées, import transactionnel, contraintes FK/PK, grains commande et article, vues analytiques, tests hors ligne et contrôle de qualité SQL.
 - ✅ **E2 — intégration PostgreSQL locale confirmée par l'utilisateur** : conteneur Docker PostgreSQL 16 `healthy`, neuf CSV importés, contrôles SQL réussis (`E2 PostgreSQL : import, contrôles et vues validés. Transaction confirmée.`) et requête `mart.v_kpi_global` exécutée avec résultats conformes à E1. Preuves : sorties du terminal Antigravity fournies le 16 octobre 2026 ; ce n'est pas un déploiement cloud.
 - ✅ **E2 — GitHub** : code publié sur `main` dans [sogoyou8/commerce-360](https://github.com/sogoyou8/commerce-360) ; commit initial [`656d5fa`](https://github.com/sogoyou8/commerce-360/commit/656d5fa1ad8c2218cd927b8dc466a684c7ac9ee1). `.env`, `.venv` et `archive.zip` ne sont pas versionnés.
-- ⏭️ **E3 — à venir** : analyses SQL commerciales détaillées, découpages temporels et territoriaux, catégories, vendeurs, clients et qualité de livraison.
+- ✅ **E3 — recette SQL validée le 16 octobre 2026 sur PostgreSQL local** : 12 vues appliquées, 13 tests Python réussis, rapprochement SQL des commandes, ventes et indicateurs avec les CSV indépendants réussi (96 211 commandes livrées ; 13 181 027,13 BRL d'articles sur janvier 2017–août 2018). [Preuves et résultats E3](docs/e3-analyses-sql.md) ; [référence CSV indépendante](docs/e3-reference-offline.md). **PR #1 non fusionnée : revue finale en attente.**
 
 ## Structure
 
@@ -20,10 +20,16 @@ requirements.txt               Pilote Python PostgreSQL (psycopg)
 sql/01_source.sql              9 tables Olist, clés & contraintes
 sql/02_mart.sql                Vues agrégées, commande/article, référentiel géo
 sql/03_quality.sql             Contrôles de volumes, grains, KPI et anomalies
+sql/04_e3_analysis.sql          12 vues SQL métier sur janvier 2017-août 2018
+sql/05_e3_checks.sql            Recette E3 : référentiels E2, grains, KPI et vues
 scripts/import_olist.py        Chargement des 9 CSV depuis le ZIP, en transaction
+scripts/run_e3.ps1            Recette E3 Windows en une commande
 tests/test_e2_contract.py      Contrats structurels hors ligne
+tests/test_e3_contract.py      Contrats structurels E3 hors ligne
 docs/audit-e1.md               Résultats mesurés de l'audit E1
 docs/audit-e1-results.json     Références machine de l'audit E1
+docs/e3-analyses-sql.md         Règles et procédure E3 Windows / PostgreSQL
+docs/e3-reference-offline.md    Référence E3 calculée indépendamment des vues SQL
 ```
 
 ## Import local — Windows / Docker Desktop
@@ -51,6 +57,14 @@ docker compose exec postgres psql -U commerce360 -d commerce360 -c "SELECT * FRO
 **Référence attendue (fichier E1) :** 96 478 commandes livrées, ventes articles 13 221 498,11 BRL, panier 137,04 BRL, 93 358 clients, 2 801 réacheteurs, 7 826 livraisons tardives / 96 470 datées, satisfaction environ 4,16/5. Tout écart bloque E2.
 
 Pour stopper PostgreSQL sans effacer les données : `docker compose down`. **Ne pas exécuter** `docker compose down -v` si vous souhaitez les conserver.
+
+## E3 — analyses commerciales (recette locale validée)
+
+Les vues E3 couvrent ventes et paniers mensuels, comparaison janvier-août 2017/2018, catégories, vendeurs, réachat, cohortes, livraisons par État et satisfaction selon les retards.
+
+Pour appliquer puis tester **sans réimporter les CSV**, suivre les commandes de [docs/e3-analyses-sql.md](docs/e3-analyses-sql.md). Le contrôle de données E3 doit reproduire, sur la période de janvier 2017 à août 2018, **96 211 commandes livrées** et **13 181 027,13 BRL de prix d'articles**, indépendamment recalculés depuis l'archive d'origine. Ces mesures ne remplacent pas les chiffres globaux E1/E2.
+
+**Statut : tests et recette SQL E3 exécutés avec succès le 16 octobre 2026 dans PostgreSQL Docker sur Windows. La PR #1 demeure ouverte et non fusionnée tant que son intégration dans `main` n'est pas confirmée.**
 
 ## Tests hors ligne
 
