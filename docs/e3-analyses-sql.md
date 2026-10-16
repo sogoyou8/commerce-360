@@ -83,6 +83,13 @@ docker compose ps
 Si le depot local a deja une branche E3 creee, executer
 git switch feature/e3-analyses-sql a la place de git switch --track ....
 
+**Option la plus simple — une seule commande pour tests, vues et reconciliations :**
+
+~~~powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\run_e3.ps1
+~~~
+
+**Alternative manuelle**, si tu veux voir chacune des operations separement.
 Appliquer les vues **sans modifier les CSV ni E2** et verifier les reconciliations :
 
 ~~~powershell
