@@ -1,6 +1,6 @@
 # Commerce 360 — E4 · Reporting Excel (cadrage de réalisation)
 
-**Statut : préparation E4, pas encore de classeur validé.**
+**Statut : neuf exports E4 générés avec succès sur Windows le 16 octobre 2026 ; manifeste et classeur Excel à vérifier/construire.**
 **Source :** vues PostgreSQL E3 fusionnées dans main après recette utilisateur Windows.
 **Aucun réimport des CSV Olist, aucune modification des tables source.**
 
@@ -91,9 +91,7 @@ vérifier \`git status\` d'abord.** Si la branche E4 existe déjà localement,
 exécuter \`git switch feature/e4-excel-preparation\`.
 
 Sortie attendue : \`.data/e4/\` contient neuf CSV et \`manifest.json\` avec
-nombre de lignes et SHA-256. Cet export **n'a pas encore été exécuté sur
-le PostgreSQL Windows de l'utilisateur** ; une confirmation sera nécessaire
-avant d'assembler le classeur.
+nombre de lignes et SHA-256. L'export a été **exécuté avec succès par l'utilisateur le 16 octobre 2026** sur son PostgreSQL Docker local. La capture du terminal Antigravity montre les neuf fichiers et le message `E4 exports prepares : 9 CSV`. La présence et le contenu de `manifest.json`, créé par le script, restent à vérifier indépendamment avant d'assembler le classeur.
 
 L'export doit être **refusé** si la base n'est pas nommée \`commerce360\`,
 si les résultats E3 diffèrent ou si les volumes des principaux exports ne
@@ -121,7 +119,8 @@ formules/TCD, non en saisie manuelle.
 
 ## 6. Critères de réussite (pour déclarer E4 terminée)
 
-- [ ] Export PostgreSQL E3 -> 9 CSV local réussi et manifest validé.
+- [x] Export PostgreSQL E3 -> **9 CSV locaux réussi** (capture du terminal, 16/10/2026).
+- [ ] Fichier `manifest.json` local présent et contenu vérifié (nombres de lignes, SHA-256).
 - [ ] Un vrai fichier .xlsx avec ses tables Excel et Power Query
       (pas une simple maquette).
 - [ ] TCD et graphiques actualisables pour ventes, vendeurs et livraisons.
@@ -133,3 +132,31 @@ formules/TCD, non en saisie manuelle.
 
 **Point d'arrêt E4 :** ne pas déclarer le classeur terminé avant d'avoir
 obtenu les exports et la validation des cellules/formules/TCD sur Excel Windows.
+
+## 7. Retour d'exécution E4 — Windows (16 octobre 2026)
+
+L'utilisateur a exécuté \`.\.venv\Scripts\python.exe scripts\export_e4.py\`
+dans le dossier \`commerce-360\` après passage sur la branche E4.
+**Les neuf CSV ont été générés :**
+
+| Export | Lignes mesurées |
+|---|---:|
+| fact_delivered_orders.csv | 96 211 |
+| monthly_sales.csv | 20 |
+| yoy_jan_aug.csv | 8 |
+| category_sales.csv | 74 |
+| seller_sales.csv | 2 945 |
+| customer_cohorts.csv | 20 |
+| delivery_states.csv | 27 |
+| delivery_satisfaction.csv | 3 |
+| quality_summary.csv | 1 |
+
+Dossier signalé : \`.data/e4/\` (hors Git). Un avertissement Python
+non bloquant \`SyntaxWarning: invalid escape sequence\` concernait
+uniquement la chaîne de documentation contenant le chemin Windows.
+Il a été corrigé en remplaçant la docstring par une chaîne brute ;
+les exports précédents restent valides.
+
+**Dernière condition pour assembler le classeur dans ChatGPT :**
+récupérer les neuf CSV et le fichier \`manifest.json\` générés localement.
+Ces fichiers sont **dérivés des vues E3**, sans modification des sources.
