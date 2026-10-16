@@ -92,7 +92,8 @@ class E3ContractTests(unittest.TestCase):
 
     def test_e3_local_validation_is_documented(self):
         doc = (ROOT / "docs/e3-analyses-sql.md").read_text(encoding="utf-8")
-        self.assertIn("recette E3 locale validée", doc)
+        self.assertIn("E3 validée et clôturée", doc)
+        self.assertIn("PR #1 fusionnée", doc)
         self.assertIn("13 tests", doc)
         self.assertIn("96 211", doc)
         self.assertIn("13 181 027,13", doc)
