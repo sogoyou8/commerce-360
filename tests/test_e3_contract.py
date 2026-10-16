@@ -90,12 +90,16 @@ class E3ContractTests(unittest.TestCase):
         self.assertEqual(audit["kpi"]["delivered_unique_customers"], 93358)
         self.assertEqual(audit["orders"]["late_delivered_count"], 7826)
 
-    def test_no_pretended_verified_business_results(self):
+    def test_e3_local_validation_is_documented(self):
         doc = (ROOT / "docs/e3-analyses-sql.md").read_text(encoding="utf-8")
-        self.assertIn("à valider sur PostgreSQL local", doc)
+        self.assertIn("recette E3 locale validée", doc)
+        self.assertIn("13 tests", doc)
+        self.assertIn("96 211", doc)
+        self.assertIn("13 181 027,13", doc)
         self.assertIn("2017", doc)
         self.assertIn("2018", doc)
         self.assertIn("E2", doc)
+        self.assertIn("PR #1", doc)
 
 
 if __name__ == "__main__":
