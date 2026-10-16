@@ -1,4 +1,4 @@
-"""E4 Commerce 360 : export en lecture seule des vues PostgreSQL E3 vers CSV pour Excel.
+r"""E4 Commerce 360 : export en lecture seule des vues PostgreSQL E3 vers CSV pour Excel.
 
 Depuis commerce-360 :
   .\.venv\Scripts\python.exe scripts\export_e4.py
