@@ -66,7 +66,8 @@ class E4PreparationTests(unittest.TestCase):
         self.assertIn("13 181 027,13", doc)
         self.assertIn("96 211", doc)
         self.assertIn("Power Query", doc)
-        self.assertIn("pas encore de classeur validé", doc.lower())
+        self.assertIn("neuf exports e4 générés avec succès", doc.lower())
+        self.assertIn("manifeste et classeur excel à vérifier", doc.lower())
 
 
 if __name__ == "__main__":
