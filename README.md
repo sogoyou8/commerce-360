@@ -1,4 +1,4 @@
-# Commerce 360 — PostgreSQL · E2 validé / E3 testé
+# Commerce 360 — PostgreSQL · E2 et E3 validés
 
 **Projet DATA 02 · Olist (données e-commerce historiques, Brésil 2016–2018)**
 
@@ -9,7 +9,7 @@
 - ✅ **E2 — terminé le 16 octobre 2026** : neuf tables typées, import transactionnel, contraintes FK/PK, grains commande et article, vues analytiques, tests hors ligne et contrôle de qualité SQL.
 - ✅ **E2 — intégration PostgreSQL locale confirmée par l'utilisateur** : conteneur Docker PostgreSQL 16 `healthy`, neuf CSV importés, contrôles SQL réussis (`E2 PostgreSQL : import, contrôles et vues validés. Transaction confirmée.`) et requête `mart.v_kpi_global` exécutée avec résultats conformes à E1. Preuves : sorties du terminal Antigravity fournies le 16 octobre 2026 ; ce n'est pas un déploiement cloud.
 - ✅ **E2 — GitHub** : code publié sur `main` dans [sogoyou8/commerce-360](https://github.com/sogoyou8/commerce-360) ; commit initial [`656d5fa`](https://github.com/sogoyou8/commerce-360/commit/656d5fa1ad8c2218cd927b8dc466a684c7ac9ee1). `.env`, `.venv` et `archive.zip` ne sont pas versionnés.
-- ✅ **E3 — recette SQL validée le 16 octobre 2026 sur PostgreSQL local** : 12 vues appliquées, 13 tests Python réussis, rapprochement SQL des commandes, ventes et indicateurs avec les CSV indépendants réussi (96 211 commandes livrées ; 13 181 027,13 BRL d'articles sur janvier 2017–août 2018). [Preuves et résultats E3](docs/e3-analyses-sql.md) ; [référence CSV indépendante](docs/e3-reference-offline.md). **PR #1 non fusionnée : revue finale en attente.**
+- ✅ **E3 — clôturée le 16 octobre 2026** : 12 vues SQL appliquées sur PostgreSQL local, 13 tests Python réussis, rapprochement des commandes et ventes avec les CSV indépendants (96 211 commandes livrées ; 13 181 027,13 BRL d'articles sur janvier 2017–août 2018). [Recette E3](docs/e3-analyses-sql.md) ; [référence CSV indépendante](docs/e3-reference-offline.md). **[PR #1 fusionnée dans `main`](https://github.com/sogoyou8/commerce-360/pull/1)**, commit [`10117a9`](https://github.com/sogoyou8/commerce-360/commit/10117a96b950a73498c8b92d08c3e0de4af49858). Aucune modification de la base PostgreSQL lors de la fusion.
 
 ## Structure
 
@@ -58,13 +58,13 @@ docker compose exec postgres psql -U commerce360 -d commerce360 -c "SELECT * FRO
 
 Pour stopper PostgreSQL sans effacer les données : `docker compose down`. **Ne pas exécuter** `docker compose down -v` si vous souhaitez les conserver.
 
-## E3 — analyses commerciales (recette locale validée)
+## E3 — analyses commerciales (terminée)
 
 Les vues E3 couvrent ventes et paniers mensuels, comparaison janvier-août 2017/2018, catégories, vendeurs, réachat, cohortes, livraisons par État et satisfaction selon les retards.
 
 Pour appliquer puis tester **sans réimporter les CSV**, suivre les commandes de [docs/e3-analyses-sql.md](docs/e3-analyses-sql.md). Le contrôle de données E3 doit reproduire, sur la période de janvier 2017 à août 2018, **96 211 commandes livrées** et **13 181 027,13 BRL de prix d'articles**, indépendamment recalculés depuis l'archive d'origine. Ces mesures ne remplacent pas les chiffres globaux E1/E2.
 
-**Statut : tests et recette SQL E3 exécutés avec succès le 16 octobre 2026 dans PostgreSQL Docker sur Windows. La PR #1 demeure ouverte et non fusionnée tant que son intégration dans `main` n'est pas confirmée.**
+**Statut : E3 terminée, recette SQL exécutée avec succès le 16 octobre 2026 sur PostgreSQL Docker Windows et PR #1 fusionnée dans `main`. E4 (Excel) en préparation : spécifications et exports dédiés, sans modifier les données E1–E3.**
 
 ## Tests hors ligne
 
