@@ -1,4 +1,4 @@
-# Commerce 360 — E2 · Modèle relationnel PostgreSQL
+# Commerce 360 — E2 · Modèle relationnel PostgreSQL validé
 
 **Projet DATA 02 · Olist (données e-commerce historiques, Brésil 2016–2018)**
 
@@ -6,8 +6,10 @@
 
 - ✅ **E0** : cadrage métier.
 - ✅ **E1** : audit direct des 9 CSV (`docs/audit-e1.md`).
-- ✅ **E2 — livrables préparés** : neuf tables typées, import transactionnel, contraintes FK/PK, deux grains analytiques, KPI de référence, tests hors ligne.
-- ⏳ **E2 — test d'intégration sur PostgreSQL** : à exécuter dans un serveur PostgreSQL. Le paquet a été assemblé et ses tests hors ligne exécutés ; il ne prétend **pas** avoir chargé une base PostgreSQL distante.
+- ✅ **E2 — terminé le 16 octobre 2026** : neuf tables typées, import transactionnel, contraintes FK/PK, grains commande et article, vues analytiques, tests hors ligne et contrôle de qualité SQL.
+- ✅ **E2 — intégration PostgreSQL locale confirmée par l'utilisateur** : conteneur Docker PostgreSQL 16 `healthy`, neuf CSV importés, contrôles SQL réussis (`E2 PostgreSQL : import, contrôles et vues validés. Transaction confirmée.`) et requête `mart.v_kpi_global` exécutée avec résultats conformes à E1. Preuves : sorties du terminal Antigravity fournies le 16 octobre 2026 ; ce n'est pas un déploiement cloud.
+- ✅ **E2 — GitHub** : code publié sur `main` dans [sogoyou8/commerce-360](https://github.com/sogoyou8/commerce-360) ; commit initial [`656d5fa`](https://github.com/sogoyou8/commerce-360/commit/656d5fa1ad8c2218cd927b8dc466a684c7ac9ee1). `.env`, `.venv` et `archive.zip` ne sont pas versionnés.
+- ⏭️ **E3 — à venir** : analyses SQL commerciales détaillées, découpages temporels et territoriaux, catégories, vendeurs, clients et qualité de livraison.
 
 ## Structure
 
@@ -74,4 +76,4 @@ Ces tests vérifient les contrats sans connexion PostgreSQL. La **validation ré
 
 Cette étape prépare un socle **local**, pas une application en production. Aucun serveur cloud, déploiement, abonnement ou coût n'a été engagé. Le pilote Python contient une fonction de remise à zéro **uniquement des neuf tables du schéma `source`** de la base indiquée ; utilisez une base Commerce 360 dédiée. Les CSV bruts ne sont pas modifiés. Les vues peuvent être reconstruites sans double comptage.
 
-À la fin de l'import PostgreSQL, confronter les résultats de `mart.v_kpi_global` aux métriques E1. **Sans import réussi, E2 n'est pas déclaré totalement validé**.
+À la fin de l'import PostgreSQL, confronter les résultats de `mart.v_kpi_global` aux métriques E1. **Contrôle E2 exécuté et confirmé le 16 octobre 2026 sur PostgreSQL local : résultats conformes aux références E1.** Pour toute nouvelle installation, cette vérification reste à rejouer avant de commencer E3.
