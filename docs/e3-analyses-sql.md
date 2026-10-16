@@ -1,6 +1,6 @@
 # Commerce 360 — E3 : analyses SQL commerciales
 
-**Statut : recette E3 locale validée le 16 octobre 2026 ; PR #1 en attente de revue/fusion.**
+**Statut : E3 validée et clôturée le 16 octobre 2026 ; PR #1 fusionnée dans `main` (commit `10117a9`).**
 Branche de travail : feature/e3-analyses-sql (sans modification des tables Olist d'origine).
 
 ## Objectif et périmètre
@@ -116,7 +116,7 @@ docker compose down arrete le conteneur **sans** supprimer le volume
 | Execution reelle des 12 vues E3 dans PostgreSQL Windows | **Confirmée** : 12 CREATE VIEW, PostgreSQL 16 healthy |
 | Recette SQL des reconciliations E3 | **Réussie** : NOTICE E3 OK, code retour sans erreur |
 | Resultats E3 mensuels / regionaux / clients documentes | **Vérifiés** ci-dessous à partir de la sortie SQL fournie |
-| Relecture et fusion de la PR E3 vers main | **Non faite** : PR #1 en brouillon, fusion soumise à accord |
+| Relecture et fusion de la PR E3 vers main | **Effectuée après accord explicite de l'utilisateur** : [PR #1 fusionnée](https://github.com/sogoyou8/commerce-360/pull/1), commit `10117a9`, contrôles CI verts avant fusion |
 
 ### Preuves de recette E3 — 16 octobre 2026
 
@@ -154,8 +154,7 @@ Captures du terminal reçues dans la conversation (pas de captures versionnées 
 Les KPI globaux E1/E2 se rapportent à **toute** l'archive et demeurent inchangés
 (96 478 commandes livrées ; 13 221 498,11 BRL d'articles).
 
-**Conclusion E3 : recette SQL et locale réussie, prête pour revue de la PR #1.**
-La fusion n'est pas encore réalisée.
+**Conclusion E3 : clôturée.** Recette SQL locale, rapprochement indépendant et CI réussis ; PR #1 fusionnée dans `main` après validation. Les données source Olist et le PostgreSQL local n'ont pas été modifiés par l'opération GitHub. Prochaine étape : E4 Excel.
 
 ## Sorties pour E4–E6
 
