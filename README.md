@@ -23,6 +23,7 @@ sql/03_quality.sql             Contrôles de volumes, grains, KPI et anomalies
 sql/04_e3_analysis.sql          12 vues SQL métier sur janvier 2017-août 2018
 sql/05_e3_checks.sql            Recette E3 : référentiels E2, grains, KPI et vues
 scripts/import_olist.py        Chargement des 9 CSV depuis le ZIP, en transaction
+scripts/run_e3.ps1            Recette E3 Windows en une commande
 tests/test_e2_contract.py      Contrats structurels hors ligne
 tests/test_e3_contract.py      Contrats structurels E3 hors ligne
 docs/audit-e1.md               Résultats mesurés de l'audit E1
