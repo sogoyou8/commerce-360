@@ -72,7 +72,7 @@ Pour appliquer puis tester **sans réimporter les CSV**, suivre les commandes de
 
 ## E4 — Préparation des sources Excel
 
-Le vrai classeur Excel E4 n'est pas encore livré. Le script d'export est prêt à être testé sur le PostgreSQL local, **sans écriture en base** ni nouvel import Olist. Après la validation des 9 exports, les données seront chargées dans Excel avec Power Query pour construire les TCD, graphiques, segments, contrôles et recommandations.
+Le vrai classeur Excel E4 n'est pas encore livré. **Le script d'export a été exécuté avec succès sur PostgreSQL local le 16 octobre 2026** : neuf fichiers CSV créés dans `.data/e4/`, sans écriture en base ni nouvel import Olist. Le manifeste est à contrôler et le classeur Excel doit encore être construit/validé avec Power Query, TCD, graphiques, segments, contrôles et recommandations.
 
 Depuis la branche E4 :
 
