@@ -1,6 +1,6 @@
 # Commerce 360 — E3 : analyses SQL commerciales
 
-**Statut : développement proposé, à valider sur PostgreSQL local.**
+**Statut : recette E3 locale validée le 16 octobre 2026 ; PR #1 en attente de revue/fusion.**
 Branche de travail : feature/e3-analyses-sql (sans modification des tables Olist d'origine).
 
 ## Objectif et périmètre
@@ -112,17 +112,50 @@ docker compose down arrete le conteneur **sans** supprimer le volume
 |---|---|
 | Tables sources et KPI E2 deja verifiés | Oui, le 16/10/2026 |
 | Scripts SQL E3 versionnes sur branche dediee | Oui |
-| Tests statiques Python E3 sur la branche | A lancer |
-| Execution reelle des vues E3 dans PostgreSQL Windows | A confirmer |
-| Recette SQL des reconciliations E3 | A confirmer |
-| Resultats E3 mensuels / regionaux / clients documentes | Apres execution |
-| Relecture et fusion de la PR E3 vers main | Apres recette |
+| Tests statiques Python E2/E3 | **13/13 réussis** sur Windows (captures Antigravity, 16/10/2026) et GitHub Actions |
+| Execution reelle des 12 vues E3 dans PostgreSQL Windows | **Confirmée** : 12 CREATE VIEW, PostgreSQL 16 healthy |
+| Recette SQL des reconciliations E3 | **Réussie** : NOTICE E3 OK, code retour sans erreur |
+| Resultats E3 mensuels / regionaux / clients documentes | **Vérifiés** ci-dessous à partir de la sortie SQL fournie |
+| Relecture et fusion de la PR E3 vers main | **Non faite** : PR #1 en brouillon, fusion soumise à accord |
 
-**Aucun chiffre metier E3 calcule sur la fenetre principale n'est pretendu
-valide avant la sortie de 05_e3_checks.sql.** Les valeurs de 96 478 commandes
-et 13 221 498,11 BRL proviennent exclusivement du benchmark E1/E2, sur
-toute l'archive. La documentation et les tests statiques ne remplacent pas
-une execution PostgreSQL reelle.
+### Preuves de recette E3 — 16 octobre 2026
+
+Sur Antigravity IDE / Windows, l'utilisateur a exécuté :
+~~~
+powershell -ExecutionPolicy Bypass -File .\scripts\run_e3.ps1
+~~~
+
+Captures du terminal reçues dans la conversation (pas de captures versionnées ici) :
+- **13 tests en 0,007 s — OK** ; PostgreSQL Docker **Up (healthy)**.
+- **12 commandes CREATE VIEW** exécutées avec succès.
+- **NOTICE** : `E3 OK : fenetre 20 mois, grains et KPI reconcilies (96211 commandes livrees, 13181027.13 BRL articles)`.
+- **Fin de script** : `E3 : tests locaux et recettes SQL reussis.`
+
+| Résultat SQL E3 (achats 2017-01 à 2018-08) | Mesure |
+|---|---:|
+| Mois analysés | 20 |
+| Commandes toutes catégories de statut | 99 092 |
+| Commandes livrées | **96 211** |
+| Ventes articles hors livraison | **13 181 027,13 BRL** |
+| Première catégorie : health_beauty | **1 229 557,50 BRL** (9,33 % des ventes) |
+| Deuxième catégorie : watches_gifts | 1 163 465,91 BRL (8,83 %) |
+| État acheteur SP : livraisons | 40 406, dont 2 384 tardives sur 40 399 datées (5,90 %) |
+| État acheteur RJ : livraisons | 12 310, dont 1 664 tardives sur 12 310 datées (13,52 %) |
+| Livraisons tardives | **7 822** |
+| Livraisons datées | **96 203** |
+| Avis des livraisons tardives | **2,57 / 5** sur 7 658 commandes notées |
+| Avis des livraisons à l'heure | **4,29 / 5** sur 87 902 commandes notées |
+| Dates transporteur après livraison (dans la fenêtre) | **19** |
+| Commandes sans articles, tous statuts (fenêtre) | 739 |
+| Commandes sans avis sélectionné, tous statuts (fenêtre) | 762 |
+| Commandes sans coordonnées, tous statuts (fenêtre) | 279 |
+
+**Interprétation :** les différences de satisfaction sont descriptives, pas causales.
+Les KPI globaux E1/E2 se rapportent à **toute** l'archive et demeurent inchangés
+(96 478 commandes livrées ; 13 221 498,11 BRL d'articles).
+
+**Conclusion E3 : recette SQL et locale réussie, prête pour revue de la PR #1.**
+La fusion n'est pas encore réalisée.
 
 ## Sorties pour E4–E6
 
