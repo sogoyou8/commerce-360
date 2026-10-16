@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: commerce360
+      POSTGRES_USER: commerce360
+      POSTGRES_PASSWORD: commerce360_local_only
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - commerce360_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U commerce360 -d commerce360"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+volumes:
+  commerce360_pgdata:
