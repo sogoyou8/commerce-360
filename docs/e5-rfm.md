@@ -1,8 +1,8 @@
 # Commerce 360 — E5 · Segmentation client RFM historique
 
-**Statut : code, contrôles et export de synthèses préparés sur `feature/e5-segmentation-rfm` ; recette PostgreSQL locale non encore exécutée.**
+**Statut : recette E5 validée sur PostgreSQL Docker local le 17 octobre 2026 (captures de l'utilisateur). Fusion GitHub PR #3 autorisée, sous réserve de CI verte.**
 
-E0–E4 restent inchangés. La PR E5 ne contient ni données clients, ni CSV, ni modification des tables PostgreSQL existantes. L'application des 5 vues `mart.e5_*` doit être faite sur la base locale déjà peuplée et validée en E3.
+E0–E4 restent inchangés. La PR E5 ne contient ni données clients, ni CSV, ni modification des tables PostgreSQL existantes. Les 5 vues `mart.e5_*` ont été appliquées sur la base locale déjà peuplée et validée en E3 ; aucune table source n'a été modifiée par le script E5.
 
 ## 1. Question métier
 
@@ -120,7 +120,24 @@ Ces chiffres sont les **références E3 préexistantes**, pas des résultats nou
 | Erreur d'identité / score / montant / ex æquo | 0 |
 | Somme des segments et des cohortes | Égale aux KPI E3 |
 
-Le nombre exact de clients **par segment** et leur contribution monétaire doivent être lus dans `mart.e5_segments_summary` **après l'exécution réelle** ; ils ne sont pas inventés ici.
+### Résultats observés — recette du 17 octobre 2026
+
+La commande SQL `SELECT segment_label, customers, delivered_orders, item_sales_brl, customer_share_pct, sales_share_pct FROM mart.e5_segments_summary ORDER BY segment_priority` a été exécutée localement, et sa sortie communiquée en capture d'écran. Les valeurs suivantes sont **observées**, et non simulées.
+
+| Segment | Clients | Commandes livrées | Ventes articles (BRL) | Clients (%) | Ventes (%) |
+|---|---:|---:|---:|---:|---:|
+| Champions observés | 927 | 2 030 | 304 205,92 | 1,00 | 2,31 |
+| Réacheteurs récents observés | 872 | 1 805 | 174 107,55 | 0,94 | 1,32 |
+| Forte valeur récente observée | 10 257 | 10 257 | 4 044 067,98 | 11,02 | 30,68 |
+| Premier achat unique récent observé | 29 166 | 29 166 | 2 243 672,51 | 31,33 | 17,02 |
+| Réacheteurs moins récents | 990 | 2 061 | 247 041,57 | 1,06 | 1,87 |
+| Achat unique moins récent | 36 145 | 36 145 | 5 041 879,93 | 38,82 | 38,25 |
+| Autres profils observés | 14 747 | 14 747 | 1 126 051,67 | 15,84 | 8,54 |
+| **Total** | **93 104** | **96 211** | **13 181 027,13** | **≈100** | **≈100** |
+
+Les parts sont arrondies à deux décimales. **2 789 clients** ont au moins deux commandes livrées observées, soit environ **3,00 %** de la population. Les résultats regroupent des caractéristiques historiques, **pas des clients actuellement inactifs**.
+
+**Preuves de recette :** sortie du script local `E5 : tests, recette SQL et exports locaux termines.` ; 3 CSV générés (`segments_summary.csv` : 7 lignes, `cohort_segments.csv` : 83 lignes, `quality_summary.csv` : 1 ligne) et capture SQL des sept segments. Le manifeste SHA-256 est généré par le script local, mais son contenu n'a pas été indépendamment relu. Pas de copie de la base ou des identifiants clients dans le dépôt.
 
 ## 8. Interprétation et limites
 
@@ -139,4 +156,4 @@ Le nombre exact de clients **par segment** et leur contribution monétaire doive
 2. Comparer les réacheteurs récents aux réacheteurs moins récents sans dire que les seconds sont perdus.
 3. Mesurer l'effet de la censure des cohortes récentes **dans la présentation des résultats**, avant toute suggestion de campagne.
 
-**Clôture E5** : exécution Windows sans erreur, exports 3 CSV, examen des chiffres et de la structure du manifeste, validation des tests GitHub, puis fusion de la PR seulement après accord explicite de l'utilisateur.
+**Recette E5 validée** : tests Python, contrôles SQL et exports exécutés sur Windows ; résultats globaux et ventilation des segments examinés. Les contrôles CI GitHub doivent rester verts sur la dernière révision de PR #3. L'utilisateur a confirmé explicitement le 17 octobre 2026 son accord pour corriger l'avertissement Python et fusionner la PR. La revue indépendante du contenu du manifeste local ne peut pas être attestée ici.
