@@ -1,4 +1,4 @@
-# Commerce 360 — E0 à E4 clôturés · E5 RFM en cours
+# Commerce 360 — E0 à E5 validés · E6 à préparer
 
 **Projet DATA 02 · Olist (données e-commerce historiques, Brésil 2016–2018)**
 
@@ -11,7 +11,7 @@
 - ✅ **E2 — GitHub** : code publié sur `main` dans [sogoyou8/commerce-360](https://github.com/sogoyou8/commerce-360) ; commit initial [`656d5fa`](https://github.com/sogoyou8/commerce-360/commit/656d5fa1ad8c2218cd927b8dc466a684c7ac9ee1). `.env`, `.venv` et `archive.zip` ne sont pas versionnés.
 - ✅ **E3 — clôturée le 16 octobre 2026** : 12 vues SQL appliquées sur PostgreSQL local, 13 tests Python réussis, rapprochement des commandes et ventes avec les CSV indépendants (96 211 commandes livrées ; 13 181 027,13 BRL d'articles sur janvier 2017–août 2018). [Recette E3](docs/e3-analyses-sql.md) ; [référence CSV indépendante](docs/e3-reference-offline.md). **[PR #1 fusionnée dans `main`](https://github.com/sogoyou8/commerce-360/pull/1)**, commit [`10117a9`](https://github.com/sogoyou8/commerce-360/commit/10117a96b950a73498c8b92d08c3e0de4af49858). Aucune modification de la base PostgreSQL lors de la fusion.
 - ✅ **E4 — clôturée le 17 octobre 2026** : neuf CSV exportés depuis E3, classeur local réel de 18 feuilles, Power Query et modèle de données (96 211 commandes), deux TCD et un graphique croisé dynamique filtrés par le segment commun `customer_state`. L'utilisateur a confirmé une actualisation Excel sans erreur. **[PR #2 fusionnée dans `main`](https://github.com/sogoyou8/commerce-360/pull/2)**, commit [`861fd14`](https://github.com/sogoyou8/commerce-360/commit/861fd14d101f52bdcc955d2311b074b4940963f4). Le XLSX reste local, non distribué publiquement : [recette E4](docs/e4-excel-recette.md).
-- ⏳ **E5 — analyse avancée clients / RFM** : SQL, contrôles et exports agrégés préparés sur la branche `feature/e5-segmentation-rfm`. **À exécuter et vérifier sur PostgreSQL Docker local avant validation.** [Méthode et recette E5](docs/e5-rfm.md).
+- ✅ **E5 — analyse avancée clients / RFM validée localement le 17 octobre 2026** : tests Python, recette SQL, 7 segments, 83 lignes d'agrégats cohorte, 3 CSV locaux et réconciliation de **93 104 clients / 96 211 commandes / 13 181 027,13 BRL**. La sortie Docker et les KPI ont été transmis en capture d'écran. [PR #3](https://github.com/sogoyou8/commerce-360/pull/3) ; [méthode et recette E5](docs/e5-rfm.md).
 
 ## Structure
 
@@ -76,7 +76,7 @@ Les vues E3 couvrent ventes et paniers mensuels, comparaison janvier-août 2017/
 
 Pour appliquer puis tester **sans réimporter les CSV**, suivre les commandes de [docs/e3-analyses-sql.md](docs/e3-analyses-sql.md). Le contrôle de données E3 doit reproduire, sur la période de janvier 2017 à août 2018, **96 211 commandes livrées** et **13 181 027,13 BRL de prix d'articles**, indépendamment recalculés depuis l'archive d'origine. Ces mesures ne remplacent pas les chiffres globaux E1/E2.
 
-**Statut : E3 et E4 clôturées sur GitHub ; PR #1 et PR #2 fusionnées. E5 RFM préparée sur branche dédiée, en attente de recette PostgreSQL locale.**
+**Statut : E3 et E4 intégrées à `main` ; E5 RFM validée sur PostgreSQL local, procédure de fusion de la PR #3 engagée.**
 
 ## E4 — Excel (recette fonctionnelle validée)
 
@@ -94,7 +94,7 @@ Les neuf fichiers CSV et le manifeste restent dans `.data/e4/` et **ne sont pas 
 - [Recette et limites de publication du classeur E4](docs/e4-excel-recette.md)
 - [PR #2 — E4 exports et documentation](https://github.com/sogoyou8/commerce-360/pull/2) : fusionnée ; le manifeste E4 séparé n'a pas été audité indépendamment.
 
-## E5 — Segmentation client RFM (à valider sur PostgreSQL local)
+## E5 — Segmentation client RFM (recette PostgreSQL validée)
 
 E5 exploite **93 104 clients**, **96 211 commandes livrées** et **13 181 027,13 BRL** d'articles sur la fenêtre d'achat E3 de 20 mois. Les scores sont calculés à date fixe **2018-09-01**, pas à la date actuelle : récence et montants en groupes à ex æquo conservés, fréquence selon **1 / 2 / 3+ commandes**. Sept segments exclusifs décrivent des comportements **observés**, jamais une probabilité de churn ni le statut actuel d'un client.
 
@@ -104,9 +104,13 @@ E5 exploite **93 104 clients**, **96 211 commandes livrées** et **13 181 027,13
 powershell -ExecutionPolicy Bypass -File .\\scripts\\run_e5.ps1
 ```
 
-Le script applique seulement cinq **vues `mart.e5_*`**, contrôle les agrégats contre E2/E3, puis exporte trois synthèses sans identifiants clients dans `.data/e5/` (non versionné). Il ne relance pas l'import Olist et ne modifie aucune table source. Les comptes réels par segment et la réussite de la recette SQL doivent être constatés après exécution sur le Docker de l'utilisateur : **ne pas les supposer validés**.
+Le script applique seulement cinq **vues `mart.e5_*`**, contrôle les agrégats contre E2/E3, puis exporte trois synthèses sans identifiants clients dans `.data/e5/` (non versionné). Il ne relance pas l'import Olist et ne modifie aucune table source. Les comptes réels par segment et la réussite de la recette SQL ont été constatés depuis les captures du Docker Windows de l'utilisateur, le 17 octobre 2026. **Ils se rapportent aux achats historiques Olist, pas au comportement actuel.** Le détail des 7 segments (dont 927 champions observés, 10 257 clients de forte valeur récente, 36 145 achats uniques moins récents) et les preuves sont dans la recette E5.
 
 - [Spécifications, critères et limites E5](docs/e5-rfm.md)
+
+## E6 — Prochain jalon (cadrage à confirmer)
+
+Préparer une restitution **Power BI Desktop / Power Query / DAX** de Commerce 360 sur la même base d'indicateurs E3 et sur les segments E5, sans modifier les sources PostgreSQL. Définir les pages de rapport, le modèle et les mesures, le protocole de rafraîchissement et les contrôles de cohérence avec les références E3/E5 **avant de coder**. Les données client individuelles et les exports locaux `.data/` ne doivent pas être publiés.
 
 ## Tests hors ligne
 
