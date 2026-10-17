@@ -1,6 +1,6 @@
 # Commerce 360 — E4 · Reporting Excel (cadrage de réalisation)
 
-**Statut : neuf exports E4 générés avec succès sur Windows le 16 octobre 2026 ; manifeste et classeur Excel à vérifier/construire.**
+**Statut : neuf exports E4 générés avec succès sur Windows le 16 octobre 2026 ; classeur Excel validé fonctionnellement le 17 octobre 2026. Le fichier `manifest.json` séparé et la publication du binaire restent à traiter.**
 **Source :** vues PostgreSQL E3 fusionnées dans main après recette utilisateur Windows.
 **Aucun réimport des CSV Olist, aucune modification des tables source.**
 
@@ -47,7 +47,7 @@ Les exports CSV et un manifest de contrôle restent dans \`.data/e4/\` ;
 ce dossier et les CSV sont exclus de Git. Ne jamais versionner \`.env\`,
 \`.venv\`, \`archive.zip\` ni les données extraites par mégarde.
 
-## 3. Classeur visé : Commerce_360_E4.xlsx
+## 3. Classeur réalisé : Commerce_360_E4_Final.xlsx (livrable local)
 
 | Feuille | Rôle |
 |---|---|
@@ -57,7 +57,11 @@ ce dossier et les CSV sont exclus de Git. Ne jamais versionner \`.env\`,
 | 03_Clients | Clients observés, réacheteurs et cohortes (sans inférence causale) |
 | 04_Livraisons | Ponctualité, délai moyen et notes par État |
 | 05_Qualite | Comptes de contrôles et limites de source |
-| D_* | Tables structurées ou requêtes Power Query alimentant les analyses |
+| D_* | Huit tableaux de synthèse structurés Excel (instantanés E3), non tous reliés directement à Power Query |
+| D_Extrait | Extrait de 500 commandes, non exhaustif |
+| TCD_Livraisons | Livraisons selon mois / ponctualité, segment `customer_state` |
+| TCD_Ventes | Somme des ventes et nombre de commandes par mois |
+| TCD_GraphiqueVentes | Courbe mensuelle en BRL, même segment géographique |
 
 Approche Excel : chargement CSV via **Données > Obtenir des données > À partir
 d'un dossier ou Texte/CSV**, typage dans Power Query (date, nombre décimal,
@@ -121,17 +125,18 @@ formules/TCD, non en saisie manuelle.
 
 - [x] Export PostgreSQL E3 -> **9 CSV locaux réussi** (capture du terminal, 16/10/2026).
 - [ ] Fichier `manifest.json` local présent et contenu vérifié (nombres de lignes, SHA-256).
-- [ ] Un vrai fichier .xlsx avec ses tables Excel et Power Query
-      (pas une simple maquette).
-- [ ] TCD et graphiques actualisables pour ventes, vendeurs et livraisons.
-- [ ] Segments et navigation entre vues utiles, sans panneau « dashboard IA ».
-- [ ] KPI et dénominateurs cohérents entre Excel et PostgreSQL E3.
-- [ ] 3 constats métier, limites explicites, pas de causalité revendiquée.
-- [ ] Recette Windows : ouverture, actualisation, filtres/TCD, aucune erreur.
+- [x] Vrai fichier XLSX reçu et inspecté, modèle de données Power Query natif,
+      tables Excel, formules et objets croisés (pas une maquette).
+- [x] TCD ventes et livraisons, graphique croisé de ventes et Power Query pour
+      `fact_delivered_orders` actualisables. Les synthèses catégories/vendeurs `D_*`
+      restent des tables statiques à reconstruire si les exports changent.
+- [x] Segment `customer_state` partagé entre les trois objets croisés et navigation Excel testée.
+- [x] KPI et dénominateurs cohérents entre Excel et PostgreSQL E3, 10 contrôles `OK`.
+- [x] Trois constats métier descriptifs, documentés dans [la recette](e4-excel-recette.md), sans causalité revendiquée.
+- [x] Recette Windows : ouverture, actualisation, filtres/TCD, aucune erreur (confirmation utilisateur).
 - [ ] Documentation et version partageable nettoyées, sans secrets ni CSV bruts.
 
-**Point d'arrêt E4 :** ne pas déclarer le classeur terminé avant d'avoir
-obtenu les exports et la validation des cellules/formules/TCD sur Excel Windows.
+**Point d'arrêt E4 :** E4.4 est validée sur Excel Windows ; pour E4.5, rester transparent sur la vérification du manifeste séparé, les chemins locaux dans la requête et la distribution du XLSX avant la clôture GitHub.
 
 ## 7. Retour d'exécution E4 — Windows (16 octobre 2026)
 
@@ -157,6 +162,4 @@ uniquement la chaîne de documentation contenant le chemin Windows.
 Il a été corrigé en remplaçant la docstring par une chaîne brute ;
 les exports précédents restent valides.
 
-**Dernière condition pour assembler le classeur dans ChatGPT :**
-récupérer les neuf CSV et le fichier \`manifest.json\` générés localement.
-Ces fichiers sont **dérivés des vues E3**, sans modification des sources.
+**Livrable reçu le 17 octobre 2026 :** `Commerce_360_E4_Final.xlsx`, 18 feuilles, modèle Power Query contenant 96 211 lignes, deux TCD et un graphique croisé, contrôles et recette Windows validés. Le `manifest.json` séparé n'a pas été joint ; ses neuf SHA-256 ne peuvent pas être revérifiés indépendamment depuis ce seul XLSX. Voir [docs/e4-excel-recette.md](e4-excel-recette.md).
