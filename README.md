@@ -1,4 +1,4 @@
-# Commerce 360 — E0 à E3 validés · E4 Excel : recette Windows validée
+# Commerce 360 — E0 à E5 validés · E6 à préparer
 
 **Projet DATA 02 · Olist (données e-commerce historiques, Brésil 2016–2018)**
 
@@ -10,7 +10,8 @@
 - ✅ **E2 — intégration PostgreSQL locale confirmée par l'utilisateur** : conteneur Docker PostgreSQL 16 `healthy`, neuf CSV importés, contrôles SQL réussis (`E2 PostgreSQL : import, contrôles et vues validés. Transaction confirmée.`) et requête `mart.v_kpi_global` exécutée avec résultats conformes à E1. Preuves : sorties du terminal Antigravity fournies le 16 octobre 2026 ; ce n'est pas un déploiement cloud.
 - ✅ **E2 — GitHub** : code publié sur `main` dans [sogoyou8/commerce-360](https://github.com/sogoyou8/commerce-360) ; commit initial [`656d5fa`](https://github.com/sogoyou8/commerce-360/commit/656d5fa1ad8c2218cd927b8dc466a684c7ac9ee1). `.env`, `.venv` et `archive.zip` ne sont pas versionnés.
 - ✅ **E3 — clôturée le 16 octobre 2026** : 12 vues SQL appliquées sur PostgreSQL local, 13 tests Python réussis, rapprochement des commandes et ventes avec les CSV indépendants (96 211 commandes livrées ; 13 181 027,13 BRL d'articles sur janvier 2017–août 2018). [Recette E3](docs/e3-analyses-sql.md) ; [référence CSV indépendante](docs/e3-reference-offline.md). **[PR #1 fusionnée dans `main`](https://github.com/sogoyou8/commerce-360/pull/1)**, commit [`10117a9`](https://github.com/sogoyou8/commerce-360/commit/10117a96b950a73498c8b92d08c3e0de4af49858). Aucune modification de la base PostgreSQL lors de la fusion.
-- ✅ **E4 — recette fonctionnelle Excel validée le 17 octobre 2026** : neuf CSV exportés depuis E3, classeur local réel de 18 feuilles, Power Query et modèle de données (96 211 commandes), deux TCD et un graphique croisé dynamique filtrés par le segment commun `customer_state`. L'utilisateur a confirmé une actualisation Excel sans erreur. **La publication du binaire et la clôture GitHub restent distinctes** : [recette E4](docs/e4-excel-recette.md).
+- ✅ **E4 — clôturée le 17 octobre 2026** : neuf CSV exportés depuis E3, classeur local réel de 18 feuilles, Power Query et modèle de données (96 211 commandes), deux TCD et un graphique croisé dynamique filtrés par le segment commun `customer_state`. L'utilisateur a confirmé une actualisation Excel sans erreur. **[PR #2 fusionnée dans `main`](https://github.com/sogoyou8/commerce-360/pull/2)**, commit [`861fd14`](https://github.com/sogoyou8/commerce-360/commit/861fd14d101f52bdcc955d2311b074b4940963f4). Le XLSX reste local, non distribué publiquement : [recette E4](docs/e4-excel-recette.md).
+- ✅ **E5 — analyse avancée clients / RFM validée localement le 17 octobre 2026** : tests Python, recette SQL, 7 segments, 83 lignes d'agrégats cohorte, 3 CSV locaux et réconciliation de **93 104 clients / 96 211 commandes / 13 181 027,13 BRL**. La sortie Docker et les KPI ont été transmis en capture d'écran. [PR #3](https://github.com/sogoyou8/commerce-360/pull/3) ; [méthode et recette E5](docs/e5-rfm.md).
 
 ## Structure
 
@@ -23,18 +24,24 @@ sql/02_mart.sql                Vues agrégées, commande/article, référentiel 
 sql/03_quality.sql             Contrôles de volumes, grains, KPI et anomalies
 sql/04_e3_analysis.sql          12 vues SQL métier sur janvier 2017-août 2018
 sql/05_e3_checks.sql            Recette E3 : référentiels E2, grains, KPI et vues
+sql/06_e5_rfm.sql               5 vues RFM et segments historiques, sans données modifiées
+sql/07_e5_checks.sql            Recette E5 : grains, montants, ex æquo, cohortes
 scripts/import_olist.py        Chargement des 9 CSV depuis le ZIP, en transaction
 scripts/run_e3.ps1             Recette E3 Windows en une commande
 scripts/export_e4.py           Exports PostgreSQL E3 -> CSV Excel (lecture seule)
+scripts/run_e5.ps1              Recette RFM Windows E5 en 5 étapes
+scripts/export_e5.py           3 CSV agrégés E5 sans identifiants clients
 tests/test_e2_contract.py      Contrats structurels hors ligne
 tests/test_e3_contract.py      Contrats structurels E3 hors ligne
 tests/test_e4_preparation.py    Contrats des exports E4 hors ligne
+tests/test_e5_contract.py       Contrats des scores et segmentations E5 hors ligne
 docs/audit-e1.md               Résultats mesurés de l'audit E1
 docs/audit-e1-results.json     Références machine de l'audit E1
 docs/e3-analyses-sql.md         Règles et procédure E3 Windows / PostgreSQL
 docs/e3-reference-offline.md    Référence E3 calculée indépendamment des vues SQL
 docs/e4-excel-plan.md           Cahier des charges Excel, KPI et validation
 docs/e4-excel-recette.md        Audit du classeur Excel, KPI, recette et limites de partage
+docs/e5-rfm.md                 Cadrage, SQL, mode d'emploi et limites RFM E5
 ```
 
 ## Import local — Windows / Docker Desktop
@@ -69,7 +76,7 @@ Les vues E3 couvrent ventes et paniers mensuels, comparaison janvier-août 2017/
 
 Pour appliquer puis tester **sans réimporter les CSV**, suivre les commandes de [docs/e3-analyses-sql.md](docs/e3-analyses-sql.md). Le contrôle de données E3 doit reproduire, sur la période de janvier 2017 à août 2018, **96 211 commandes livrées** et **13 181 027,13 BRL de prix d'articles**, indépendamment recalculés depuis l'archive d'origine. Ces mesures ne remplacent pas les chiffres globaux E1/E2.
 
-**Statut : E3 terminée et PR #1 fusionnée ; E4 validée fonctionnellement sur Excel Desktop Windows le 17 octobre 2026. PR #2 encore ouverte pour documentation/intégration, sans modification des données E1–E3.**
+**Statut : E3 et E4 intégrées à `main` ; E5 RFM validée sur PostgreSQL local, procédure de fusion de la PR #3 engagée.**
 
 ## E4 — Excel (recette fonctionnelle validée)
 
@@ -85,7 +92,25 @@ Les neuf fichiers CSV et le manifeste restent dans `.data/e4/` et **ne sont pas 
 
 - [Spécifications E4](docs/e4-excel-plan.md)
 - [Recette et limites de publication du classeur E4](docs/e4-excel-recette.md)
-- [PR #2 — E4 exports et documentation](https://github.com/sogoyou8/commerce-360/pull/2) : fusion soumise à accord explicite, manifeste séparé encore à auditer.
+- [PR #2 — E4 exports et documentation](https://github.com/sogoyou8/commerce-360/pull/2) : fusionnée ; le manifeste E4 séparé n'a pas été audité indépendamment.
+
+## E5 — Segmentation client RFM (recette PostgreSQL validée)
+
+E5 exploite **93 104 clients**, **96 211 commandes livrées** et **13 181 027,13 BRL** d'articles sur la fenêtre d'achat E3 de 20 mois. Les scores sont calculés à date fixe **2018-09-01**, pas à la date actuelle : récence et montants en groupes à ex æquo conservés, fréquence selon **1 / 2 / 3+ commandes**. Sept segments exclusifs décrivent des comportements **observés**, jamais une probabilité de churn ni le statut actuel d'un client.
+
+**Recette Windows (une commande) :**
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\\scripts\\run_e5.ps1
+```
+
+Le script applique seulement cinq **vues `mart.e5_*`**, contrôle les agrégats contre E2/E3, puis exporte trois synthèses sans identifiants clients dans `.data/e5/` (non versionné). Il ne relance pas l'import Olist et ne modifie aucune table source. Les comptes réels par segment et la réussite de la recette SQL ont été constatés depuis les captures du Docker Windows de l'utilisateur, le 17 octobre 2026. **Ils se rapportent aux achats historiques Olist, pas au comportement actuel.** Le détail des 7 segments (dont 927 champions observés, 10 257 clients de forte valeur récente, 36 145 achats uniques moins récents) et les preuves sont dans la recette E5.
+
+- [Spécifications, critères et limites E5](docs/e5-rfm.md)
+
+## E6 — Prochain jalon (cadrage à confirmer)
+
+Préparer une restitution **Power BI Desktop / Power Query / DAX** de Commerce 360 sur la même base d'indicateurs E3 et sur les segments E5, sans modifier les sources PostgreSQL. Définir les pages de rapport, le modèle et les mesures, le protocole de rafraîchissement et les contrôles de cohérence avec les références E3/E5 **avant de coder**. Les données client individuelles et les exports locaux `.data/` ne doivent pas être publiés.
 
 ## Tests hors ligne
 
