@@ -1,4 +1,4 @@
-# Commerce 360 — E0 à E5 validés · E6 à préparer
+# Commerce 360 — E0 à E5 clôturés · E6 Power BI en cours
 
 **Projet DATA 02 · Olist (données e-commerce historiques, Brésil 2016–2018)**
 
@@ -111,6 +111,14 @@ Le script applique seulement cinq **vues `mart.e5_*`**, contrôle les agrégats 
 ## E6 — Prochain jalon (cadrage à confirmer)
 
 Préparer une restitution **Power BI Desktop / Power Query / DAX** de Commerce 360 sur la même base d'indicateurs E3 et sur les segments E5, sans modifier les sources PostgreSQL. Définir les pages de rapport, le modèle et les mesures, le protocole de rafraîchissement et les contrôles de cohérence avec les références E3/E5 **avant de coder**. Les données client individuelles et les exports locaux `.data/` ne doivent pas être publiés.
+
+## E6 — Power BI : implémentation dans GitHub, recette Desktop requise
+
+- Le validateur en lecture seule scripts/validate_e6.py vérifie les 12 CSV E4/E5, les 12 empreintes SHA-256 et les totaux.
+- Le répertoire powerbi/queries contient 12 requêtes Power Query typées plus la fonction fnLocalCSV.
+- powerbi/E6_Mesures_DAX.dax présente les mesures métier, le calendrier et les contrôles.
+- docs/e6-powerbi.md décrit les 5 pages attendues et la recette locale Power BI Desktop.
+- **Le PBIX n'est pas encore assemblé et vérifié sur Windows.** Le rapport doit être produit localement et ne doit pas être mis sur GitHub.
 
 ## Tests hors ligne
 
