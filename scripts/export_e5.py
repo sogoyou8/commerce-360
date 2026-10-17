@@ -1,4 +1,4 @@
-"""E5 Commerce 360 : exports locaux agregés RFM, sans identifiant client.
+r"""E5 Commerce 360 : exports locaux agregés RFM, sans identifiant client.
 
 Depuis commerce-360 (apres run_e5.ps1) :
   .\.venv\Scripts\python.exe scripts\export_e5.py
