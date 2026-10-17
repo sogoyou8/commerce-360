@@ -1,6 +1,6 @@
 # Commerce 360 — E5 · Segmentation client RFM historique
 
-**Statut : recette E5 validée sur PostgreSQL Docker local le 17 octobre 2026 (captures de l'utilisateur). Fusion GitHub PR #3 autorisée, sous réserve de CI verte.**
+**Statut : E5 clôturée le 17 octobre 2026. Recette validée sur PostgreSQL Docker local (captures de l'utilisateur), contrôles GitHub verts et [PR #3 fusionnée dans `main`](https://github.com/sogoyou8/commerce-360/pull/3) (commit `e8964cc`).**
 
 E0–E4 restent inchangés. La PR E5 ne contient ni données clients, ni CSV, ni modification des tables PostgreSQL existantes. Les 5 vues `mart.e5_*` ont été appliquées sur la base locale déjà peuplée et validée en E3 ; aucune table source n'a été modifiée par le script E5.
 
@@ -156,4 +156,4 @@ Les parts sont arrondies à deux décimales. **2 789 clients** ont au moins deux
 2. Comparer les réacheteurs récents aux réacheteurs moins récents sans dire que les seconds sont perdus.
 3. Mesurer l'effet de la censure des cohortes récentes **dans la présentation des résultats**, avant toute suggestion de campagne.
 
-**Recette E5 validée** : tests Python, contrôles SQL et exports exécutés sur Windows ; résultats globaux et ventilation des segments examinés. Les contrôles CI GitHub doivent rester verts sur la dernière révision de PR #3. L'utilisateur a confirmé explicitement le 17 octobre 2026 son accord pour corriger l'avertissement Python et fusionner la PR. La revue indépendante du contenu du manifeste local ne peut pas être attestée ici.
+**Recette E5 validée** : tests Python, contrôles SQL et exports exécutés sur Windows ; résultats globaux et ventilation des segments examinés. Les contrôles CI GitHub étaient verts sur la dernière révision de PR #3 (`c1343fc`, run `39006687808`) avant sa fusion réussie dans `main` (`e8964cc`). L'utilisateur a confirmé explicitement le 17 octobre 2026 son accord pour corriger l'avertissement Python et fusionner la PR. La revue indépendante du contenu du manifeste local ne peut pas être attestée ici.
