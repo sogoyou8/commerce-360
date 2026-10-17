@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - feature/e3-analyses-sql
+      - feature/e5-segmentation-rfm
   pull_request:
     branches:
       - main
@@ -14,7 +15,7 @@ permissions:
 
 jobs:
   tests:
-    name: E2/E3 offline contracts
+    name: E2–E5 offline contracts
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
