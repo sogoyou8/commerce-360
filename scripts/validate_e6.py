@@ -95,7 +95,7 @@ def validate(data_root: Path) -> dict[str, object]:
     require(all(r["purchase_month"][:7] >= "2017-01"
                 and r["purchase_month"][:7] <= "2018-08" for r in fact),
             "Date d'achat en dehors de la fenetre E3")
-    fact_sales = sum((amount(r, "item_revenue_brl") for r in fact), Decimal(0))
+    fact_sales = sum((Decimal(r["item_revenue_brl"] or "0") for r in fact), Decimal(0))
     require(fact_sales == KPI_SALES, f"Ventes fact E4 : {fact_sales}")
 
     monthly = tables["e4/monthly_sales"]
