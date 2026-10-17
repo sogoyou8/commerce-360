@@ -68,7 +68,7 @@ def export(destination: Path, dsn: str) -> dict:
             # Ordre de la vue : clients, repeats, single, orders, sales, etc.
             if quality is None or int(quality[0]) != 93104 or \
                int(quality[1]) != 2789 or int(quality[3]) != 96211 or \
-               quality[4] != 13181027.13 or any(int(x) for x in quality[7:10]):
+               str(quality[4]) != "13181027.13" or any(int(x) for x in quality[7:10]):
                 raise RuntimeError(f"Recette E5 incorrecte : {quality!r}")
 
             for name, query in EXPORTS.items():
