@@ -67,7 +67,11 @@ class E4PreparationTests(unittest.TestCase):
         self.assertIn("96 211", doc)
         self.assertIn("Power Query", doc)
         self.assertIn("neuf exports e4 générés avec succès", doc.lower())
-        self.assertIn("manifeste et classeur excel à vérifier", doc.lower())
+        self.assertIn("classeur excel validé fonctionnellement", doc.lower())
+        recette = (ROOT / "docs/e4-excel-recette.md").read_text(encoding="utf-8")
+        self.assertIn("96 211", recette)
+        self.assertIn("Actualiser tout", recette)
+        self.assertIn("fact_delivered_orders", recette)
 
 
 if __name__ == "__main__":
