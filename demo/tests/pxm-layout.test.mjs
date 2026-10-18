@@ -76,3 +76,10 @@ test("E3 states label delivered orders correctly and never pretend 27 states are
   assert.match(js,/data\.states\.length===27/);
   assert.match(js,/data\.meta\.coverage\.states/);
 });
+
+test("E3 inspector content does not flex-shrink into overlapping sections",()=>{
+  assert.match(css,/\.story-inner\{[^}]*flex:0 0 auto/);
+  assert.match(css,/\.story-foot\{[^}]*flex:0 0 auto/);
+  assert.match(css,/\.lower\{[^}]*flex:0 0 auto/);
+  assert.match(css,/\.story-panel\{[^}]*overflow-y:auto/);
+});
