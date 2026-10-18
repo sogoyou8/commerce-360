@@ -117,11 +117,16 @@ test("E2 rejects misleading partial/full coverage, incorrect totals and fabricat
   }
 });
 
-test("E2 reference is explicitly limited until the checked local exports are used", () => {
+test("E2 coverage is explicit for both initial and fully checked exports", () => {
   assert.deepEqual(validatePublicData(source), []);
-  assert.equal(source.states.length,3);
-  assert.equal(source.categories.length,2);
-  assert.equal(source.sellerStates.length,0);
-  assert.equal(source.cohorts.length,0);
-  assert.equal(source.meta.coverage.states,"3 États documentés parmi 27");
+  if(source.states.length===3) {
+    assert.equal(source.categories.length,2);
+    assert.equal(source.sellerStates.length,0);
+    assert.equal(source.cohorts.length,0);
+    assert.equal(source.meta.coverage.states,"3 États documentés parmi 27");
+  } else {
+    assert.equal(source.states.length,27);
+    assert.equal(source.categories.length,12);
+    assert.equal(source.meta.coverage.states,"27 États vérifiés");
+  }
 });
