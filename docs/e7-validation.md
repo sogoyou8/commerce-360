@@ -1,6 +1,6 @@
 # Commerce 360 — E7 · Validation croisée et recommandations métier
 
-**Projet DATA 02 — Olist historique (Brésil).** Statut : **recette préparée ; exécution SQL locale et revue finale encore nécessaires**. Ce document ne prouve ni une exécution SQL actuelle ni la possession du fichier PBIX. Il assemble les références indépendantes E3, les contrôles E5 et les résultats visibles des captures Power BI E6.
+**Projet DATA 02 — Olist historique (Brésil).** Statut : **E7 validée en environnement local sur captures Antigravity le 18 octobre 2026** : 35 tests Python réussis, `E7 SQL OK` sous PostgreSQL, comparaisons SQL et Power BI E6 cohérentes. Le PBIX est local ; il n'a pas été inspecté ni publié depuis ce dépôt. Le passage des PR #4/#5 dans `main` reste distinct de la recette technique.
 
 ## 1. Contrat de comparaison
 
@@ -61,7 +61,7 @@ docker compose cp .\sql\08_e7_checks.sql postgres:/tmp/08_e7_checks.sql
 docker compose exec -T postgres psql -X -v ON_ERROR_STOP=1 -U commerce360 -d commerce360 -f /tmp/08_e7_checks.sql
 ```
 
-**Succès attendu :** `NOTICE: E7 SQL OK ...` puis tableaux de résultats et code de sortie 0. Toute `EXCEPTION`, colonne introuvable ou absence de PostgreSQL bloque le statut « E7 validé ». Ne pas utiliser `docker compose down -v`.
+**Succès obtenu le 18 octobre 2026 (captures terminal fournies par l'utilisateur) :** `SET`, puis `NOTICE: E7 SQL OK : 96211 commandes, 13181027.13 BRL, 93104 clients, 7822 retards, 2789 reacheteurs`, puis `DO` et les cinq sorties de contrôle SQL sans message d'erreur. Les sorties vérifiées indiquent : ventes 13 181 027,13 BRL, panier 137,00 BRL, note 4,16/5, délai 12,54 j ; CE 1 273 livraisons dont 196 retards (15,40 %, 21,24 j) ; groupe `late` 7 822 livraisons, 7 658 notées, 2,57/5, avis négatifs 54,05 % ; 93 104 clients dont 2 789 réacheteurs ; 7 segments. Exécution locale visible, **non reproduite depuis GitHub**. Ne pas utiliser `docker compose down -v`.
 
 **Ressources du conteneur PostgreSQL :** le script applique `SET max_parallel_workers_per_gather = 0;` dans sa propre session afin d'éviter que les scans parallèles ne saturent la mémoire partagée Docker (`/dev/shm`). Cela n'affecte pas les données et ne nécessite ni redémarrage ni suppression de volume.
 
@@ -80,7 +80,7 @@ Exécuter ensuite **sur les exports locaux E4/E5** le contrôle de fichiers :
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-Ce validateur n'est disponible que si la branche E6 a été récupérée localement. Il vérifie les 12 CSV locaux et leurs manifestes SHA-256. Un workflow GitHub vert **ne remplace pas** ces contrôles ni l'ouverture du PBIX. Archiver les sorties de console (sans secrets ni données ligne à ligne) pour la recette finale.
+Ce validateur n'est disponible que si la branche E6 a été récupérée localement. Il vérifie les 12 CSV locaux et leurs manifestes SHA-256. **Résultats locaux confirmés par captures** : `E6 OK : exports E4/E5, SHA-256, grains et montants reconciles` (9 exports E4, 3 E5) ; `Ran 35 tests ... OK` pour les contrats Python E2–E7. Un workflow GitHub vert **ne remplace pas** ces contrôles ni l'ouverture du PBIX. Les captures de la conversation constituent les preuves visibles de recette ; ne publier ni secrets ni données ligne à ligne.
 
 ## 5. Constat métier et recommandations raisonnées
 
@@ -91,8 +91,8 @@ Ce validateur n'est disponible que si la branche E6 a été récupérée localem
 
 ## 6. Verdict et passage E8
 
-**E7 préparation : effectuée.** Références documentées, différences de grain identifiées, anomalies de filtrage reproduites puis corrigées dans le PBIX selon captures, script de rapprochement reproductible ajouté.
+**E7 — VALIDÉE localement (18 octobre 2026)** sur les éléments fournis : 35 tests Python `OK`, exports E4/E5 vérifiés avec `E6 OK`, rapprochement PostgreSQL `E7 SQL OK` et cinq tableaux SQL produits, interactions Power BI vérifiées lors d'E6. Les captures ne constituent pas un audit automatisé du PBIX mais attestent de la recette utilisateur.
 
-**E7 validation intégrale : en attente** de l'exécution locale de `sql/08_e7_checks.sql` et `scripts/validate_e6.py`, ainsi que de la conservation des résultats. Le présent document ne prétend pas que ces commandes ont été lancées.
+**État GitHub distinct** : PR #4 (E6) et PR #5 (E7) sont encore en brouillon au moment de cette mise à jour ; PR #5 cible la branche de PR #4. Ne pas annoncer une fusion dans `main` sans l'avoir réalisée ; demander accord avant fusion. Vérifier la CI sur les SHA concernés indépendamment des tests locaux.
 
 **E8 après validation :** actualiser le README et `docs/e6-powerbi.md` pour refléter les **cinq pages réelles** (`01_Vue d'ensemble`, `02_Ventes`, `03_Livraisons`, `04_Qualité`, `05_Clients`), relire les fichiers de recette, vérifier les risques de divulgation, choisir les seuls agrégats/captures publiables, puis préparer la présentation GitHub/Abyss Showcase. Aucune publication du PBIX ni des CSV détaillés en l'état.
