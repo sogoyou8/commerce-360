@@ -7,16 +7,18 @@ on:
       - feature/e3-analyses-sql
       - feature/e5-segmentation-rfm
       - feature/e6-powerbi
+      - feature/e7-validation-croisee
   pull_request:
     branches:
       - main
+      - feature/e6-powerbi
 
 permissions:
   contents: read
 
 jobs:
   tests:
-    name: E2–E6 offline contracts
+    name: E2–E7 offline contracts
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
