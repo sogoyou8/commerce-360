@@ -6,6 +6,7 @@ on:
       - main
       - feature/e3-analyses-sql
       - feature/e5-segmentation-rfm
+      - feature/e6-powerbi
   pull_request:
     branches:
       - main
@@ -15,7 +16,7 @@ permissions:
 
 jobs:
   tests:
-    name: E2–E5 offline contracts
+    name: E2–E6 offline contracts
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

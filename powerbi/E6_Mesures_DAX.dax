@@ -1,0 +1,131 @@
+// Commerce 360 / E6 — mesures à créer UNE PAR UNE dans Power BI Desktop.
+// Les agrégats E3/E5 sont déconnectés de la table de faits pour ne pas inventer
+// de relation de grain, de rétention actuelle ou d'effet de filtre.
+// Formats dans l'interface : BRL à 2 décimales ; taux ci-dessous en %.
+// Les taux E3/E5 stockés en _pct sont déjà exprimés sur 100 (ne pas re-multiplier).
+
+// TABLE CALCULÉE (Modélisation > Nouvelle table)
+DimDate =
+ADDCOLUMNS(
+    CALENDAR(DATE(2017, 1, 1), DATE(2018, 8, 31)),
+    "Annee", YEAR([Date]),
+    "MoisNumero", MONTH([Date]),
+    "MoisDebut", DATE(YEAR([Date]), MONTH([Date]), 1),
+    "AnneeMois", FORMAT([Date], "yyyy-MM"),
+    "OrdreAnneeMois", YEAR([Date]) * 100 + MONTH([Date])
+)
+// Trier DimDate[AnneeMois] par DimDate[OrdreAnneeMois].
+// Relation ACTIVE 1:* de DimDate[Date] vers fact_delivered_orders[purchase_date].
+
+// Mesures sur fact_delivered_orders (sensibles au mois et à customer_state)
+Commandes livrées =
+COUNTROWS('fact_delivered_orders')
+
+Ventes articles (BRL) =
+SUM('fact_delivered_orders'[item_revenue_brl])
+
+Panier moyen (BRL) =
+DIVIDE([Ventes articles (BRL)], [Commandes livrées])
+
+Livraisons en retard =
+CALCULATE(
+    [Commandes livrées],
+    'fact_delivered_orders'[delivery_group] = "late"
+)
+
+Livraisons datées =
+CALCULATE(
+    [Commandes livrées],
+    'fact_delivered_orders'[delivery_group] IN {"late", "on_time"}
+)
+
+Taux de retard =
+DIVIDE([Livraisons en retard], [Livraisons datées])
+
+Délai moyen nettoyé (jours) =
+AVERAGE('fact_delivered_orders'[delivery_days_clean])
+
+Commandes notées =
+COUNT('fact_delivered_orders'[review_score])
+
+Note moyenne (/5) =
+AVERAGE('fact_delivered_orders'[review_score])
+
+Notes faibles (1 ou 2) =
+CALCULATE(
+    [Commandes livrées],
+    FILTER(
+        'fact_delivered_orders',
+        NOT ISBLANK('fact_delivered_orders'[review_score])
+            && 'fact_delivered_orders'[review_score] <= 2
+    )
+)
+
+Part de notes faibles =
+DIVIDE([Notes faibles (1 ou 2)], [Commandes notées])
+
+// Mesures sur synthèses E5 : snapshot GLOBAL arrêté au 2018-09-01.
+// AUCUN filtre de DimDate / customer_state sur ces tables.
+Clients RFM observés =
+SUM('segments_summary'[customers])
+
+Réacheteurs RFM observés =
+SUM('segments_summary'[repeat_customers])
+
+Réachat observé =
+DIVIDE([Réacheteurs RFM observés], [Clients RFM observés])
+
+Commandes RFM =
+SUM('segments_summary'[delivered_orders])
+
+Ventes segments RFM (BRL) =
+SUM('segments_summary'[item_sales_brl])
+
+Part des clients segment =
+DIVIDE(
+    SUM('segments_summary'[customers]),
+    CALCULATE(SUM('segments_summary'[customers]), ALL('segments_summary'))
+)
+
+Part des ventes segment =
+DIVIDE(
+    SUM('segments_summary'[item_sales_brl]),
+    CALCULATE(SUM('segments_summary'[item_sales_brl]), ALL('segments_summary'))
+)
+
+// cohort_segments : chaque client n'appartient qu'à une cohorte/segment.
+Clients cohorte-segment =
+SUM('cohort_segments'[customers])
+
+Ventes cohorte-segment (BRL) =
+SUM('cohort_segments'[item_sales_brl])
+
+// Table E3 : clients distincts de la fenêtre ; cumul de cohortes DISJOINTES.
+// Ne jamais décrire comme « clients actifs uniques du mois ».
+Clients uniques observés (20 mois) =
+SUM('customer_cohorts'[observed_customers])
+
+// Catégories et vendeurs : montants ADDITIFS, compteurs de commandes NON additifs.
+Ventes catégories (BRL) =
+SUM('category_sales'[item_sales_brl])
+
+Ventes vendeurs (BRL) =
+SUM('seller_sales'[item_sales_brl])
+
+// Qualité : mesures globales à partir de sources agrégées E3/E5.
+// Ces contrôles doivent se lire HORS tout contexte de filtre.
+Contrôle commandes E3 - E5 =
+CALCULATE([Commandes livrées], REMOVEFILTERS())
+    - SUM('quality_rfm'[delivered_orders])
+
+Contrôle ventes E3 - E5 (BRL) =
+CALCULATE([Ventes articles (BRL)], REMOVEFILTERS())
+    - SUM('quality_rfm'[item_sales_brl])
+
+Contrôle clients E4 - E5 =
+CALCULATE(SUM('customer_cohorts'[observed_customers]), REMOVEFILTERS())
+    - SUM('quality_rfm'[customers])
+
+// Les trois contrôles doivent être exactement 0 sur le classeur non filtré.
+// Ne pas utiliser une mesure indépendante de données périmètre variable
+// pour conclure à une réconciliation filtrée par année/État.
