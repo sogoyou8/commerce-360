@@ -244,7 +244,7 @@ test("F3 HD asset dimensions and native alpha are validated",()=>{
 
 test("F5 upgrades all three exploration cards without altering the cockpit or data",()=>{
   const f5=readFileSync(new URL("../dock-f5.css",import.meta.url),"utf8");
-  assert.match(html,/dock-f5\.css\?v=e3-f5-20261019-cards/);
+  assert.match(html,/dock-f5\.css\?v=e3-f5-20261019-cards2/);
   assert.match(html,/app\.js\?v=e3-20261019-f5-accessible/);
   assert.match(f5,/#dock-categories \.dock-category-row/);
   assert.match(f5,/#dock-states \.dock-state-layout/);
@@ -252,6 +252,7 @@ test("F5 upgrades all three exploration cards without altering the cockpit or da
   assert.match(f5,/#dock-categories \.dock-category-row--other\{display:grid/);
   assert.match(f5,/#dock-states \.dock-state-row--other\{display:grid/);
   assert.match(f5,/@media \(max-width:460px\)/);
+  assert.match(f5,/flex:0 0 19px;height:19px;min-height:0;overflow:hidden/);
   assert.match(f5, /forced-colors:active/);
   assert.doesNotMatch(f5,/\.workspace\s*\{|\.analysis\s*\{|\.metric\s*\{/);
   assert.match(js,/row\.setAttribute\("aria-label","Explorer la catégorie "/);
