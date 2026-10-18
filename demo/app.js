@@ -27,6 +27,8 @@ const state = {
   qualityMeasure: "negativeRate",
   selectedQuality: "late",
   customersMeasure: "customers",
+  customersView: "segments",
+  selectedCohort: "2017-01",
   selectedSegment: "single_less_recent",
 };
 
@@ -459,6 +461,43 @@ function renderQuality() {
   ]);
 }
 
+
+function renderCustomerCohorts() {
+  // Each cohort groups unique customers by first observed delivered purchase month.
+  // Cumulative sales include later purchases through 2018-08, not only the first month.
+  const t=data.totals;
+  const cohorts=[...data.cohorts].sort((a,b)=>a.month.localeCompare(b.month));
+  const selected=cohorts.find(c=>c.month===state.selectedCohort)||cohorts[0];
+  const measure=state.customersMeasure;
+  const rows=cohorts.map(c=>({...c,code:c.month}));
+  setScope("PÉRIMÈTRE — PREMIER ACHAT LIVRÉ OBSERVÉ",data.meta.coverage.cohorts.toUpperCase());
+  setViz("05 · COHORTES HISTORIQUES","Les premières dates d'achat observées.",
+    "20 cohortes mensuelles. Clients, réacheteurs et ventes cumulées jusqu'au 31 août 2018.",
+    "Les ventes d'une cohorte comprennent les achats ultérieurs de ses clients, et non uniquement ceux du mois initial.");
+  $("viz-container").replaceChildren(
+    heading(measure==="salesBrl"?smallAmount(selected.salesBrl):n(selected[measure]),
+      strMonth(selected.month,true)+" · "+(measure==="salesBrl"?"ventes des clients":measure==="repeats"?"réacheteurs":"clients observés")),
+    renderRankRows(rows,c=>strMonth(c.month),c=>c[measure],selected.month,
+      month=>{state.selectedCohort=month;render();},
+      v=>measure==="salesBrl"?smallAmount(v):n(v),
+      c=>percent(observedShare(c.customers,t.customers))+" des clients")
+  );
+  setStory({
+    kicker:"COHORTE · PREMIER ACHAT OBSERVÉ",
+    title:strMonth(selected.month,true)+".",
+    description:n(selected.customers)+" clients ont leur premier achat livré observé en "+strMonth(selected.month,true)+". Ils représentent "+percent(observedShare(selected.customers,t.customers))+" des clients ; leurs achats livrés cumulés jusqu'au 31 août 2018 représentent "+amount(selected.salesBrl,true)+".",
+    label:"CLIENTS DE LA COHORTE",
+    value:n(selected.customers),
+    sub:n(selected.repeats)+" réacheteurs observés · "+percent(observedShare(selected.repeats,selected.customers))+" au sein de la cohorte",
+    caveat:"Cohortes historiques observées sur une fenêtre fixe : les cohortes récentes ont moins de temps pour réacheter. Ces résultats ne prédisent ni fidélité actuelle ni churn.",
+  });
+  setLower("COHORTES · MÉTHODOLOGIE","Une population, plusieurs périodes.",[
+    {label:"COHORTES",value:n(cohorts.length),description:"Mois du premier achat livré observé, sans doublon entre cohortes."},
+    {label:"RÉACHETEURS OBSERVÉS",value:n(t.repeatCustomers),description:"Au moins deux commandes livrées avant la fin de la période étudiée."},
+    {label:"FIN D'OBSERVATION",value:"31 AOÛT 2018",description:"Montants cumulés des clients de chaque cohorte, non limités au mois initial."}
+  ]);
+}
+
 function renderCustomers() {
   const t=data.totals, measure=state.customersMeasure;
   const choices=[...data.segments].sort((a,b)=>b[measure]-a[measure]);
@@ -471,7 +510,14 @@ function renderCustomers() {
     {label:"Segments RFM",value:n(data.segments.length),note:"Catégories mutuellement exclusives"},
   ]);
   setViz("05 · SEGMENTATION RFM","Sept profils. Une même population.","Trier les profils selon le volume de clients ou la contribution en prix d'articles.","Sélectionner un segment pour voir son poids. Les ventes des segments s'additionnent, car les clients sont exclusifs.");
-  setOptions([{key:"customers",title:"Clients"},{key:"salesBrl",title:"Ventes BRL"},{key:"repeats",title:"Réacheteurs"}],measure,key=>{state.customersMeasure=key;render();});
+  const customerOptions=[{key:"customers",title:"Clients"},{key:"salesBrl",title:"Ventes BRL"},{key:"repeats",title:"Réacheteurs"}];
+  if(data.cohorts.length)customerOptions.push({key:"cohorts",title:"Cohortes"});
+  setOptions(customerOptions,state.customersView==="cohorts"?"cohorts":measure,key=>{
+    if(key==="cohorts")state.customersView="cohorts";
+    else {state.customersView="segments";state.customersMeasure=key;}
+    render();
+  });
+  if(state.customersView==="cohorts"&&data.cohorts.length){renderCustomerCohorts();return;}
   $("viz-container").replaceChildren(
     heading(measure==="salesBrl"?smallAmount(selected.salesBrl):n(selected[measure]),`Segment sélectionné · ${selected.label}`),
     renderRankRows(choices,s=>s.label,s=>s[measure],selected.code,key=>{state.selectedSegment=key;render();},
@@ -560,6 +606,15 @@ function renderInspectorDetails() {
       {label:"Écart d’avis ≤ 2",value:(chosen.negativeRate-other.negativeRate>0?"+":"")+decimal.format(chosen.negativeRate-other.negativeRate)+" pts",note:"Versus autre groupe de ponctualité · descriptif"}
     ];
     navigation={items:data.satisfaction.filter(x=>x.code!=="undated"),id:chosen.code,getId:x=>x.code,change:code=>{state.selectedQuality=code;render();}};
+  } else if(state.view==="customers" && state.customersView==="cohorts" && data.cohorts.length) {
+    const cohorts=[...data.cohorts].sort((a,b)=>a.month.localeCompare(b.month));
+    const cohort=cohorts.find(c=>c.month===state.selectedCohort)||cohorts[0];
+    items=[
+      {label:"Part des clients",value:percent(observedShare(cohort.customers,data.totals.customers)),note:"Une cohorte par premier achat livré observé"},
+      {label:"Réacheteurs de la cohorte",value:n(cohort.repeats),note:percent(observedShare(cohort.repeats,cohort.customers))+" des clients de la cohorte"},
+      {label:"Ventes cumulées de la cohorte",value:smallAmount(cohort.salesBrl),note:"Achats livrés historiques des clients de cette cohorte"}
+    ];
+    navigation={items:cohorts,id:cohort.month,getId:x=>x.month,change:month=>{state.selectedCohort=month;render();}};
   } else if(state.view==="customers") {
     const segment=data.segments.find(x=>x.code===state.selectedSegment)||data.segments[0];
     items=[
