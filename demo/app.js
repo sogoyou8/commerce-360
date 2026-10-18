@@ -247,8 +247,8 @@ function renderOverview() {
     {label:"Panier moyen",value:amount(t.averageBasket,true),note:"Articles / commandes livrées"},
     {label:"Retards de livraison",value:percent(t.lateRate),note:`${n(t.late)} sur ${n(t.dated)} datées`},
   ]);
-  setViz("01 · ÉVOLUTION HISTORIQUE","Vingt mois de commerce","Une lecture mensuelle des commandes livrées et des prix d'articles.", "Les colonnes sont cliquables. La sélection change le mois décrit, pas les KPI nationaux.");
-  setOptions([{key:"salesBrl",title:"Ventes BRL"},{key:"orders",title:"Commandes"}],state.overviewMeasure,key=>{state.overviewMeasure=key;render();});
+  setViz("01 · ÉVOLUTION HISTORIQUE","Évolution des ventes et des commandes","Colonnes : BRL hors fret · courbe : commandes livrées.", "Chaque mois est sélectionnable. Les KPI nationaux ne sont pas filtrés par cette sélection.");
+  setOptions([{key:"salesBrl",title:"Ventes"},{key:"orders",title:"Commandes"}],state.overviewMeasure,key=>{state.overviewMeasure=key;render();});
   renderMonthBars();
   const yoy=compareSamePeriod(data.monthly);
   setLower("REPÈRES DU PROJET","Trois signaux pour commencer.",[
@@ -495,10 +495,90 @@ function renderCustomers() {
   ]);
 }
 
+function dockRow(label,value,ratio,subtitle="") {
+  const row=node("div","dock-row");
+  const line=append(node("div","dock-row-line"),node("span","dock-item-label",label),node("strong","dock-item-value",value));
+  const track=append(node("div","dock-track"),node("i"));
+  track.firstChild.style.setProperty("--w",Math.max(0,Math.min(100,ratio))+"%");
+  row.append(line,track);
+  if(subtitle)row.append(node("small","dock-row-note",subtitle));
+  return row;
+}
+function renderDock() {
+  const categories=[...data.categories].sort((a,b)=>b.salesBrl-a.salesBrl);
+  const categoryMax=categories[0]?.salesBrl||1;
+  renderText("dock-category-coverage",data.meta.coverage.categories);
+  $("dock-categories").replaceChildren(...categories.slice(0,3).map(item=>
+    dockRow(item.label.replaceAll("_"," "),smallAmount(item.salesBrl),100*item.salesBrl/categoryMax,
+      percent(observedShare(item.salesBrl,data.totals.salesBrl))+" du total national")));
+  const regions=[...data.states].sort((a,b)=>b.rate-a.rate);
+  renderText("dock-state-coverage",data.meta.coverage.states+" · classement par taux de retard");
+  $("dock-states").replaceChildren(...regions.slice(0,3).map(item=>
+    dockRow(item.code,percent(item.rate),item.rate/Math.max(1,regions[0].rate)*100,
+      n(item.late)+" retards parmi "+n(item.dated)+" livraisons datées")));
+  const onTime=data.satisfaction.find(x=>x.code==="on_time");
+  const late=data.satisfaction.find(x=>x.code==="late");
+  const quality=node("div","dock-quality-layout");
+  const headline=node("div","dock-quality-headline");
+  append(headline,node("strong","",decimal.format(data.totals.averageScore)+" / 5"),
+    node("span","","Note moyenne nationale, parmi les commandes notées"));
+  append(quality,headline,
+    dockRow("Livraisons à l’heure",decimal.format(onTime.score)+" / 5",20*onTime.score,
+      percent(onTime.negativeRate)+" d’avis ≤ 2 parmi "+n(onTime.scored)+" notées"),
+    dockRow("Livraisons en retard",decimal.format(late.score)+" / 5",20*late.score,
+      percent(late.negativeRate)+" d’avis ≤ 2 parmi "+n(late.scored)+" notées"));
+  $("dock-quality").replaceChildren(quality);
+}
+function renderInspectorDetails() {
+  if(state.view==="overview") return;
+  let items=[],navigation=null;
+  if(state.view==="sales") {
+    const pairs=yearPairs();
+    const pair=pairs.find(x=>x.month===state.salesMonth)||pairs.at(-1);
+    const chosenMetric=state.salesMeasure;
+    items=[
+      {label:"Même mois 2017",value:chosenMetric==="salesBrl"?smallAmount(pair.previous.salesBrl):n(pair.previous.orders),note:"Période comparable"},
+      {label:"Même mois 2018",value:chosenMetric==="salesBrl"?smallAmount(pair.current.salesBrl):n(pair.current.orders),note:"Période comparable"}
+    ];
+    navigation={items:pairs,id:pair.month,getId:x=>x.month,change:month=>{state.salesMonth=month;render();}};
+  } else if(state.view==="delivery") {
+    const measure=state.deliveryMeasure;
+    const regions=[...data.states].sort((a,b)=>b[measure]-a[measure]);
+    const region=regions.find(x=>x.code===state.selectedState)||regions[0];
+    items=[
+      {label:"Livraisons datées",value:n(region.dated),note:"État acheteur "+region.code},
+      {label:"Livraisons tardives",value:n(region.late),note:"Numérateur du taux de retard"},
+      {label:"Délai moyen",value:decimal.format(region.days)+" j",note:"Délai nettoyé, périmètre régional"}
+    ];
+    navigation={items:regions,id:region.code,getId:x=>x.code,change:code=>{state.selectedState=code;render();}};
+  } else if(state.view==="quality") {
+    const chosen=data.satisfaction.find(x=>x.code===state.selectedQuality)||data.satisfaction[0];
+    const other=data.satisfaction.find(x=>x.code===(chosen.code==="late"?"on_time":"late"));
+    items=[
+      {label:"Avis négatifs observés",value:n(chosen.negative),note:n(chosen.scored)+" commandes notées"},
+      {label:"Note moyenne du groupe",value:decimal.format(chosen.score)+" / 5",note:"Moyenne parmi les commandes notées"},
+      {label:"Écart d’avis ≤ 2",value:(chosen.negativeRate-other.negativeRate>0?"+":"")+decimal.format(chosen.negativeRate-other.negativeRate)+" pts",note:"Versus autre groupe de ponctualité · descriptif"}
+    ];
+    navigation={items:data.satisfaction.filter(x=>x.code!=="undated"),id:chosen.code,getId:x=>x.code,change:code=>{state.selectedQuality=code;render();}};
+  } else if(state.view==="customers") {
+    const segment=data.segments.find(x=>x.code===state.selectedSegment)||data.segments[0];
+    items=[
+      {label:"Clients du segment",value:n(segment.customers),note:percent(observedShare(segment.customers,data.totals.customers))+" de la population"},
+      {label:"Réacheteurs observés",value:n(segment.repeats),note:"Au moins deux commandes livrées"},
+      {label:"Ventes d’articles",value:smallAmount(segment.salesBrl),note:"Hors frais de livraison"}
+    ];
+  }
+  renderComparisonRows(items);
+  if(navigation) setSelectionNavigation(navigation.items,navigation.id,navigation.getId,navigation.change);
+  else $("story-navigation").replaceChildren();
+}
+
 function render() {
   if (!data) return;
   focusView(state.view);
   ({overview:renderOverview,sales:renderSales,delivery:renderDelivery,quality:renderQuality,customers:renderCustomers})[state.view]();
+  renderInspectorDetails();
+  renderDock();
 }
 
 function onHashChange() {
