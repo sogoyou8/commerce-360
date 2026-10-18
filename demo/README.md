@@ -133,3 +133,5 @@ Une URL n'est considérée comme publiée **qu'après un déploiement Vercel con
 ## Vie privée et limites
 
 Aucun suivi utilisateur, cookie, compte, API propriétaire ou base SQL publique. Pas de fausse prédiction de churn ni d'affirmation causale sur la satisfaction. Les chiffres étudiés correspondent à **2017–2018**, en **BRL**, au prix des articles **hors fret** et non à une marge. Les segments clients sont exclusifs et construits avec un cutoff fixe au **01/09/2018**. Voir [bilan E8](../docs/e8-bilan.md) et [recette E7](../docs/e7-validation.md).
+
+**E3 / Clients — exploration des cohortes :** le bouton « Cohortes » du mode Clients ouvre le classement interactif des 20 mois de premier achat livré observé. Les montants et réachats de chaque cohorte couvrent les achats ultérieurs jusqu'au 31 août 2018 ; ils ne représentent ni les ventes du seul mois initial ni une prédiction de fidélité. Le graphique et l'inspecteur utilisent les agrégats E2 du JSON public.
