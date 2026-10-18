@@ -21,6 +21,7 @@ const state = {
   overviewMonth: "2018-08",
   salesMeasure: "salesBrl",
   salesMonth: 8,
+  salesDetail: "categories",
   deliveryMeasure: "rate",
   selectedState: "CE",
   qualityMeasure: "negativeRate",
@@ -115,6 +116,7 @@ function setStory({ kicker, title, description, label, value, sub, caveat }) {
 }
 
 function setLower(label, heading, items) {
+  $("lower-content").classList.remove("lower-content--wide");
   renderText("lower-kicker", label);
   renderText("lower-heading", heading);
   $("lower-content").replaceChildren(...items.map(({label, value, description})=>{
@@ -239,6 +241,42 @@ function renderYearBars() {
   });
 }
 
+function renderSalesBreakdown() {
+  renderText("lower-kicker","RÉPARTITION COMMERCIALE");
+  renderText("lower-heading","Les catégories et les territoires vendeurs.");
+  const zone=$("lower-content");
+  zone.classList.add("lower-content--wide");
+  const hasSellerStates=data.sellerStates.length>0;
+  if(!hasSellerStates)state.salesDetail="categories";
+  const selected=state.salesDetail;
+  const controls=node("div","breakdown-tabs");
+  for(const item of [{key:"categories",label:"Catégories"},{key:"sellerStates",label:"États vendeurs"}]){
+    const button=node("button","",item.label);
+    button.type="button";
+    button.disabled=item.key==="sellerStates"&&!hasSellerStates;
+    button.title=button.disabled?"Données agrégées vendeurs à importer depuis E4":"Explorer ce classement";
+    button.setAttribute("aria-pressed",String(selected===item.key));
+    button.addEventListener("click",()=>{state.salesDetail=item.key;render();});
+    controls.append(button);
+  }
+  const rows=(selected==="categories"?data.categories.map(x=>({name:x.label.replaceAll("_"," "),sales:x.salesBrl})):data.sellerStates.map(x=>({name:x.code,sales:x.salesBrl}))).sort((a,b)=>b.sales-a.sales);
+  const list=node("div","breakdown-list");
+  const max=Math.max(1,...rows.map(x=>x.sales));
+  for(const [index,x] of rows.entries()){
+    const line=node("div","breakdown-row");
+    const title=append(node("span",""),node("small","",String(index+1).padStart(2,"0")),node("span","",x.name));
+    const track=append(node("span","rank-track"),node("i"));
+    track.firstChild.style.setProperty("--w",100*x.sales/max+"%");
+    append(line,title,track,node("strong","",smallAmount(x.sales)));
+    list.append(line);
+  }
+  const info=selected==="categories"?
+    data.meta.coverage.categories+" · Catégories classées par ventes d’articles, pas par nombre de commandes.":
+    data.meta.coverage.sellerStates+" · États vendeurs ; pas les États des acheteurs.";
+  const head=append(node("div","breakdown-head"),node("p","",info),controls);
+  zone.replaceChildren(head,list);
+}
+
 function renderSales() {
   const t=data.totals;
   const yoy=compareSamePeriod(data.monthly);
@@ -252,12 +290,7 @@ function renderSales() {
   setViz("02 · COMPARAISON TEMPORELLE","Deux années. Même fenêtre.","Comparer mois à mois uniquement janvier à août, pour les deux années.","Chaque groupe de deux barres représente le même mois en 2017 puis en 2018.");
   setOptions([{key:"salesBrl",title:"Ventes BRL"},{key:"orders",title:"Commandes"}],state.salesMeasure,key=>{state.salesMeasure=key;render();});
   renderYearBars();
-  const top=data.categories.slice(0,3);
-  const other={label:"COUVERTURE DU GRAPHIQUE",value:data.meta.coverage.categories,description:"Seules les catégories explicitement publiées sont montrées ; leur somme ne représente pas toute l'activité."};
-  setLower("CATÉGORIES DOCUMENTÉES","Des catégories, pas des commandes additionnables.",[
-   ...top.slice(0,2).map((x,i)=>({label:`${String(i+1).padStart(2,"0")} · ${x.label.replaceAll("_"," ")}`,value:smallAmount(x.salesBrl),description:`${percent(observedShare(x.salesBrl,t.salesBrl))} des ventes d'articles du périmètre.`})),
-   other
-  ]);
+  renderSalesBreakdown();
 }
 
 function renderRankRows(items, getLabel, getValue, selectedId, onSelect, formatterFn, getSubtitle) {
