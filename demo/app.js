@@ -430,6 +430,7 @@ function renderRankRows(items, getLabel, getValue, selectedId, onSelect, formatt
     const row=node("button","rank-row");
     row.type="button";
     row.setAttribute("aria-pressed",String(item.code===selectedId));
+    if(state.view==="customers")row.classList.add("rank-row--customer");
     const name=append(node("span","rank-name"),node("span","",getLabel(item)));
     if(getSubtitle)name.append(node("small","",getSubtitle(item)));
     const track=append(node("span","rank-track"),node("i"));
@@ -456,10 +457,20 @@ function renderDelivery() {
   ]);
   setViz("03 · ANALYSE TERRITORIALE","Des territoires contrastés.",data.meta.coverage.states+" · taux calculés sur les livraisons datées de chaque État.","Sélectionner un État pour consulter ses effectifs et son délai ; les KPI nationaux restent nationaux.");
   setOptions([{key:"rate",title:"Retard (%)"},{key:"days",title:"Délai (jours)"}],measure,key=>{state.deliveryMeasure=key;render();});
+  const mapStage=append(node("div","delivery-map-visual"),renderBrazilMap(),
+    node("p","delivery-map-explainer","27 États · carte colorée par taux de retard"));
+  const ranked=append(node("div","delivery-rankings"),
+    node("span","delivery-rankings-caption","LES 27 ÉTATS · "+(measure==="rate"?"TAUX DE RETARD":"DÉLAI MOYEN")),
+    renderRankRows(choices,s=>s.code,s=>s[measure],stateChoice.code,
+      code=>{state.selectedState=code;render();},
+      v=>measure==="rate"?percent(v):decimal.format(v)+" j",
+      s=>n(s.orders)+" commandes livrées"));
   $("viz-container").replaceChildren(
-    heading(measure==="rate"?percent(stateChoice.rate):`${decimal.format(stateChoice.days)} jours`,`État ${stateChoice.code} · ${measure==="rate"?"retards":"délai moyen nettoyé"}`),
-    renderRankRows(choices,s=>s.code,s=>s[measure],stateChoice.code,code=>{state.selectedState=code;render();},v=>measure==="rate"?percent(v):`${decimal.format(v)} j`,s=>`${n(s.orders)} commandes livrées`),
-    append(node("div","rank-legend"),node("span","", "BARRES RELATIVES AU MAXIMUM DES ÉTATS AFFICHÉS"),node("span","", "SÉLECTION ACTIVE"))
+    heading(measure==="rate"?percent(stateChoice.rate):decimal.format(stateChoice.days)+" jours",
+      "État "+stateChoice.code+" · "+(measure==="rate"?"retards":"délai moyen nettoyé")),
+    append(node("div","delivery-atlas"),mapStage,ranked),
+    append(node("div","rank-legend"),node("span","","ÉTAT SÉLECTIONNABLE SUR CARTE ET CLASSEMENT"),
+      node("span","","KPI NATIONAUX INCHANGÉS"))
   );
   setStory({
     kicker:"ÉTAT SÉLECTIONNÉ · "+stateChoice.code,
@@ -498,7 +509,12 @@ function renderQuality() {
     card.setAttribute("aria-label",`${group.label} : ${measure==="score"?decimal.format(value)+" sur 5":percent(value)}`);
     const track=append(node("span","group-track"),node("i"));
     track.firstChild.style.setProperty("--w",100*value/max+"%");
-    append(card,node("small","",group.label.toUpperCase()),node("strong","",measure==="score"?`${decimal.format(value)} / 5`:percent(value)),
+    const gauge=node("span","group-gauge");
+    gauge.style.setProperty("--gauge-pct",100*value/max+"%");
+    gauge.append(append(node("span","group-gauge-core"),
+      node("strong","group-gauge-value",measure==="score"?decimal.format(value)+" / 5":percent(value)),
+      node("span","group-gauge-caption",measure==="score"?"NOTE MOYENNE":"AVIS ≤ 2")));
+    append(card,node("small","",group.label.toUpperCase()),gauge,
       node("span","group-secondary",measure==="score"?`${percent(group.negativeRate)} d'avis ≤ 2`:`Note moyenne : ${decimal.format(group.score)} / 5`),
       track,node("em","",`${n(group.scored)} commandes notées`));
     card.addEventListener("click",()=>{state.selectedQuality=group.code;render();});
@@ -624,7 +640,7 @@ function loadBrazilMap() {
       if(documentSvg.querySelector("parsererror")||documentSvg.querySelectorAll("path[id]").length!==27)
         throw new Error("La carte doit comporter les 27 unités fédératives.");
       brazilMapTemplate=documentSvg.documentElement;
-      if(data)renderDock();
+      if(data)render();
     })
     .catch(error=>{console.warn("Commerce 360 — carte indisponible :",error);});
 }

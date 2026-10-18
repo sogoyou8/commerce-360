@@ -146,3 +146,16 @@ test("E3 compact satisfaction dock avoids subpixel row clipping",()=>{
   assert.match(css,/#dock-quality>\.dock-quality-layout\{grid-template-rows:minmax\(62px,1fr\) 22px 22px/);
   assert.match(css,/#dock-quality>\.dock-quality-layout>\.dock-row\{height:22px;min-height:0;overflow:hidden\}/);
 });
+
+test("E3 finish: main delivery atlas and accessible source map",()=>{
+ assert.match(js,/delivery-map-visual/);
+ assert.match(js,/renderBrazilMap\(\)/);
+ assert.match(js,/if\(data\)render\(\)/);
+ assert.match(css,/\.delivery-atlas\{flex:1;min-height:0;display:grid/);
+});
+test("E3 finish: two radial visualisations computed from verified satisfaction",()=>{
+ assert.match(js,/gauge\.style\.setProperty\("--gauge-pct",100\*value\/max\+"%"\)/);
+ assert.match(css,/\.group-gauge\{/);
+ assert.match(js,/group\.scored/);
+ assert.match(js,/rank-row--customer/);
+});

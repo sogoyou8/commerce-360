@@ -670,3 +670,72 @@ a{color:inherit;text-decoration:none}
   #dock-quality .dock-row .dock-row-line{min-height:14px}
   #dock-quality .dock-row .dock-track{margin-top:0}
 }
+
+/* E3 visual finish, while preserving real Olist numbers */
+@media (min-width:1180px){
+ .ambient::after{top:-250px;right:-115px;width:min(970px,67vw);opacity:.42;filter:saturate(1.6) contrast(1.22)}
+ .ambient{background:radial-gradient(ellipse 34% 50% at 90% 5%,rgba(28,100,227,.24),transparent 90%),#040916}
+ .metric-note{font-size:11px;color:#adc5e5}
+ .dock-state-layout{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)}
+ .dock-map-shell .brazil-map{filter:drop-shadow(0 0 10px rgba(70,150,255,.35))}
+ .combo-column{background:linear-gradient(180deg,#377bdd,#153e85)}
+ .combo-month[aria-pressed="true"] .combo-column{background:linear-gradient(180deg,#a9d3ff,#438af0)}
+ .score-ring{box-shadow:0 0 20px rgba(42,124,248,.27)}
+}
+.delivery-atlas{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.06fr) minmax(0,1fr);gap:18px;margin:9px 0 3px}
+.delivery-map-visual{min-width:0;min-height:0;display:flex;flex-direction:column;align-items:center;gap:4px;justify-content:center;background:radial-gradient(ellipse at center,rgba(45,109,216,.15),transparent 68%);border-right:1px solid rgba(120,160,223,.15)}
+.delivery-map-visual>.dock-map-shell{width:100%;flex:1;min-height:0;max-height:100%;overflow:hidden;display:flex;justify-content:center;align-items:center}
+.delivery-map-visual .brazil-map{height:100%;width:100%;max-height:none;max-width:100%;filter:drop-shadow(0 0 12px rgba(57,139,251,.24))}
+.delivery-map-visual .map-legend{display:none}
+.delivery-map-explainer{flex:0 0 auto;font-size:10px;color:#8faed6;text-align:center;line-height:1.35;margin:3px 0 0}
+.delivery-rankings{min-width:0;min-height:0;display:flex;flex-direction:column;gap:7px;overflow:hidden}
+.delivery-rankings-caption{color:#94b7e0;letter-spacing:.08em;font-size:9px}
+.delivery-rankings .rank-chart{min-height:0;overflow-y:auto;scrollbar-gutter:stable}
+.delivery-rankings .rank-row{padding:8px 6px;grid-template-columns:minmax(42px,.6fr) minmax(65px,1fr) minmax(58px,.6fr);gap:8px}
+.delivery-rankings .rank-track{height:8px}
+.group-card{align-items:center;justify-content:flex-start;gap:6px;padding:13px 16px}
+.group-card>small{align-self:flex-start;color:#abcaf0;letter-spacing:.08em}
+.group-gauge{display:block;flex:0 0 auto;width:clamp(112px,15vh,160px);height:clamp(112px,15vh,160px);border-radius:50%;padding:10px;aspect-ratio:1;background:conic-gradient(from -90deg,#76b8ff 0 var(--gauge-pct),rgba(65,105,176,.25) var(--gauge-pct) 100%);box-shadow:0 0 25px rgba(56,130,235,.18)}
+.group-card[aria-pressed="true"] .group-gauge{box-shadow:0 0 32px rgba(70,153,254,.27)}
+.group-gauge-core{width:100%;height:100%;border-radius:50%;background:#07172f;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:5px}
+.group-gauge .group-gauge-value{font-size:clamp(20px,2.2vw,33px);line-height:1.1;margin:0;white-space:nowrap}
+.group-gauge-caption{font-size:8px;letter-spacing:.08em;color:#9cbbdf}
+.group-card .group-secondary{font-size:11px;text-align:center}
+.group-card .group-track{width:100%;height:6px;flex:0 0 auto;margin-top:auto}
+.group-card em{font-size:10px;align-self:flex-start}
+.rank-row--customer{min-height:50px;padding:11px 9px}
+.rank-row--customer .rank-track{height:9px;background:rgba(88,129,202,.17)}
+.rank-row--customer[aria-pressed="true"]{background:linear-gradient(90deg,rgba(52,98,179,.23),rgba(54,99,189,.06));border-color:rgba(141,188,255,.42)}
+.rank-row--customer[aria-pressed="true"] .rank-track>i{background:linear-gradient(90deg,#7bbaff,#b9eaff)}
+@media(min-width:1180px) and (max-height:850px){
+ .ambient::after{top:-225px;right:-130px;width:min(760px,64vw);opacity:.32}
+ .metric-note{font-size:10px}
+ .delivery-atlas{gap:9px;margin-top:5px}
+ .delivery-map-explainer,.delivery-rankings-caption{font-size:8px}
+ .delivery-rankings .rank-row{padding:5px 4px;gap:5px}
+ .group-card{padding:7px 11px;gap:4px}
+ .group-gauge{width:clamp(92px,14vh,118px);height:clamp(92px,14vh,118px);padding:8px}
+ .group-gauge .group-gauge-value{font-size:21px}
+ .group-card .group-secondary{font-size:9px}
+ .group-card em{font-size:9px;margin-top:0}
+ .rank-row--customer{padding:8px 6px;min-height:0}
+}
+@media(max-width:1179px){
+ .delivery-atlas{min-height:345px;gap:10px}
+ .group-gauge{width:clamp(95px,16vw,140px);height:clamp(95px,16vw,140px)}
+ .group-gauge .group-gauge-value{font-size:clamp(17px,2.5vw,28px)}
+}
+@media(max-width:800px){
+ .delivery-atlas{min-height:490px;grid-template-columns:1fr;grid-template-rows:240px minmax(0,1fr)}
+ .delivery-map-visual{border-right:0;border-bottom:1px solid rgba(120,160,223,.16)}
+ .delivery-rankings .rank-chart{min-height:180px}
+ .group-gauge{width:100px;height:100px}
+}
+@media(max-width:460px){
+ .delivery-atlas{min-height:425px;grid-template-rows:200px minmax(0,1fr)}
+ .group-card{padding:9px;gap:4px}
+ .group-gauge{width:91px;height:91px;padding:7px}
+ .group-gauge .group-gauge-value{font-size:18px}
+ .group-gauge-caption{font-size:7px}
+ .group-card .group-secondary{font-size:9px}
+}

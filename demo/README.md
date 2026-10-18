@@ -1,3 +1,11 @@
+## Finition E3 premium — carte territoriale, Qualité et Clients (18/10/2026)
+
+La livraison principale affiche une grande carte cliquable des 27 États à côté du classement intégral. Les couleurs de la carte représentent toujours les taux de retard parmi les livraisons datées ; la liste bascule entre taux et délai moyen. Qualité utilise deux jauges radiales pour le groupe ponctuel / en retard et la mesure sélectionnée ; tous les chiffres sont issus du JSON de données vérifiées. Clients renforce visuellement les sept segments RFM et conserve les cohortes historiques. Terre NASA rendue plus visible en fond (crédit dans Données). Aucune modification des agrégats, aucune comparaison fictive. La PR #7 reste draft.
+
+Recette requise : vérifier les cinq modes et les interactions carte/Qualité/Clients, et confirmer le layout à 1920×993, 1440×900, 1180×750 et 390×844 avant validation visuelle.
+
+---
+
 ## Troisième passe PXM (18/10/2026) — corrections fondées sur six captures
 
 - **P0 :** correction des 16 barres 2017/2018 invisibles dans Ventes ; le conteneur annuel utilise maintenant un div explicite, séparé du libellé des mois, et les tests de source empêchent la régression. La recette navigateur doit en plus vérifier les dimensions réelles des 16 barres.
