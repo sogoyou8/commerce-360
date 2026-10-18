@@ -98,12 +98,12 @@ a{color:inherit;text-decoration:none}
 .combo-month{position:relative;display:flex;align-items:center;justify-content:flex-end;flex-direction:column;
   min-width:0;padding:0 1px 0;border:0;background:transparent}
 .combo-month:hover,.combo-month[aria-pressed="true"]{background:rgba(49,101,185,.12)}
-.combo-column{display:block;width:70%;max-width:34px;height:calc(var(--h) * .82);min-height:2px;flex:0 0 auto;
+.combo-column{display:block;width:70%;max-width:34px;height:var(--h);max-height:calc(100% - 18px);min-height:2px;flex:0 0 auto;
   background:linear-gradient(180deg,#287ce9 0%,#0e356e 100%);border-radius:2px 2px 0 0}
 .combo-month:hover .combo-column,.combo-month[aria-pressed="true"] .combo-column{background:linear-gradient(180deg,#8bc1ff,#225bad)}
 .combo-value{position:absolute;top:0;opacity:0;color:#cfe5ff;font-size:9px;white-space:nowrap}
 .combo-month:hover .combo-value,.combo-month:focus-visible .combo-value{opacity:1;z-index:3}
-.combo-month-label{position:absolute;bottom:0;transform:translateY(115%);color:#91a9ca;white-space:nowrap;font-size:8px;z-index:3}
+.combo-month-label{position:absolute;bottom:0;transform:none;color:#b5c8e7;white-space:nowrap;font-size:8px;z-index:3}
 .combo-line{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
 .story-panel{display:flex;flex-direction:column;min-height:0;min-width:0;overflow-y:auto;overscroll-behavior:contain;
   padding:20px 21px 15px;background:linear-gradient(135deg,rgba(18,40,78,.37),rgba(7,17,33,.87));border-left:1px solid var(--border)}
