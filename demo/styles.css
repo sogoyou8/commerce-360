@@ -302,10 +302,11 @@ a{color:inherit;text-decoration:none}
   .mode-nav .nav-items{border:0;border-radius:0;height:39px;min-width:max-content}
   .mode-nav a{font-size:11px;padding:0 13px}
   .shell{min-height:0}
-  .intro-copy{flex-direction:column;align-items:flex-start;gap:3px}
-  .intro h1{font-size:18px}
-  .intro-description{white-space:normal;font-size:10px}
-  .context-strip{font-size:8px}
+  .intro{align-items:flex-start;gap:12px}
+  .intro-copy{flex:1 1 auto;min-width:0;flex-direction:column;align-items:flex-start;gap:3px}
+  .intro h1{font-size:18px;white-space:normal;line-height:1.24}
+  .intro-description{white-space:normal;font-size:10px;line-height:1.4}
+  .context-strip{flex:0 0 auto;max-width:155px;font-size:8px;line-height:1.35}
   .metric-strip{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 0}
   .metric:nth-child(odd){padding-left:12px}
   .metric-value{font-size:27px}
@@ -323,8 +324,11 @@ a{color:inherit;text-decoration:none}
 }
 @media (max-width:460px) {
   .identity-text small{display:none}
-  .intro h1{font-size:16px}
-  .context-strip{max-width:42%}
+  .intro{flex-direction:column;align-items:stretch;gap:7px}
+  .intro-copy{width:100%;max-width:100%}
+  .intro h1{font-size:18px;white-space:normal}
+  .intro-description{max-width:100%;overflow:visible}
+  .context-strip{align-self:flex-start;max-width:100%;text-align:left;gap:2px;letter-spacing:.04em}
   .metric{padding:4px 10px}.metric:first-child{padding-left:10px}
   .metric-value{font-size:23px}.metric-label{font-size:9px}
   .analysis-top h2{font-size:17px}
