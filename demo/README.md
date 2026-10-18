@@ -1,3 +1,13 @@
+## Passe visuelle E3/PXM — 18 octobre 2026
+
+Sur la branche de prévisualisation de la PR #7 (toujours draft) : hiérarchie desktop ramenée à trois lignes utiles, KPI renforcés, graphique mensuel avec règle de sélection et navigation clavier roving, inspecteur sans défilement interne, repères détaillés déplacés dans « Données », six catégories vérifiées, carte SVG cliquable des 27 UF, anneau de satisfaction issu du JSON. Les cinq modes et le flux mobile sont conservés. Le mode Vue d'ensemble affiche simultanément ventes et commandes, sans toggle trompeur. La carte représente le taux de retard parmi les livraisons datées et ne prétend pas montrer une causalité.
+
+**Source et licence de la carte :** [@svg-maps/brazil](https://github.com/VictorCazanave/svg-maps/tree/master/packages/brazil), Victor Cazanave et contributeurs, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Adaptation : SVG local et coloration/interaction à partir des 27 agrégats E2. Aucun appel externe de cartographie à l'exécution.
+
+**Recette encore nécessaire :** contrôle navigateur et captures aux résolutions 1920×993, 1440×900, 1180×750, 390×844 et 430×932, tests des cinq modes et du clavier, vérification de l'absence de débordement. Ne pas fusionner la PR #7 avant validation visuelle. Les valeurs du fichier `data/public.json` et le contrat E2 sont inchangés.
+
+---
+
 # Commerce 360 — Démonstration web
 
 Une expérience web **statique, sans serveur ni cookies**, pour explorer les données Olist historiques issues du pipeline E0–E8 : **Vue d'ensemble, Ventes, Livraisons, Qualité, Clients**.

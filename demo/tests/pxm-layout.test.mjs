@@ -18,17 +18,17 @@ test("E3 has a single header, five modes, one workspace, an inspector and three 
   assert.match(html,/id="story-comparisons"/);
   assert.match(html,/id="story-navigation"/);
   for (const id of ["dock-categories","dock-states","dock-quality"]) assert.ok(html.includes('id="'+id+'"'));
-  assert.match(html,/class="lower"><summary id="lower-heading"/);
+  assert.match(html,/class="method-insights"><summary id="lower-heading"/);
   assert.match(html,/id="method-dialog"/);
 });
 
 test("E3 desktop uses one viewport and mobile preserves accessible natural scrolling",()=>{
-  assert.match(css,/height:calc\(100dvh - 76px\)/);
+  assert.match(css,/height:calc\(100dvh - 72px\)/);
   assert.match(css,/@media \(min-width:1180px\) and \(min-height:750px\)/);
   assert.match(css,/html,body\{height:100%;overflow:hidden\}/);
   assert.match(css,/@media \(max-width:800px\)/);
   assert.match(css,/\.exploration-dock\{grid-template-columns:1fr/);
-  assert.match(css,/\.story-panel\{[\s\S]*?overflow-y:auto/);
+  assert.match(css,/\.story-panel\{[^}]*overflow:hidden/);
 });
 
 test("E3 chart combines actual monthly sales and orders with distinct visual encodings",()=>{
@@ -80,11 +80,24 @@ test("E3 states label delivered orders correctly and never pretend 27 states are
 test("E3 inspector content does not flex-shrink into overlapping sections",()=>{
   assert.match(css,/\.story-inner\{[^}]*flex:0 0 auto/);
   assert.match(css,/\.story-foot\{[^}]*flex:0 0 auto/);
-  assert.match(css,/\.lower\{[^}]*flex:0 0 auto/);
-  assert.match(css,/\.story-panel\{[^}]*overflow-y:auto/);
+  assert.match(html,/class="method-insights"/);
+  assert.doesNotMatch(css,/\.story-panel\{[^}]*overflow-y:auto/);
+  assert.match(css,/\.story-panel\{[^}]*overflow:hidden/);
 });
 
-test("E3 narrow screen intro keeps scope away from the heading",()=>{
-  assert.match(css,/\.intro\{flex-direction:column;align-items:stretch;gap:7px\}/);
-  assert.match(css,/\.context-strip\{align-self:flex-start;max-width:100%;text-align:left/);
+test("E3 keeps an accessible heading without consuming a desktop grid row",()=>{
+  assert.match(html,/<section class="intro sr-only" aria-labelledby="page-title">/);
+  assert.match(css,/grid-template-rows:104px minmax\(0,1fr\) clamp\(188px,24vh,248px\)/);
+});
+test("E3 selection, map and satisfaction use real public aggregates",()=>{
+  const svg=readFileSync(new URL("../assets/br-states.svg",import.meta.url),"utf8");
+  assert.equal([...svg.matchAll(/<path\s+id="[a-z]{2}"/g)].length,27);
+  assert.match(svg,/CC BY 4\.0/);
+  assert.match(js,/tabIndex=active\?0:-1/);
+  assert.match(js,/combo-selection-rule/);
+  assert.match(js,/function renderBrazilMap\(\)/);
+  assert.match(js,/data\.states\.map/);
+  assert.match(js,/data\.totals\.negativeRate/);
+  assert.match(js,/categories\.slice\(0,6\)/);
+  assert.doesNotMatch(js,/925421|6421|8\.7/);
 });

@@ -6,6 +6,16 @@ const decimal = new Intl.NumberFormat("fr-FR", { minimumFractionDigits: 2, maxim
 const compact = new Intl.NumberFormat("fr-FR", { notation: "compact", maximumFractionDigits: 2 });
 const shortMonth = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Aoû", "Sep", "Oct", "Nov", "Déc"];
 const pages = ["overview", "sales", "delivery", "quality", "customers"];
+const categoryLabels = {
+  health_beauty: "Santé & beauté", watches_gifts: "Montres & cadeaux",
+  bed_bath_table: "Maison & literie", sports_leisure: "Sports & loisirs",
+  computers_accessories: "Informatique", furniture_decor: "Meubles & décoration",
+  housewares: "Articles ménagers", cool_stuff: "Accessoires & gadgets",
+  auto: "Automobile", garden_tools: "Jardinage", toys: "Jouets", baby: "Puériculture"
+};
+function labelCategory(code) { return categoryLabels[code] || code.replaceAll("_", " "); }
+let brazilMapTemplate = null;
+let brazilMapLoading = null;
 const chapters = {
   overview: { n: "01", category: "VUE D'ENSEMBLE", kicker: "20 MOIS · 2017–2018", title: "Explorer le commerce <em>brésilien.</em>", desc: "Ventes d'articles et commandes livrées · étude indépendante sur neuf sources Olist." },
   sales: { n: "02", category: "VENTES", kicker: "VENTES D'ARTICLES · HORS FRET", title: "Ventes et <em>catégories.</em>", desc: "Comparer janvier–août 2017 et 2018, puis explorer les catégories réellement documentées." },
@@ -17,11 +27,11 @@ const chapters = {
 let data;
 const state = {
   view: "overview",
-  overviewMeasure: "salesBrl",
   overviewMonth: "2018-08",
   salesMeasure: "salesBrl",
   salesMonth: 8,
   salesDetail: "categories",
+  selectedCategory: null,
   deliveryMeasure: "rate",
   selectedState: "CE",
   qualityMeasure: "negativeRate",
@@ -97,6 +107,7 @@ function setViz(eyebrow, title, caption, note) {
 
 function setOptions(options, selected, onSelect) {
   const wrap = $("view-options");
+  wrap.hidden = options.length === 0;
   wrap.replaceChildren(...options.map((item) => {
     const button = node("button", "", item.title);
     button.type = "button";
@@ -161,8 +172,18 @@ function changePercent(now, before) {
   const value=100*(now/before-1);
   return (value>0?"+":"")+percent(value);
 }
+function selectOverviewMonth(month, focus = false) {
+  state.overviewMonth = month;
+  render();
+  if (focus) {
+    const button = [...document.querySelectorAll(".combo-month")].find(x => x.dataset.month === month);
+    if (button) {
+      button.focus({ preventScroll: true });
+      button.scrollIntoView({ block: "nearest", inline: "nearest" });
+    }
+  }
+}
 function renderMonthBars() {
-  const measure=state.overviewMeasure;
   const items=data.monthly;
   const chosen=items.find(x=>x.month===state.overviewMonth)||items.at(-1);
   const index=items.indexOf(chosen);
@@ -176,9 +197,15 @@ function renderMonthBars() {
   svg.setAttribute("class","combo-line");
   svg.setAttribute("viewBox","0 0 1000 300");
   svg.setAttribute("preserveAspectRatio","none");
-  svg.setAttribute("role","img");
-  svg.setAttribute("aria-label","Courbe des commandes livrées : axe droit");
+  svg.setAttribute("aria-hidden","true");
   const xy=items.map((entry,i)=>[((i+.5)/items.length)*1000,286-(entry.orders/maxOrders)*255]);
+  const rule=document.createElementNS("http://www.w3.org/2000/svg","line");
+  for(const [key,value] of Object.entries({
+    x1:xy[index][0],x2:xy[index][0],y1:16,y2:286,
+    stroke:"#9ac5ff","stroke-width":"1.5","stroke-dasharray":"4 5","vector-effect":"non-scaling-stroke"
+  }))rule.setAttribute(key,String(value));
+  rule.setAttribute("class","combo-selection-rule");
+  svg.append(rule);
   const path=document.createElementNS("http://www.w3.org/2000/svg","polyline");
   path.setAttribute("points",xy.map(p=>p.join(",")).join(" "));
   path.setAttribute("fill","none");
@@ -191,23 +218,31 @@ function renderMonthBars() {
     const active=entry.month===chosen.month;
     const button=node("button","combo-month");
     button.type="button";
+    button.dataset.month=entry.month;
+    button.tabIndex=active?0:-1;
     button.setAttribute("aria-pressed",String(active));
     button.setAttribute("aria-label",strMonth(entry.month,true)+" : "+amount(entry.salesBrl,true)+", "+n(entry.orders)+" commandes");
     button.title=button.getAttribute("aria-label");
     button.style.setProperty("--h",Math.max(1,100*entry.salesBrl/maxSales)+"%");
-    button.addEventListener("click",()=>{state.overviewMonth=entry.month;render();});
+    button.addEventListener("click",()=>selectOverviewMonth(entry.month));
+    button.addEventListener("keydown",event=>{
+      if(!["ArrowLeft","ArrowRight","Home","End"].includes(event.key))return;
+      event.preventDefault();
+      const next=event.key==="Home"?0:event.key==="End"?items.length-1:
+        Math.max(0,Math.min(items.length-1,i+(event.key==="ArrowRight"?1:-1)));
+      selectOverviewMonth(items[next].month,true);
+    });
     append(button,node("span","combo-value",smallAmount(entry.salesBrl)),
       node("span","combo-column"),
-      node("span","combo-month-label",["01","05","09"].includes(entry.month.slice(5))||
-        entry.month==="2018-08"?strMonth(entry.month):""));
+      node("span","combo-month-label",i%2===0||i===items.length-1?strMonth(entry.month):""));
     bars.append(button);
     const circle=document.createElementNS("http://www.w3.org/2000/svg","circle");
     circle.setAttribute("cx",String(xy[i][0]));
     circle.setAttribute("cy",String(xy[i][1]));
-    circle.setAttribute("r",active?"5":"3.2");
+    circle.setAttribute("r",active?"5.2":"3.2");
     circle.setAttribute("fill",active?"#ffffff":"#d1e1ff");
-    circle.setAttribute("stroke","#17335c");
-    circle.setAttribute("stroke-width","2");
+    circle.setAttribute("stroke",active?"#367de2":"#17335c");
+    circle.setAttribute("stroke-width",active?"3":"2");
     circle.setAttribute("vector-effect","non-scaling-stroke");
     svg.append(circle);
   });
@@ -223,21 +258,21 @@ function renderMonthBars() {
   const previous=index>0?items[index-1]:null;
   const previousYear=items.find(x=>x.month===String(Number(chosen.month.slice(0,4))-1)+chosen.month.slice(4));
   const compare=[
-    {label:"Commandes livrées",value:n(chosen.orders),note:"Mois sélectionné"},
-    {label:"Panier moyen",value:amount(chosen.salesBrl/chosen.orders,true),note:"Articles par commande"},
+    {label:"Commandes livrées",value:n(chosen.orders)},
+    {label:"Panier moyen",value:amount(chosen.salesBrl/chosen.orders,true)},
   ];
-  if(previous)compare.push({label:"Ventes vs mois précédent",value:changePercent(chosen.salesBrl,previous.salesBrl),note:"Variation mensuelle constatée"});
-  if(previousYear)compare.push({label:"Ventes vs même mois 2017",value:changePercent(chosen.salesBrl,previousYear.salesBrl),note:"Année précédente · mois équivalent"});
+  if(previous)compare.push({label:"Ventes vs mois précédent",value:changePercent(chosen.salesBrl,previous.salesBrl)});
+  if(previousYear)compare.push({label:"Ventes vs même mois en 2017",value:changePercent(chosen.salesBrl,previousYear.salesBrl)});
   setStory({
     kicker:"MOIS SÉLECTIONNÉ",title:strMonth(chosen.month,true),
     description:"Commandes livrées et ventes d'articles du mois sélectionné ; les indicateurs nationaux restent indépendants.",
-    label:measure==="salesBrl"?"VENTES DU MOIS":"COMMANDES DU MOIS",
-    value:measure==="salesBrl"?smallAmount(chosen.salesBrl):n(chosen.orders),
-    sub:measure==="salesBrl"?"Prix des articles hors fret":"Commandes livrées observées",
-    caveat:"Les taux de retard et les avis nationaux ne sont pas filtrés par mois : ces croisements ne figurent pas dans les agrégats publiés.",
+    label:"VENTES DU MOIS",
+    value:smallAmount(chosen.salesBrl),
+    sub:"Prix des articles hors fret",
+    caveat:"Les taux de retard et les avis nationaux ne sont pas filtrés par mois.",
   });
   renderComparisonRows(compare);
-  setSelectionNavigation(items,chosen.month,x=>x.month,month=>{state.overviewMonth=month;render();});
+  setSelectionNavigation(items,chosen.month,x=>x.month,month=>selectOverviewMonth(month));
 }
 
 function renderOverview() {
@@ -250,7 +285,7 @@ function renderOverview() {
     {label:"Retards de livraison",value:percent(t.lateRate),note:`${n(t.late)} sur ${n(t.dated)} datées`},
   ]);
   setViz("01 · ÉVOLUTION HISTORIQUE","Évolution des ventes et des commandes","Colonnes : BRL hors fret · courbe : commandes livrées.", "Chaque mois est sélectionnable. Les KPI nationaux ne sont pas filtrés par cette sélection.");
-  setOptions([{key:"salesBrl",title:"Ventes"},{key:"orders",title:"Commandes"}],state.overviewMeasure,key=>{state.overviewMeasure=key;render();});
+  setOptions([],null,()=>{});
   renderMonthBars();
   const yoy=compareSamePeriod(data.monthly);
   setLower("REPÈRES DU PROJET","Trois signaux pour commencer.",[
@@ -331,11 +366,16 @@ function renderSalesBreakdown() {
     button.addEventListener("click",()=>{state.salesDetail=item.key;render();});
     controls.append(button);
   }
-  const rows=(selected==="categories"?data.categories.map(x=>({name:x.label.replaceAll("_"," "),sales:x.salesBrl})):data.sellerStates.map(x=>({name:x.code,sales:x.salesBrl}))).sort((a,b)=>b.sales-a.sales);
+  const rows=(selected==="categories"?data.categories.map(x=>({name:labelCategory(x.label),code:x.label,sales:x.salesBrl})):data.sellerStates.map(x=>({name:x.code,sales:x.salesBrl}))).sort((a,b)=>b.sales-a.sales);
   const list=node("div","breakdown-list");
   const max=Math.max(1,...rows.map(x=>x.sales));
   for(const [index,x] of rows.entries()){
-    const line=node("div","breakdown-row");
+    const line=node(selected==="categories"?"button":"div","breakdown-row");
+    if(selected==="categories"){
+      line.type="button";
+      line.setAttribute("aria-pressed",String(state.selectedCategory===x.code));
+      line.addEventListener("click",()=>{state.selectedCategory=x.code;renderSalesBreakdown();});
+    }
     const title=append(node("span",""),node("small","",String(index+1).padStart(2,"0")),node("span","",x.name));
     const track=append(node("span","rank-track"),node("i"));
     track.firstChild.style.setProperty("--w",100*x.sales/max+"%");
@@ -550,31 +590,126 @@ function dockRow(label,value,ratio,subtitle="") {
   if(subtitle)row.append(node("small","dock-row-note",subtitle));
   return row;
 }
+function openDeliveryState(code) {
+  state.selectedState=code;
+  if(location.hash==="#delivery")render();
+  else location.hash="#delivery";
+}
+function loadBrazilMap() {
+  if(brazilMapTemplate||brazilMapLoading)return;
+  brazilMapLoading=fetch(new URL("./assets/br-states.svg",import.meta.url))
+    .then(response=>{if(!response.ok)throw new Error("Carte SVG indisponible");return response.text();})
+    .then(xml=>{
+      const documentSvg=new DOMParser().parseFromString(xml,"image/svg+xml");
+      if(documentSvg.querySelector("parsererror")||documentSvg.querySelectorAll("path[id]").length!==27)
+        throw new Error("La carte doit comporter les 27 unités fédératives.");
+      brazilMapTemplate=documentSvg.documentElement;
+      if(data)renderDock();
+    })
+    .catch(error=>{console.warn("Commerce 360 — carte indisponible :",error);});
+}
+function renderBrazilMap() {
+  const holder=node("div","dock-map-shell");
+  if(!brazilMapTemplate){
+    holder.append(node("span","map-placeholder","Chargement de la carte…"));
+    loadBrazilMap();
+    return holder;
+  }
+  const svg=document.importNode(brazilMapTemplate,true);
+  svg.removeAttribute("aria-label");
+  svg.setAttribute("role","group");
+  svg.setAttribute("tabindex","0");
+  svg.setAttribute("class","brazil-map");
+  const regionsByCode=new Map(data.states.map(item=>[item.code,item]));
+  const codes=data.states.map(item=>item.code).sort();
+  const maxRate=Math.max(...data.states.map(item=>item.rate));
+  let activeCode=state.selectedState;
+  const updateActive=()=>{
+    for(const path of svg.querySelectorAll("path[id]"))
+      path.classList.toggle("is-map-active",path.id.toUpperCase()===activeCode);
+    const item=regionsByCode.get(activeCode);
+    svg.setAttribute("aria-label","Carte des 27 États. "+activeCode+" : "+percent(item.rate)+" de retard. Flèches pour choisir, Entrée pour explorer.");
+  };
+  for(const path of svg.querySelectorAll("path[id]")){
+    const code=path.id.toUpperCase();
+    const item=regionsByCode.get(code);
+    if(!item)continue;
+    const alpha=.22+.72*(item.rate/maxRate);
+    path.setAttribute("fill",`rgba(65, 145, 255, ${alpha.toFixed(3)})`);
+    path.setAttribute("aria-label",code+" : "+percent(item.rate)+" de retard");
+    path.dataset.uf=code;
+    path.addEventListener("click",()=>openDeliveryState(code));
+  }
+  svg.addEventListener("keydown",event=>{
+    if(event.key==="Enter"||event.key===" "){event.preventDefault();openDeliveryState(activeCode);return;}
+    if(!["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Home","End"].includes(event.key))return;
+    event.preventDefault();
+    const i=codes.indexOf(activeCode);
+    activeCode=event.key==="Home"?codes[0]:event.key==="End"?codes.at(-1):
+      codes[(i+(["ArrowRight","ArrowDown"].includes(event.key)?1:-1)+codes.length)%codes.length];
+    updateActive();
+  });
+  updateActive();
+  holder.append(svg);
+  return holder;
+}
 function renderDock() {
   const categories=[...data.categories].sort((a,b)=>b.salesBrl-a.salesBrl);
   const categoryMax=categories[0]?.salesBrl||1;
-  renderText("dock-category-coverage",data.meta.coverage.categories);
-  $("dock-categories").replaceChildren(...categories.slice(0,3).map(item=>
-    dockRow(item.label.replaceAll("_"," "),smallAmount(item.salesBrl),100*item.salesBrl/categoryMax,
-      percent(observedShare(item.salesBrl,data.totals.salesBrl))+" du total national")));
+  renderText("dock-category-coverage",data.meta.coverage.categories+" · part des ventes nationales");
+  const categoryRows=categories.slice(0,6).map(item=>{
+    const row=node("button","dock-category-row");
+    row.type="button";
+    row.title="Explorer "+labelCategory(item.label)+" dans Ventes";
+    const label=node("span","dock-item-label",labelCategory(item.label));
+    const track=append(node("span","dock-track"),node("i"));
+    track.firstChild.style.setProperty("--w",100*item.salesBrl/categoryMax+"%");
+    const value=node("span","dock-item-value",smallAmount(item.salesBrl)+" · "+percent(observedShare(item.salesBrl,data.totals.salesBrl),1));
+    append(row,label,track,value);
+    row.addEventListener("click",()=>{
+      state.selectedCategory=item.label;
+      state.salesDetail="categories";
+      if(location.hash==="#sales")render();else location.hash="#sales";
+    });
+    return row;
+  });
+  $("dock-categories").replaceChildren(...categoryRows);
   const regions=[...data.states].sort((a,b)=>b.rate-a.rate);
-  renderText("dock-state-coverage",data.meta.coverage.states+" · classement par taux de retard");
-  $("dock-states").replaceChildren(...regions.slice(0,3).map(item=>
-    dockRow(item.code,percent(item.rate),item.rate/Math.max(1,regions[0].rate)*100,
-      n(item.late)+" retards parmi "+n(item.dated)+" livraisons datées")));
+  renderText("dock-state-coverage",data.meta.coverage.states+" · taux de retard des livraisons datées");
+  const stateLayout=node("div","dock-state-layout");
+  const stateRank=node("div","dock-state-ranks");
+  const maxRate=regions[0]?.rate||1;
+  regions.slice(0,5).forEach((item,i)=>{
+    const row=node("button","dock-state-row");
+    row.type="button";
+    row.title=item.code+" : "+n(item.late)+" retards sur "+n(item.dated)+" livraisons datées";
+    const track=append(node("span","dock-track"),node("i"));
+    track.firstChild.style.setProperty("--w",100*item.rate/maxRate+"%");
+    append(row,node("span","state-rank-index",String(i+1)),node("span","state-rank-code",item.code),track,node("strong","",percent(item.rate)));
+    row.addEventListener("click",()=>openDeliveryState(item.code));
+    stateRank.append(row);
+  });
+  append(stateLayout,renderBrazilMap(),stateRank);
+  $("dock-states").replaceChildren(stateLayout);
   const onTime=data.satisfaction.find(x=>x.code==="on_time");
   const late=data.satisfaction.find(x=>x.code==="late");
   const quality=node("div","dock-quality-layout");
-  const headline=node("div","dock-quality-headline");
-  append(headline,node("strong","",decimal.format(data.totals.averageScore)+" / 5"),
-    node("span","","Note moyenne nationale, parmi les commandes notées"));
-  append(quality,headline,
-    dockRow("Livraisons à l’heure",decimal.format(onTime.score)+" / 5",20*onTime.score,
-      percent(onTime.negativeRate)+" d’avis ≤ 2 parmi "+n(onTime.scored)+" notées"),
-    dockRow("Livraisons en retard",decimal.format(late.score)+" / 5",20*late.score,
-      percent(late.negativeRate)+" d’avis ≤ 2 parmi "+n(late.scored)+" notées"));
+  const top=node("div","dock-quality-overview");
+  const ring=node("div","score-ring");
+  ring.style.setProperty("--score-pct",100*data.totals.averageScore/5+"%");
+  append(ring,append(node("div","score-ring-center"),
+    node("strong","",decimal.format(data.totals.averageScore)+" / 5"),node("span","","Note moyenne")));
+  const negative=append(node("div","quality-negative"),
+    node("span","","Avis négatifs · notes ≤ 2"),
+    node("strong","",percent(data.totals.negativeRate)),
+    node("small","","Parmi les commandes notées"));
+  append(top,ring,negative);
+  append(quality,top,
+    dockRow("Livraisons à l’heure",decimal.format(onTime.score)+" / 5",20*onTime.score),
+    dockRow("Livraisons en retard",decimal.format(late.score)+" / 5",20*late.score));
   $("dock-quality").replaceChildren(quality);
 }
+
 function renderInspectorDetails() {
   if(state.view==="overview") return;
   let items=[],navigation=null;
