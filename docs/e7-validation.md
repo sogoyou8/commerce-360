@@ -1,6 +1,6 @@
 # Commerce 360 — E7 · Validation croisée et recommandations métier
 
-**Projet DATA 02 — Olist historique (Brésil).** Statut : **E7 validée en environnement local sur captures Antigravity le 18 octobre 2026** : 35 tests Python réussis, `E7 SQL OK` sous PostgreSQL, comparaisons SQL et Power BI E6 cohérentes. Le PBIX est local ; il n'a pas été inspecté ni publié depuis ce dépôt. Le passage des PR #4/#5 dans `main` reste distinct de la recette technique.
+**Projet DATA 02 — Olist historique (Brésil).** Statut : **E7 validée localement sur captures Antigravity le 18 octobre 2026** : 35 tests Python réussis, `E7 SQL OK` sous PostgreSQL, comparaisons SQL et Power BI E6 cohérentes. **PR #4 (E6) et PR #5 (E7) fusionnées dans `main` le 18 octobre 2026** ; CI GitHub verte sur le commit `24cd2760`. Le PBIX reste local et n'a pas été inspecté ni publié depuis ce dépôt.
 
 ## 1. Contrat de comparaison
 
@@ -80,7 +80,7 @@ Exécuter ensuite **sur les exports locaux E4/E5** le contrôle de fichiers :
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-Ce validateur n'est disponible que si la branche E6 a été récupérée localement. Il vérifie les 12 CSV locaux et leurs manifestes SHA-256. **Résultats locaux confirmés par captures** : `E6 OK : exports E4/E5, SHA-256, grains et montants reconciles` (9 exports E4, 3 E5) ; `Ran 35 tests ... OK` pour les contrats Python E2–E7. Un workflow GitHub vert **ne remplace pas** ces contrôles ni l'ouverture du PBIX. Les captures de la conversation constituent les preuves visibles de recette ; ne publier ni secrets ni données ligne à ligne.
+Ce validateur E6 est intégré à `main` depuis la fusion de la PR #4 et fonctionne si les exports locaux E4/E5 et leurs manifestes sont présents. Il vérifie les 12 CSV locaux et leurs manifestes SHA-256. **Résultats locaux confirmés par captures** : `E6 OK : exports E4/E5, SHA-256, grains et montants reconciles` (9 exports E4, 3 E5) ; `Ran 35 tests ... OK` pour les contrats Python E2–E7. Un workflow GitHub vert **ne remplace pas** ces contrôles ni l'ouverture du PBIX. Les captures de la conversation constituent les preuves visibles de recette ; ne publier ni secrets ni données ligne à ligne.
 
 ## 5. Constat métier et recommandations raisonnées
 
@@ -93,6 +93,6 @@ Ce validateur n'est disponible que si la branche E6 a été récupérée localem
 
 **E7 — VALIDÉE localement (18 octobre 2026)** sur les éléments fournis : 35 tests Python `OK`, exports E4/E5 vérifiés avec `E6 OK`, rapprochement PostgreSQL `E7 SQL OK` et cinq tableaux SQL produits, interactions Power BI vérifiées lors d'E6. Les captures ne constituent pas un audit automatisé du PBIX mais attestent de la recette utilisateur.
 
-**État GitHub distinct** : PR #4 (E6) et PR #5 (E7) sont encore en brouillon au moment de cette mise à jour ; PR #5 cible la branche de PR #4. Ne pas annoncer une fusion dans `main` sans l'avoir réalisée ; demander accord avant fusion. Vérifier la CI sur les SHA concernés indépendamment des tests locaux.
+**État GitHub (18 octobre 2026)** : [PR #4 — E6](https://github.com/sogoyou8/commerce-360/pull/4) et [PR #5 — E7](https://github.com/sogoyou8/commerce-360/pull/5) ont été **fusionnées dans `main`**, dans cet ordre. Le dernier commit de fusion E7 est `24cd2760` ; la CI E2–E7 associée à ce commit est verte. Ces validations portent sur les sources et contrôles du dépôt, pas sur une analyse automatisée du PBIX.
 
-**E8 après validation :** actualiser le README et `docs/e6-powerbi.md` pour refléter les **cinq pages réelles** (`01_Vue d'ensemble`, `02_Ventes`, `03_Livraisons`, `04_Qualité`, `05_Clients`), relire les fichiers de recette, vérifier les risques de divulgation, choisir les seuls agrégats/captures publiables, puis préparer la présentation GitHub/Abyss Showcase. Aucune publication du PBIX ni des CSV détaillés en l'état.
+**E8 — restitution préparée** : [bilan public, chiffres, limites et preuves](e8-bilan.md) ; [procédure de reproduction et revue de confidentialité](e8-reproduction.md) ; [texte portfolio/CV](e8-portfolio.md). Les cinq pages réelles sont documentées dans `docs/e6-powerbi.md`. Aucune publication du PBIX ni des CSV détaillés en l'état.

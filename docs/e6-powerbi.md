@@ -21,9 +21,8 @@ Aucun jeu de données, fichier PBIX ou identifiant individuel RFM n'est publié 
 Dans la racine commerce-360, après avoir vérifié que la copie de travail est propre :
 
 ~~~powershell
-git fetch origin
-git switch --track origin/feature/e6-powerbi
-# Si la branche existe déjà : git switch feature/e6-powerbi
+git switch main
+git pull --ff-only origin main
 .\.venv\Scripts\python.exe scripts\validate_e6.py
 ~~~
 
@@ -77,4 +76,4 @@ Le plan initial E6 a évolué au cours de l'assemblage et de la recette. **Voici
 
 Les sources sont historiques et les cohortes récentes sont censurées à droite : aucune assertion de churn, de fidélité actuelle ou de causalité n'est justifiée. Les agrégats E5 n'exposent aucun ID client, donc pas de segmentation RFM par État, date ou produit dans ce modèle. Une telle exigence nécessiterait une nouvelle modélisation et des vérifications dédiées, et ne doit pas être simulée via des relations Power BI.
 
-Le PBIX peut incorporer des données détaillées d'achats et un chemin Windows absolu ; il reste local. Power BI Service, passerelle et publication externe sont **hors périmètre E6**.
+Le PBIX peut incorporer des données détaillées d'achats et un chemin Windows absolu ; il reste local. Power BI Service, passerelle et publication externe sont **hors périmètre E6**. La restitution et la confidentialité sont traitées dans [E8 — bilan](e8-bilan.md), [E8 — recette](e8-reproduction.md) et [E8 — portfolio](e8-portfolio.md).

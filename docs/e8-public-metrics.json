@@ -1,0 +1,54 @@
+{
+  "dataset": "Olist / Brésil — donnees historiques",
+  "scope": {
+    "purchase_start_inclusive": "2017-01-01",
+    "purchase_end_exclusive": "2018-09-01",
+    "currency": "BRL",
+    "item_sales_definition": "prix des articles de commandes livrees, hors fret; ni marge ni CA net"
+  },
+  "totals": {
+    "orders_all_statuses": 99092,
+    "delivered_orders": 96211,
+    "item_sales_brl": "13181027.13",
+    "average_basket_brl": "137.00",
+    "observed_customers": 93104,
+    "repeat_customers": 2789,
+    "repeat_rate_pct": "3.00",
+    "late_deliveries": 7822,
+    "dated_deliveries": 96203,
+    "late_rate_pct": "8.13",
+    "average_delivery_days_clean": "12.54",
+    "average_review_score": "4.16",
+    "negative_review_rate_pct": "12.80",
+    "rfm_segments": 7,
+    "cohort_segment_rows": 83
+  },
+  "by_delivery_group": {
+    "late": {
+      "delivered_orders": 7822,
+      "scored_orders": 7658,
+      "mean_review": "2.57",
+      "low_review_orders": 4139,
+      "low_review_rate_pct": "54.05"
+    },
+    "on_time": {
+      "delivered_orders": 88381,
+      "scored_orders": 87902,
+      "mean_review": "4.29",
+      "low_review_orders": 8089,
+      "low_review_rate_pct": "9.20"
+    }
+  },
+  "example_state": {
+    "state": "CE",
+    "delivered_orders": 1273,
+    "late_deliveries": 196,
+    "late_rate_pct": "15.40",
+    "average_delivery_days_clean": "21.24"
+  },
+  "leading_category": {
+    "name": "health_beauty",
+    "item_sales_brl": "1229557.50"
+  },
+  "provenance": "References E3/E5, requetes PostgreSQL E7 executees localement et captures Power BI E6 ; valeurs agregees; PBIX non verifie par CI"
+}

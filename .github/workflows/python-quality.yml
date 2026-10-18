@@ -8,6 +8,7 @@ on:
       - feature/e5-segmentation-rfm
       - feature/e6-powerbi
       - feature/e7-validation-croisee
+      - feature/e8-finalisation
   pull_request:
     branches:
       - main
@@ -18,7 +19,7 @@ permissions:
 
 jobs:
   tests:
-    name: E2–E7 offline contracts
+    name: E2–E8 offline contracts
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -28,3 +29,5 @@ jobs:
           python-version: "3.12"
       - name: Python unittest suite
         run: python -m unittest discover -s tests -v
+      - name: E8 publication guardrail (tracked files and public metrics)
+        run: python scripts/validate_e8.py

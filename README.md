@@ -1,6 +1,10 @@
-# Commerce 360 — E0 à E5 intégrés · E6 Power BI validée localement, E7 contrôlée
+# Commerce 360 — analyse e-commerce historique | PostgreSQL · Python · Excel · Power BI
 
-**Projet DATA 02 · Olist (données e-commerce historiques, Brésil 2016–2018)**
+**Projet DATA 02 · Olist (Brésil, données e-commerce historiques ; fenêtre d'analyse principale : janvier 2017 à août 2018).**
+
+> **Résultats clés** — 96 211 commandes livrées · 13 181 027,13 BRL de prix d'articles hors fret · 93 104 clients observés · 8,13 % de retards sur livraisons datées. Étude descriptive, pas d'indicateur actuel d'Olist. **Pas de tableau de bord public : le PBIX reste local.**
+
+**Accès rapide :** [Bilan et limites E8](docs/e8-bilan.md) · [Reproduire et contrôler](docs/e8-reproduction.md) · [Présentation portfolio / CV](docs/e8-portfolio.md) · [Mesures publiques agrégées](docs/e8-public-metrics.json) · [Méthode Power BI](docs/e6-powerbi.md) · [Validation SQL](docs/e7-validation.md).
 
 ## Statut réel
 
@@ -12,6 +16,9 @@
 - ✅ **E3 — clôturée le 16 octobre 2026** : 12 vues SQL appliquées sur PostgreSQL local, 13 tests Python réussis, rapprochement des commandes et ventes avec les CSV indépendants (96 211 commandes livrées ; 13 181 027,13 BRL d'articles sur janvier 2017–août 2018). [Recette E3](docs/e3-analyses-sql.md) ; [référence CSV indépendante](docs/e3-reference-offline.md). **[PR #1 fusionnée dans `main`](https://github.com/sogoyou8/commerce-360/pull/1)**, commit [`10117a9`](https://github.com/sogoyou8/commerce-360/commit/10117a96b950a73498c8b92d08c3e0de4af49858). Aucune modification de la base PostgreSQL lors de la fusion.
 - ✅ **E4 — clôturée le 17 octobre 2026** : neuf CSV exportés depuis E3, classeur local réel de 18 feuilles, Power Query et modèle de données (96 211 commandes), deux TCD et un graphique croisé dynamique filtrés par le segment commun `customer_state`. L'utilisateur a confirmé une actualisation Excel sans erreur. **[PR #2 fusionnée dans `main`](https://github.com/sogoyou8/commerce-360/pull/2)**, commit [`861fd14`](https://github.com/sogoyou8/commerce-360/commit/861fd14d101f52bdcc955d2311b074b4940963f4). Le XLSX reste local, non distribué publiquement : [recette E4](docs/e4-excel-recette.md).
 - ✅ **E5 — clôturée le 17 octobre 2026** : tests Python, recette SQL PostgreSQL locale, 7 segments, 83 lignes d'agrégats cohorte, 3 CSV locaux et réconciliation de **93 104 clients / 96 211 commandes / 13 181 027,13 BRL**. Sortie Docker et KPI attestés par les captures de l'utilisateur. **[PR #3 fusionnée dans `main`](https://github.com/sogoyou8/commerce-360/pull/3)**, commit [`e8964cc`](https://github.com/sogoyou8/commerce-360/commit/e8964cc1daa4e34e8d1a81dde33426ad29b802c1). [Méthode et recette E5](docs/e5-rfm.md).
+- ✅ **E6 — réalisée et validée localement sur captures** : rapport Power BI Desktop de cinq pages, 12 exports E4/E5 et SHA-256 reconciliés (`E6 OK`). **[PR #4 fusionnée dans `main`](https://github.com/sogoyou8/commerce-360/pull/4)**.
+- ✅ **E7 — validation SQL locale réussie le 18 octobre 2026** : `E7 SQL OK`, 35 tests Python, concordance des indicateurs et filtres Power BI observés. **[PR #5 fusionnée dans `main`](https://github.com/sogoyou8/commerce-360/pull/5)**, CI finale verte sur `24cd2760`.
+- 🛠️ **E8 — finalisation de la restitution et de la reproductibilité** : bilan analytique public, guide de recette, fiche portfolio/CV et garde-fou de diffusion. La PR E8 est en cours de revue ; **aucun PBIX, CSV ni XLSX brut n'est ajouté**.
 
 ## Structure
 
@@ -117,13 +124,30 @@ Rapport `Commerce_360_E6.pbix` visible en captures utilisateur (pas publié dans
 - Le validateur en lecture seule scripts/validate_e6.py vérifie les 12 CSV E4/E5, les 12 empreintes SHA-256 et les totaux.
 - Le répertoire powerbi/queries contient 12 requêtes Power Query typées plus la fonction fnLocalCSV.
 - powerbi/E6_Mesures_DAX.dax présente les mesures métier, le calendrier et les contrôles.
-- docs/e6-powerbi.md décrit les 5 pages attendues et la recette locale Power BI Desktop.
+- docs/e6-powerbi.md décrit les 5 pages effectivement visibles et la recette locale Power BI Desktop.
 - **Le PBIX est assemblé et a été utilisé dans les captures Windows** ; le validateur E6 et les KPI SQL E7 concordent. Il n'a pas été audité automatiquement par GitHub et reste exclu du dépôt. Quelques preuves complémentaires (rafraîchissement exhaustif, trois contrôles DAX à zéro, filtre SP, YoY) restent explicitement identifiées dans la recette, sans annuler les tests fonctionnels déjà montrés.
+
+## E7 — Validation croisée (intégrée)
+ 
+La recette locale E7 a réconcilié PostgreSQL, les agrégats E3/E5 et les KPI visibles du PBIX : **96 211 commandes**, **13 181 027,13 BRL**, **93 104 clients**, **7 822 retards** et **2 789 réacheteurs**, avec les tests ciblés CE et groupe `late`. Voir [`docs/e7-validation.md`](docs/e7-validation.md). La PR #5 a été fusionnée dans `main` ; ceci ne constitue **pas** un audit logiciel du fichier PBIX lui-même.
+
+## E8 — Bilan public, recette et portfolio
+
+Cette étape fournit uniquement des documents, un fichier de **métriques agrégées historiques** et un validateur de publication en lecture seule :
+
+- [Bilan analytique et niveau de preuve](docs/e8-bilan.md)
+- [Reproduction locale et checklist de diffusion](docs/e8-reproduction.md)
+- [Contenu portfolio et CV prêt à adapter](docs/e8-portfolio.md)
+- [Référentiel public d'agrégats](docs/e8-public-metrics.json)
+- `scripts/validate_e8.py` : contrôles d'intégrité et détection de fichiers locaux suivis par Git.
+
+Les visuels publics du portfolio restent **à sélectionner manuellement** dans Power BI Desktop, après suppression des éléments privés et vérification des droits d'usage. Aucun site web ni Power BI Service n'est publié par cette étape.
 
 ## Tests hors ligne
 
 ```powershell
 py -m unittest discover -s tests -v
+py scripts/validate_e8.py
 ```
 
 Ces tests vérifient les contrats sans connexion PostgreSQL. La **validation réelle** des vues SQL et du chargement nécessite `scripts/import_olist.py` contre PostgreSQL et la réussite de `sql/03_quality.sql`.
@@ -142,6 +166,6 @@ Ces tests vérifient les contrats sans connexion PostgreSQL. La **validation ré
 
 ## Limites et garde-fous
 
-Cette étape prépare un socle **local**, pas une application en production. Aucun serveur cloud, déploiement, abonnement ou coût n'a été engagé. Le pilote Python contient une fonction de remise à zéro **uniquement des neuf tables du schéma `source`** de la base indiquée ; utilisez une base Commerce 360 dédiée. Les CSV bruts ne sont pas modifiés. Les vues peuvent être reconstruites sans double comptage.
+Ce projet fournit un socle analytique **local**, pas une application en production. Aucun serveur cloud, déploiement, abonnement ou coût n'a été engagé. Le pilote Python contient une fonction de remise à zéro **uniquement des neuf tables du schéma `source`** de la base indiquée ; utilisez une base Commerce 360 dédiée. Les CSV bruts ne sont pas modifiés. Les vues peuvent être reconstruites sans double comptage.
 
 À la fin de l'import PostgreSQL, confronter les résultats de `mart.v_kpi_global` aux métriques E1. **Contrôle E2 exécuté et confirmé le 16 octobre 2026 sur PostgreSQL local : résultats conformes aux références E1.** Pour toute nouvelle installation, cette vérification reste à rejouer avant de commencer E3.
