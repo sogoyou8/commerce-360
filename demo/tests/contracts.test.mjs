@@ -74,3 +74,24 @@ test("comparable sales categories use article prices, not profit", () => {
   assert.equal(source.categories[0].salesBrl,1229557.50);
   assert.ok(source.meta.caveat.includes("historiques"));
 });
+
+
+test("E1 explains the independent Olist study in the UI without exposing raw data", () => {
+  const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
+  const js = readFileSync(new URL("../app.js", import.meta.url), "utf8");
+  const css = readFileSync(new URL("../styles.css", import.meta.url), "utf8");
+  assert.match(html, /À propos \/ Données/);
+  assert.match(html, /aria-controls="method-dialog"/);
+  assert.match(html, /aria-labelledby="method-title"/);
+  assert.match(html, /ÉTUDE DE CAS INDÉPENDANTE/);
+  assert.match(html, /neuf fichiers e-commerce historiques/);
+  for (const metric of ["96 211", "13,18 M", "93 104", "7 822", "96 203"]) {
+    assert.ok(html.includes(metric), `Chiffre historique non documenté : ${metric}`);
+  }
+  assert.match(html, /<summary>Données, méthodologie et limites/);
+  assert.match(html, /aucun filtrage croisé fictif/);
+  assert.match(html, /https:\/\/github.com\/sogoyou8\/commerce-360\/blob\/main\/docs\/e8-bilan.md/);
+  assert.match(js, /Explorer le commerce/);
+  assert.match(js, /aria-expanded", "false"/);
+  assert.match(css, /\.method-dialog \{ position: fixed/);
+});
