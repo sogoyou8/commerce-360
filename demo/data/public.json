@@ -1,0 +1,251 @@
+{
+  "meta": {
+    "title": "Commerce 360",
+    "origin": "Olist · Brésil",
+    "start": "2017-01-01",
+    "endExclusive": "2018-09-01",
+    "currency": "BRL",
+    "source": "Références E3/E5/E7, rapport Power BI E6",
+    "mode": "Référence publique vérifiée",
+    "coverage": {
+      "states": "3 États documentés parmi 27",
+      "categories": "2 catégories documentées parmi le catalogue",
+      "sellerStates": "Non disponible dans la référence publique",
+      "cohorts": "Non disponible dans la référence publique"
+    },
+    "caveat": "Données historiques. Agrégats descriptifs uniquement, aucune information client individuelle."
+  },
+  "totals": {
+    "orders": 96211,
+    "salesBrl": 13181027.13,
+    "averageBasket": 137,
+    "customers": 93104,
+    "repeatCustomers": 2789,
+    "late": 7822,
+    "dated": 96203,
+    "lateRate": 8.13,
+    "deliveryDays": 12.54,
+    "averageScore": 4.16,
+    "negativeRate": 12.8
+  },
+  "monthly": [
+    {
+      "month": "2017-01",
+      "orders": 750,
+      "salesBrl": 111798.36
+    },
+    {
+      "month": "2017-02",
+      "orders": 1653,
+      "salesBrl": 234223.4
+    },
+    {
+      "month": "2017-03",
+      "orders": 2546,
+      "salesBrl": 359198.85
+    },
+    {
+      "month": "2017-04",
+      "orders": 2303,
+      "salesBrl": 340669.68
+    },
+    {
+      "month": "2017-05",
+      "orders": 3546,
+      "salesBrl": 489338.25
+    },
+    {
+      "month": "2017-06",
+      "orders": 3135,
+      "salesBrl": 421923.37
+    },
+    {
+      "month": "2017-07",
+      "orders": 3872,
+      "salesBrl": 481604.52
+    },
+    {
+      "month": "2017-08",
+      "orders": 4193,
+      "salesBrl": 554699.7
+    },
+    {
+      "month": "2017-09",
+      "orders": 4150,
+      "salesBrl": 607399.67
+    },
+    {
+      "month": "2017-10",
+      "orders": 4478,
+      "salesBrl": 648247.65
+    },
+    {
+      "month": "2017-11",
+      "orders": 7289,
+      "salesBrl": 987765.37
+    },
+    {
+      "month": "2017-12",
+      "orders": 5513,
+      "salesBrl": 726033.19
+    },
+    {
+      "month": "2018-01",
+      "orders": 7069,
+      "salesBrl": 924645
+    },
+    {
+      "month": "2018-02",
+      "orders": 6555,
+      "salesBrl": 826437.13
+    },
+    {
+      "month": "2018-03",
+      "orders": 7003,
+      "salesBrl": 953356.25
+    },
+    {
+      "month": "2018-04",
+      "orders": 6798,
+      "salesBrl": 973534.09
+    },
+    {
+      "month": "2018-05",
+      "orders": 6749,
+      "salesBrl": 977544.69
+    },
+    {
+      "month": "2018-06",
+      "orders": 6099,
+      "salesBrl": 856077.86
+    },
+    {
+      "month": "2018-07",
+      "orders": 6159,
+      "salesBrl": 867953.46
+    },
+    {
+      "month": "2018-08",
+      "orders": 6351,
+      "salesBrl": 838576.64
+    }
+  ],
+  "states": [
+    {
+      "code": "CE",
+      "orders": 1273,
+      "dated": 1273,
+      "late": 196,
+      "rate": 15.4,
+      "days": 21.24
+    },
+    {
+      "code": "RJ",
+      "orders": 12310,
+      "dated": 12310,
+      "late": 1664,
+      "rate": 13.52,
+      "days": 15.3
+    },
+    {
+      "code": "SP",
+      "orders": 40406,
+      "dated": 40399,
+      "late": 2384,
+      "rate": 5.9,
+      "days": 8.74
+    }
+  ],
+  "categories": [
+    {
+      "label": "health_beauty",
+      "salesBrl": 1229557.5
+    },
+    {
+      "label": "watches_gifts",
+      "salesBrl": 1163465.91
+    }
+  ],
+  "sellerStates": [],
+  "satisfaction": [
+    {
+      "code": "on_time",
+      "label": "À l’heure",
+      "orders": 88381,
+      "scored": 87902,
+      "score": 4.29,
+      "negative": 8089,
+      "negativeRate": 9.2
+    },
+    {
+      "code": "late",
+      "label": "En retard",
+      "orders": 7822,
+      "scored": 7658,
+      "score": 2.57,
+      "negative": 4139,
+      "negativeRate": 54.05
+    },
+    {
+      "code": "undated",
+      "label": "Non daté",
+      "orders": 8,
+      "scored": 8,
+      "score": 4.5,
+      "negative": 1,
+      "negativeRate": 12.5
+    }
+  ],
+  "segments": [
+    {
+      "code": "champions_observed",
+      "label": "Champions observés",
+      "customers": 927,
+      "repeats": 927,
+      "salesBrl": 304205.92
+    },
+    {
+      "code": "repeat_recent",
+      "label": "Réacheteurs récents observés",
+      "customers": 872,
+      "repeats": 872,
+      "salesBrl": 174107.55
+    },
+    {
+      "code": "high_value_recent",
+      "label": "Forte valeur récente observée",
+      "customers": 10257,
+      "repeats": 0,
+      "salesBrl": 4044067.98
+    },
+    {
+      "code": "single_recent",
+      "label": "Premier achat unique récent observé",
+      "customers": 29166,
+      "repeats": 0,
+      "salesBrl": 2243672.51
+    },
+    {
+      "code": "repeat_less_recent",
+      "label": "Réacheteurs moins récents",
+      "customers": 990,
+      "repeats": 990,
+      "salesBrl": 247041.57
+    },
+    {
+      "code": "single_less_recent",
+      "label": "Achat unique moins récent",
+      "customers": 36145,
+      "repeats": 0,
+      "salesBrl": 5041879.93
+    },
+    {
+      "code": "other_observed",
+      "label": "Autres profils observés",
+      "customers": 14747,
+      "repeats": 0,
+      "salesBrl": 1126051.67
+    }
+  ],
+  "cohorts": []
+}
