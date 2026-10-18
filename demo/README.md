@@ -1,3 +1,18 @@
+## F4 — Design system transversal (19/10/2026)
+
+Couche `demo/design-system-f4.css` chargée **après** F0, F1/F2 et F3 pour mutualiser l'expression graphique des cinq modes :
+
+- **F4.1** typographie et chiffres tabulaires cohérents, titres équilibrés, contraste des légendes augmenté ;
+- **F4.2** palette de tokens `--ui-*` définissant texte, bordures, accent, états positifs et négatifs ;
+- **F4.3** apparence partagée des boutons, navigation, options, flèches et raccourcis des trois panneaux ;
+- **F4.4** bordures et surfaces harmonisées sur graphique, inspecteur et exploration ;
+- **F4.5** hover, pressé, sélection et focus clavier lisibles, respects de reduced motion et forced colors ;
+- **F4.6** validation attendue en vrai navigateur, sur cinq modes et tailles desktop/mobile.
+
+La couche F4 ne définit aucune nouvelle grille ni dimension de cockpit : F1/F2 demeurent propriétaires de la structure. Les données Olist `data/public.json`, le JS et le SVG des États restent inchangés. Les états de contrôle utilisent des attributs ARIA réels, pas de comparaisons inventées. PR #7 toujours draft.
+
+---
+
 ## F3 final — planète détourée intégrée (19/10/2026)
 
 **Asset produit et ajouté dans le dépôt :** `demo/assets/earth-f3.webp` (WebP RGBA, 160×160, ~8 Ko), version légère de l'illustration Terre nocturne générée pour Commerce 360. L'image source haute définition reste disponible séparément ; l'asset WebP est une variante décorative basse résolution pour chargement rapide, non une carte de données.

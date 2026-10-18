@@ -214,3 +214,19 @@ test("F3 globe is a real, lightweight transparent WebP asset, not an image mask"
   assert.match(f3,/background:url\("\.\/assets\/earth-f3\.webp"\) center \/ contain no-repeat/);
   assert.doesNotMatch(f3,/city_lights_namerica_8k|mask-image:radial-gradient/);
 });
+
+test("F4 uses shared visual tokens for all five navigation modes",()=>{
+  const f4=readFileSync(new URL("../design-system-f4.css",import.meta.url),"utf8");
+  assert.match(html,/design-system-f4\.css\?v=e3-f4-20261019-unified/);
+  for(const name of ["--ui-text","--ui-secondary","--ui-accent","--ui-positive","--ui-line","--ui-radius"])
+    assert.ok(f4.includes(name),"missing "+name);
+  assert.match(f4,/\.mode-nav a\[aria-current="page"\]/);
+  assert.match(f4,/\.view-options button\[aria-pressed="true"\]/);
+  assert.match(f4,/\.rank-row\[aria-pressed="true"\]/);
+  assert.match(f4,/\.group-card\[aria-pressed="true"\]/);
+  assert.match(f4,/\.dock-category-row:hover/);
+  assert.match(f4,/\.brazil-map:focus-visible/);
+  assert.match(f4,/prefers-reduced-motion:reduce/);
+  assert.match(f4,/forced-colors:active/);
+  assert.doesNotMatch(f4,/\.workspace\s*\{|\.analysis\s*\{|grid-template-rows/);
+});
