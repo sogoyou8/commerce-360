@@ -13,7 +13,17 @@ Commerce 360 est une **étude de cas Data Analyst indépendante** sur neuf sourc
 - Le panneau relie directement au **[dépôt GitHub](https://github.com/sogoyou8/commerce-360)** et au **[bilan analytique vérifié](../docs/e8-bilan.md)**.
 - Les données historiques ne sont ni l'activité actuelle d'Olist ni une mesure de marge ; les retards, avis et clients ont leurs propres dénominateurs. Aucun croisement analytique inexistant n'est simulé.
 
-**Ce changement concerne seulement la présentation du sujet (E1)**. La restructuration PXM « un seul écran / cinq modes » est prévue dans une étape ultérieure et n'est pas présentée comme réalisée.
+## E3 — Un cockpit PXM, cinq modes
+
+Le socle de la démo est désormais **un seul espace de travail** : navigation horizontale à cinq modes, sous-titre métier court, quatre KPI **contextuels**, grand graphique central et **inspecteur** mis à jour à chaque sélection. Plus de sidebar verticale, de grand Hero, de rangée de cartes décoratives ni de footer de dashboard.
+
+**Interaction :** choisir un mode depuis la barre supérieure (également par les flèches gauche/droite, Début/Fin lorsque la navigation a le focus), choisir une mesure dans le graphique, puis sélectionner le mois, le groupe de satisfaction, l'État documenté ou le segment client. L'inspecteur expose la valeur et sa prudence méthodologique. Un volet replié conserve des repères complémentaires sans encombrer l'écran. Le panneau « À propos / Données » d'E1 reste accessible en haut à droite.
+
+**Affichage :** le viewport desktop devient l'espace principal (sans scroll de page sur les écrans d'au moins 960 px de large et 670 px de haut) ; le graphique et l'inspecteur gèrent leurs propres débordements. Les écrans plus petits s'adaptent en colonne et autorisent le scroll nécessaire à l'accessibilité.
+
+**Données :** E3 ne modifie pas les chiffres publiés. Les 20 mois, 7 segments et 3 États/2 catégories du snapshot initial restent vérifiés et transparents ; le même UI reçoit automatiquement les 27 États et 12 catégories après la procédure E2 locale. Les KPI nationaux ne simulent aucun filtrage impossible.
+
+Cette PR est encore une **prévisualisation**. La recette navigateur desktop/mobile et l'intégration complète des exports E2 restent requises avant publication finale.
 
 ## Prévisualisation Vercel
 
@@ -35,9 +45,9 @@ Ouvrir **http://localhost:8000**. Si la branche est déjà locale, utiliser `git
 
 La page nécessite JavaScript et un serveur HTTP statique : ouvrir directement le fichier `index.html` avec `file://` n'est pas pris en charge, car les agrégats sont chargés par `fetch`.
 
-## Ce que la première version permet réellement
+## Interactions réelles des cinq modes
 
-| Chapitre | Interaction | Grain et source |
+| Mode | Interaction | Grain et source |
 |---|---|---|
 | 01 Vue d'ensemble | Changer ventes/commandes et sélectionner chacun des 20 mois | `mart.e3_monthly_sales` / référence E3 |
 | 02 Ventes | Choisir ventes/commandes et comparer janvier–août 2017 avec les mêmes mois de 2018 | Référence E3 ; **deux catégories** de tête seulement dans la version sans export |
