@@ -60,3 +60,19 @@ test("E3 complementary panels show only real partial-coverage Olist aggregates",
   assert.match(html,/Power BI\/DAX/);
   assert.match(html,/aucun filtrage croisé fictif/);
 });
+
+test("E3 Clients exposes E2 cohorts with distinct population and time-grain caveats",()=>{
+  assert.match(js,/function renderCustomerCohorts\(\)/);
+  assert.match(js,/data\.cohorts/);
+  assert.match(js,/state\.customersView==="cohorts"/);
+  assert.match(js,/selectedCohort/);
+  assert.match(js,/20 cohortes mensuelles/);
+  assert.match(js,/ne prédisent ni fidélité actuelle ni churn/);
+  assert.match(js,/Premi[eè]r achat|PREMIER ACHAT LIVRÉ OBSERVÉ/);
+});
+
+test("E3 states label delivered orders correctly and never pretend 27 states are partial",()=>{
+  assert.match(js,/commandes livrées\x60\)/);
+  assert.match(js,/data\.states\.length===27/);
+  assert.match(js,/data\.meta\.coverage\.states/);
+});
