@@ -46,7 +46,7 @@
     pointer-events:none;
   }
   .metric:last-child {
-    background:linear-gradient(90deg,rgba(4,10,23,.11),rgba(4,10,24,.73));
+    background:linear-gradient(90deg,rgba(4,10,23,.23),rgba(4,10,24,.86));
   }
   .story-panel {
     background:linear-gradient(155deg,rgba(10,26,56,.86),rgba(4,13,31,.975) 83%);

@@ -622,6 +622,7 @@ function dockRow(label,value,ratio,subtitle="") {
   const line=append(node("div","dock-row-line"),node("span","dock-item-label",label),node("strong","dock-item-value",value));
   const track=append(node("div","dock-track"),node("i"));
   track.firstChild.style.setProperty("--w",Math.max(0,Math.min(100,ratio))+"%");
+  track.setAttribute("aria-hidden","true");
   row.append(line,track);
   if(subtitle)row.append(node("small","dock-row-note",subtitle));
   return row;
@@ -697,9 +698,11 @@ function renderDock() {
     const row=node("button","dock-category-row");
     row.type="button";
     row.title="Explorer "+labelCategory(item.label)+" dans Ventes";
+    row.setAttribute("aria-label","Explorer la catégorie "+labelCategory(item.label)+" : "+amount(item.salesBrl,true)+", "+percent(observedShare(item.salesBrl,data.totals.salesBrl),1)+" des ventes nationales");
     const label=node("span","dock-item-label",labelCategory(item.label));
     const track=append(node("span","dock-track"),node("i"));
     track.firstChild.style.setProperty("--w",100*item.salesBrl/categoryMax+"%");
+    track.setAttribute("aria-hidden","true");
     const value=node("span","dock-item-value",smallAmount(item.salesBrl)+" · "+percent(observedShare(item.salesBrl,data.totals.salesBrl),1));
     append(row,label,track,value);
     row.addEventListener("click",()=>{
@@ -727,8 +730,10 @@ function renderDock() {
     const row=node("button","dock-state-row");
     row.type="button";
     row.title=item.code+" : "+n(item.late)+" retards sur "+n(item.dated)+" livraisons datées";
+    row.setAttribute("aria-label","Explorer "+item.code+" : "+n(item.orders)+" commandes livrées, "+percent(item.rate,1)+" de retard parmi "+n(item.dated)+" livraisons datées");
     const track=append(node("span","dock-track"),node("i"));
     track.firstChild.style.setProperty("--w",100*item.orders/maxVolume+"%");
+    track.setAttribute("aria-hidden","true");
     const label=append(node("span","state-rank-metrics"),node("strong","",n(item.orders)),node("small","",percent(item.rate,1)+" ret."));
     append(row,node("span","state-rank-index",String(i+1)),node("span","state-rank-code",item.code),track,label);
     row.addEventListener("click",()=>openDeliveryState(item.code));
@@ -750,6 +755,8 @@ function renderDock() {
   const quality=node("div","dock-quality-layout");
   const top=node("div","dock-quality-overview");
   const ring=node("div","score-ring");
+  ring.setAttribute("role","img");
+  ring.setAttribute("aria-label","Note moyenne des commandes notées : "+decimal.format(data.totals.averageScore)+" sur 5");
   ring.style.setProperty("--score-pct",100*data.totals.averageScore/5+"%");
   append(ring,append(node("div","score-ring-center"),
     node("strong","",new Intl.NumberFormat("fr-FR",{maximumFractionDigits:1,minimumFractionDigits:1}).format(data.totals.averageScore)+" / 5"),node("span","","Note moyenne")));

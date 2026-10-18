@@ -1,3 +1,11 @@
+## F5 — Cartes inférieures et lisibilité (19/10/2026)
+
+Couche de présentation indépendante `demo/dock-f5.css`, chargée après F4. Les trois cartes permanentes (catégories, États, satisfaction) reçoivent une hiérarchie homogène, des barres plus lisibles, une carte du Brésil agrandie selon l'espace disponible, un anneau de note renforcé et des états de focus cohérents. Les lignes « Autres ventes » et « Autres (22 États) », calculées à partir des totaux nationaux vérifiés, restent visibles même sur desktop compact. Sur mobile, les cartes s'empilent et gardent les valeurs accessibles sans débordement horizontal.
+
+Les contrôles du dock ont des libellés accessibles contenant le montant ou le nombre exact, le taux et le périmètre. L'anneau décrit la vraie moyenne des avis. Aucun nouveau KPI, pourcentage, comparaison fictive ou donnée source n'est ajouté ; `demo/data/public.json` et les cinq modes ne changent pas. F3 reçoit uniquement une protection de contraste légèrement plus forte derrière le quatrième KPI. La ressource Terre active est `assets/earth-f3-hd.webp` en 1024×1024, **pas** un PNG ; une variante Retina native 2048px ne doit pas être inventée par simple agrandissement. Validation CI et navigateur nécessaire avant fusion, PR #7 conservée en draft.
+
+---
+
 ## F4 — Design system transversal (19/10/2026)
 
 Couche `demo/design-system-f4.css` chargée **après** F0, F1/F2 et F3 pour mutualiser l'expression graphique des cinq modes :

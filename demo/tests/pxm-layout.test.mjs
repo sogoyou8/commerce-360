@@ -241,3 +241,20 @@ test("F3 HD asset dimensions and native alpha are validated",()=>{
   assert.match(f3,/earth-f3-hd\.webp/);
   assert.doesNotMatch(f3,/url\("\.\/assets\/earth-f3\.webp"\)/);
 });
+
+test("F5 upgrades all three exploration cards without altering the cockpit or data",()=>{
+  const f5=readFileSync(new URL("../dock-f5.css",import.meta.url),"utf8");
+  assert.match(html,/dock-f5\.css\?v=e3-f5-20261019-cards/);
+  assert.match(html,/app\.js\?v=e3-20261019-f5-accessible/);
+  assert.match(f5,/#dock-categories \.dock-category-row/);
+  assert.match(f5,/#dock-states \.dock-state-layout/);
+  assert.match(f5,/#dock-quality \.score-ring/);
+  assert.match(f5,/#dock-categories \.dock-category-row--other\{display:grid/);
+  assert.match(f5,/#dock-states \.dock-state-row--other\{display:grid/);
+  assert.match(f5,/@media \(max-width:460px\)/);
+  assert.match(f5, /forced-colors:active/);
+  assert.doesNotMatch(f5,/\.workspace\s*\{|\.analysis\s*\{|\.metric\s*\{/);
+  assert.match(js,/row\.setAttribute\("aria-label","Explorer la catégorie "/);
+  assert.match(js,/row\.setAttribute\("aria-label","Explorer "\+item\.code/);
+  assert.match(js,/ring\.setAttribute\("role","img"\)/);
+});
