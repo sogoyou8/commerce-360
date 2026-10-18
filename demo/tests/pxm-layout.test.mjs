@@ -72,7 +72,7 @@ test("E3 Clients exposes E2 cohorts with distinct population and time-grain cave
 });
 
 test("E3 states label delivered orders correctly and never pretend 27 states are partial",()=>{
-  assert.match(js,/commandes livrées\x60\)/);
+  assert.match(js,/n\(s\.orders\)\+" commandes livrées"/);
   assert.match(js,/data\.states\.length===27/);
   assert.match(js,/data\.meta\.coverage\.states/);
 });
