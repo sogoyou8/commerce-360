@@ -1,6 +1,6 @@
 # Commerce 360 — E6 Power BI Desktop · modèle et recette
 
-**Statut : code, requêtes M, mesures DAX et contrôles préparés sur la branche E6. PBIX et recette Desktop encore à réaliser sous Windows.** Ne pas clôturer E6 sur la seule base de la CI.
+**Statut actualisé le 18 octobre 2026 :** le rapport `Commerce_360_E6.pbix` existe sur le PC de l'utilisateur ; cinq pages et leurs indicateurs ont été montrés en captures Power BI Desktop. Le validateur E6 des 12 exports E4/E5 et leurs SHA-256 a affiché `E6 OK` ; 35 tests Python E2–E7 ont réussi ; les recoupements métier E7 avec PostgreSQL se sont terminés par `E7 SQL OK`. **Le PBIX reste local et n'a pas été ouvert ou audité depuis GitHub.** La recette des points non visibles sur les captures est distinguée ci-dessous de ces preuves, et la documentation/publication générale sera peaufinée en E8.
 
 ## Objectif et périmètre
 
@@ -40,38 +40,38 @@ Le script requiert les 9 exports et manifest.json dans .data/e4, ainsi que les 3
 5. Vérifier que les dates sont typées Date, que les montants sont en nombre décimal fixe (Currency) et les volumes entiers. La conversion des valeurs décimales exportées au format à point passe par la culture **en-US**, quelle que soit la langue d'Excel. La colonne low_review_score E4 reste en texte, car PostgreSQL produit t/f : calculer la satisfaction à partir de review_score plutôt que d'interpréter à tort le texte comme booléen.
 6. Fermer et appliquer. Contrôler 96 211 lignes dans fact_delivered_orders, 7 dans segments_summary et 83 dans cohort_segments.
 7. Modélisation > Nouvelle table : créer **DimDate** en copiant uniquement sa définition de powerbi/E6_Mesures_DAX.dax. Trier DimDate[AnneeMois] par DimDate[OrdreAnneeMois].
-8. Vue Modèle : établir **une seule relation active 1 → plusieurs** de DimDate[Date] vers fact_delivered_orders[purchase_date]. Ne créer **aucune relation** vers les tables agrégées E3/E5 ni entre elles.
+8. Vue Modèle : établir la relation temporelle `DimDate[Date]` (1) → `fact_delivered_orders[purchase_date]` (*), si utilisée pour des visuels au grain commande. **Les captures du PBIX réel montrent également deux relations actives, à sens unique, validées dans la recette des filtres** : `delivery_states[customer_state]` (1) → `fact_delivered_orders[customer_state]` (*) et `delivery_satisfaction[delivery_group]` (1) → `fact_delivered_orders[delivery_group]` (*). Elles relient des dimensions descriptives à la table des commandes sur une clé cohérente ; ne pas ajouter de relations arbitraires aux agrégats catégorie, vendeur et RFM. Vérifier toute nouvelle relation au regard du grain et du contexte de filtre.
 9. Modélisation > Nouvelle mesure : créer chaque mesure séparément depuis le fichier DAX ; appliquer les formats BRL, unités et pourcentages appropriés. Les mesures DAX Taux de retard, Réachat observé et Part des ventes segment produisent une fraction et se formatent en pourcentage. Les **colonnes CSV** avec suffixe _pct contiennent déjà une valeur sur 100 : ne pas leur appliquer directement un format % sans division par 100.
 
 **Attention au grain :** fact_delivered_orders = 1 ligne par commande livrée ; category_sales = 1 ligne par catégorie, seller_sales = 1 ligne par vendeur, segments_summary = 1 ligne par segment historique, cohort_segments = 1 ligne par couple cohorte-segment. Le nombre de commandes par catégorie et par vendeur **n'est pas additif** car une même commande peut traverser plusieurs groupes. Les exports E5 sont des agrégats : les filtrer avec une colonne de la table de commandes provoquerait une fausse impression de relation. Les clients observés sur 20 mois ne sont pas les clients uniques actifs chaque mois.
 
-## C — Cinq pages du rapport (16:9)
+## C — Les cinq pages réellement réalisées dans Power BI Desktop (16:9)
 
-Garder une hiérarchie claire, de grands graphiques utiles, peu de rectangles et un affichage lisible à l'écran ; pas de décoration de « dashboard » générique. Les tableaux longs peuvent avoir leur défilement interne.
+Le plan initial E6 a évolué au cours de l'assemblage et de la recette. **Voici la structure visible dans les captures utilisateur**, qui fait foi pour le rapport réalisé ; les tables de contrôle qualité restent disponibles dans le modèle mais ne sont pas une page autonome.
 
-| Page | Contenu à construire | Interactions autorisées |
+| Page visible dans Power BI Desktop | Contenu confirmé par les captures | Interaction et grain |
 |---|---|---|
-| **01 · Pilotage** | Commandes livrées, ventes articles, panier, taux de retard ; courbe mensuelle, volumes 2017/2018 | Mesures fact + DimDate ; segments mois et État acheteur (customer_state) |
-| **02 · Ventes** | Top 10 catégories, top 10 vendeurs, parts et comparatif jan–août 2017/2018 | category_sales, seller_sales, yoy_jan_aug : agrégats **globaux fixes** |
-| **03 · Clients et RFM** | 93 104 clients, 2 789 réacheteurs (3,00 %), sept segments, poids ventes et cohortes | segments_summary, cohort_segments, customer_cohorts ; cutoff fixe 2018 |
-| **04 · Livraisons** | 7 822 retards parmi 96 203 livraisons datées, taux 8,13 %, délais, notes et cartes des États si pertinente | KPI calculés sur fact, analyses descriptives dans delivery_states et delivery_satisfaction |
-| **05 · Qualité** | Trois contrôles DAX à zéro, 99 092 commandes tous statuts, 739 sans article, 762 sans avis, 279 sans géolocalisation, huit dates réelles manquantes | quality_summary et quality_rfm **non filtrées** ; ne jamais masquer ni « corriger » les anomalies sources |
+| **01_Vue d'ensemble** | 13,18 M BRL de ventes articles, 96 211 commandes, panier 137 BRL, retard 8,13 %, courbe de ventes mensuelles | 20 mois historiques ; comparaisons au niveau commande quand le visuel le permet |
+| **02_Ventes** | Top 10 catégories, ventes par État vendeur | Agrégats descriptifs catégorie et État vendeur, ne pas prétendre qu'ils sont filtrables par chaque dimension du fait commandes |
+| **03_Livraisons** | 7 822 retards, taux 8,13 %, délai moyen 12,5 j, taux de retard par État et délai par État | Test interactif CE : 196 retards, 15,40 %, délai 21,2 j ; relation `delivery_states` → `fact_delivered_orders` |
+| **04_Qualité** | Note moyenne clients 4,16/5, taux d'avis négatifs 12,80 %, notes et avis négatifs selon ponctualité | Test interactif `late` : note 2,57/5, taux d'avis négatifs 54,05 % ; relation `delivery_satisfaction` → `fact_delivered_orders` |
+| **05_Clients** | 93 104 clients observés, taux de réachat 3,00 %, répartition des clients RFM, ventes par segment RFM | Sept segments descriptifs calculés au 01/09/2018 ; sélection d'un segment « achat unique » : taux de réachat 0 % |
 
-**Avertissement visible sur pages 02, 03 et 05 :** données descriptives calculées sur la période entière. Ne pas faire croire que le segment d'État de page 01 s'applique aux analyses RFM. Désactiver les interactions automatiques susceptibles de suggérer un filtrage qu'aucune relation ne réalise.
+**Limites du croisement :** la plupart des tables E3/E5 sont des agrégats à grains distincts ; elles ne sont pas automatiquement filtrées par tous les graphiques. Aucun indicateur client ne prédit la rétention actuelle. Les notes et avis sont calculés sur les commandes disposant d'un avis valide.
 
-## D — Recette E6 Power BI Desktop (obligatoire avant clôture)
+## D — Recette E6 : résultats observés et vérifications complémentaires
 
-- [ ] E6-01 : le script validate_e6.py affiche **E6 OK** ; les 12 empreintes SHA-256 correspondent à leurs manifestes.
-- [ ] E6-02 : **Actualiser** dans Power BI Desktop fonctionne sans erreur. Les douze requêtes ont les types attendus.
-- [ ] E6-03 : KPI globaux hors filtre : **96 211** commandes livrées, **13 181 027,13 BRL** d'articles, panier **environ 137,00 BRL**, **93 104** clients, **2 789** réacheteurs ; sept segments et 83 couples cohortes-segments.
-- [ ] E6-04 : livraisons en retard = **7 822**, datées = **96 203**, taux arrondi = **8,13 %**.
-- [ ] E6-05 : les trois contrôles DAX de réconciliation commandes, ventes et clients affichent **0**, sans filtre.
-- [ ] E6-06 : sur un visuel fondé sur fact_delivered_orders, filtrer customer_state = SP doit donner **40 406** commandes ; les tableaux RFM demeurent fixes et identifiés comme tels.
-- [ ] E6-07 : 20 mois dans les ventes, 8 mois jan–août appariés dans YoY, top catégories et vendeurs bien classés, pas de double comptage de commandes.
-- [ ] E6-08 : les cinq pages sont exploitables à taille normale, sans données manquantes, relations ambiguës, mesures cassées ou affirmations causales/prédictives.
-- [ ] E6-09 : enregistrer un vrai **Commerce_360_E6.pbix** dans le PC ; ne pas le publier dans ce dépôt (il contient des détails de commandes et des chemins locaux).
+- [x] **E6-01** : `scripts/validate_e6.py` a affiché **E6 OK** ; 9 exports E4 + 3 exports E5, manifestes SHA-256, montants et grains cohérents (capture terminal du 18/10/2026).
+- [x] **E6-03** : KPI globaux montrés par captures ou croisés en SQL : **96 211** commandes livrées, **13 181 027,13 BRL**, panier **137,00 BRL**, **93 104** clients, **2 789** réacheteurs, sept segments, 83 lignes de cohortes-segments.
+- [x] **E6-04** : **7 822** retards, **96 203** livraisons datées, **8,13 %** — vérifiés par E7 SQL et affichage Power BI.
+- [x] **E6-08 (périmètre visuel)** : les cinq pages sont visibles et les interactions ciblées CE / `late` / RFM ont été testées en captures utilisateur.
+- [x] **E6-09** : un rapport `Commerce_360_E6` ouvert dans Power BI Desktop a été présenté en captures ; **le fichier PBIX n'est pas versé au dépôt**.
+- [ ] **E6-02** : conserver si nécessaire une preuve séparée d'un **Actualiser tout** sans erreur dans Power BI Desktop ; les captures disponibles montrent les données chargées, pas la totalité du rafraîchissement.
+- [ ] **E6-05** : capturer les trois mesures de contrôle DAX à **0** dans Power BI Desktop, si elles sont présentes ; leur égalité n'est pas directement montrée dans les captures.
+- [ ] **E6-06** : vérifier explicitement `customer_state = SP` → **40 406** commandes dans le visuel commande et l'absence de faux filtrage des agrégats indépendants.
+- [ ] **E6-07 (partie non vue)** : vérifier l'analyse YoY janvier–août appariée, si elle doit figurer dans la restitution finale ; le graphique mensuel et les top catégories/États vendeurs sont visibles.
 
-**La CI GitHub ne valide que le code source et les contrats.** L'E6 sera clôturable après recette locale Desktop sur ces 9 points et revue de PR, pas avant.
+**Le contrôle de recette fonctionnelle E6 a été déclaré validé dans la conversation et le rapprochement SQL E7 est passé.** Les réserves ci-dessus sont des preuves complémentaires de reproductibilité/périmètre, et non des écarts métier avérés. La CI GitHub ne peut pas ouvrir le PBIX local ; E8 devra documenter le rapport effectivement livré avant publication.
 
 ## E — Limites et suites
 
