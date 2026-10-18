@@ -83,3 +83,8 @@ test("E3 inspector content does not flex-shrink into overlapping sections",()=>{
   assert.match(css,/\.lower\{[^}]*flex:0 0 auto/);
   assert.match(css,/\.story-panel\{[^}]*overflow-y:auto/);
 });
+
+test("E3 narrow screen intro keeps scope away from the heading",()=>{
+  assert.match(css,/\.intro\{flex-direction:column;align-items:stretch;gap:7px\}/);
+  assert.match(css,/\.context-strip\{align-self:flex-start;max-width:100%;text-align:left/);
+});
