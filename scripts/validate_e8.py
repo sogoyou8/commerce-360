@@ -80,6 +80,8 @@ def validate_metrics(data: dict) -> list[str]:
         errors.append("Grain commandes incoherent")
     if (t["observed_customers"], t["repeat_customers"]) != (93104, 2789):
         errors.append("Effectifs clients non conformes")
+    if (t["late_deliveries"], t["dated_deliveries"]) != (7822, 96203):
+        errors.append("Effectifs de livraisons datees non conformes")
     if Decimal(t["item_sales_brl"]) != Decimal("13181027.13"):
         errors.append("Ventes de reference modifiees")
     if pct(t["repeat_customers"], t["observed_customers"]) != Decimal(t["repeat_rate_pct"]):
