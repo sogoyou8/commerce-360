@@ -95,3 +95,33 @@ test("E1 explains the independent Olist study in the UI without exposing raw dat
   assert.match(js, /aria-expanded", "false"/);
   assert.match(css, /\.method-dialog \{ position: fixed/);
 });
+
+test("E2 rejects misleading partial/full coverage, incorrect totals and fabricated regions", () => {
+  const cases=[
+    d=>{ d.meta.coverage.states="27 États vérifiés"; },
+    d=>{ d.states[0].orders+=1; },
+    d=>{ d.states[0].code="ZZ"; },
+    d=>{ d.states.push({...d.states[0],code:"BA"}); },
+    d=>{ d.states[2].dated+=1; },
+    d=>{ d.categories[0].salesBrl+=0.01; },
+    d=>{ d.categories[1].label=d.categories[0].label; },
+    d=>{ d.meta.coverage.categories="12 catégories les plus vendues en prix d'articles"; },
+    d=>{ d.sellerStates=[{code:"SP",salesBrl:1}]; },
+    d=>{ d.cohorts=[{month:"2017-01",customers:1,repeats:0,salesBrl:1}]; },
+    d=>{ d.cohorts=[{month:"2018-12",customers:25,repeats:0,salesBrl:1}]; },
+  ];
+  for(const [index, mutate] of cases.entries()) {
+    const changed=clone();
+    mutate(changed);
+    assert.notDeepEqual(validatePublicData(changed), [], "Unsafe E2 fixture accepted: "+index);
+  }
+});
+
+test("E2 reference is explicitly limited until the checked local exports are used", () => {
+  assert.deepEqual(validatePublicData(source), []);
+  assert.equal(source.states.length,3);
+  assert.equal(source.categories.length,2);
+  assert.equal(source.sellerStates.length,0);
+  assert.equal(source.cohorts.length,0);
+  assert.equal(source.meta.coverage.states,"3 États documentés parmi 27");
+});
