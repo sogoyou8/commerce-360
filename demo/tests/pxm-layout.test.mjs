@@ -141,3 +141,8 @@ test("E3 reference-compliant detail remains grounded in national aggregates",()=
   assert.match(html,/NASA \/ Suomi NPP/);
   assert.match(css,/city_lights_namerica_8k\.jpg/);
 });
+
+test("E3 compact satisfaction dock avoids subpixel row clipping",()=>{
+  assert.match(css,/#dock-quality>\.dock-quality-layout\{grid-template-rows:minmax\(62px,1fr\) 22px 22px/);
+  assert.match(css,/#dock-quality>\.dock-quality-layout>\.dock-row\{height:22px;min-height:0;overflow:hidden\}/);
+});
