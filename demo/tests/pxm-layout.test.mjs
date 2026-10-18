@@ -125,3 +125,19 @@ test("E3 satisfaction grid overrides dock-content ID specificity at compact desk
 test("E3 compact satisfaction rows stay within their 23px grid tracks",()=>{
   assert.match(css,/#dock-quality>\.dock-quality-layout>\.dock-row\{min-height:0;height:23px\}/);
 });
+
+test("E3 Ventes annual bar wrapper cannot inherit month label positioning",()=>{
+  assert.match(js,/node\("div","year-towers"\)/);
+  assert.doesNotMatch(js,/node\("span","year-towers"\)/);
+  assert.match(css,/\.year-pair > \.year-month-label/);
+  assert.doesNotMatch(css,/\.year-pair span\s*\{/);
+  assert.match(js,/yearlyLabel=measure==="salesBrl"/);
+  assert.match(js,/year2017=pairs\.reduce/);
+});
+test("E3 reference-compliant detail remains grounded in national aggregates",()=>{
+  assert.match(js,/remainingSales=Math\.max\(0,Math\.round\(\(data\.totals\.salesBrl-displayedSales\)/);
+  assert.match(js,/otherOrders=data\.totals\.orders-volumeTop5/);
+  assert.match(js,/group-secondary/);
+  assert.match(html,/NASA \/ Suomi NPP/);
+  assert.match(css,/city_lights_namerica_8k\.jpg/);
+});

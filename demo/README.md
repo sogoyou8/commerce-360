@@ -1,3 +1,15 @@
+## Troisième passe PXM (18/10/2026) — corrections fondées sur six captures
+
+- **P0 :** correction des 16 barres 2017/2018 invisibles dans Ventes ; le conteneur annuel utilise maintenant un div explicite, séparé du libellé des mois, et les tests de source empêchent la régression. La recette navigateur doit en plus vérifier les dimensions réelles des 16 barres.
+- **Ventes :** taux et totaux de l'en-tête du graphique calculés selon l'option active Ventes ou Commandes, et non un taux Ventes conservé sous Commandes.
+- **Qualité :** deux cartes rééquilibrées, avec valeur principale, mesure secondaire réellement observée et barre de progression visible.
+- **Dock :** « Autres ventes » = total national moins six catégories affichées ; « Autres (22 États) » = commandes nationales moins celles des cinq principaux États. Les deux lignes sont masquées uniquement sur les cockpits de faible hauteur pour ne rien rogner. Le plein détail demeure accessible dans les modes métier.
+- **Atmosphère :** Terre nocturne NASA/Suomi NPP dans l'angle supérieur droit sur grand écran, avec crédit source dans la fenêtre Données. Aucune donnée d'analyse n'est associée à cette image décorative et le fond dégradé existant reste visible en cas de non-chargement.
+- **Invariants :** pas de modification de `data/public.json`, pas de chiffres repris de la maquette cible, cinq modes conservés, PR #7 non fusionnée.
+- **Recette à réaliser :** mesures live des 16 barres, viewport desktop 1180×750 / 1440×900 / 1920×993, mobile 390×844, cinq vues et tests CI.
+
+---
+
 ## Passe de finition E3/PXM — direction artistique / visualisation (18 octobre 2026)
 
 Sur PR #7, raffinement de la version E3 existante : axes de ventes et de commandes arrondis à des bornes lisibles (sans modifier les valeurs), colonnes inactives assombries, courbe et grille allégées, comparaisons de l'inspecteur regroupées, bordures atténuées, dock agrandi sur desktop ≥1180px et hauteur >850px. Sur les petits écrans desktop, conservation de la variante compacte. La carte reste colorée par **taux de retard des livraisons datées** mais le mini-classement de la vue d'ensemble porte maintenant sur les **commandes livrées par État** avec taux affiché, pour éviter de confondre volume et performance. Satisfaction : deux comparaisons visibles et anneau lisible (arrondi d'affichage 4,2/5, valeur 4,16/5 conservée dans le mode Qualité).

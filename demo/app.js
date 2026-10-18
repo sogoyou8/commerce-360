@@ -337,18 +337,22 @@ function renderYearBars() {
     button.setAttribute("aria-pressed",String(pair.month===chosen.month));
     button.setAttribute("aria-label",`${shortMonth[pair.month-1]} : 2017 ${measure==="salesBrl"?amount(pair.previous.salesBrl):n(pair.previous.orders)}, 2018 ${measure==="salesBrl"?amount(pair.current.salesBrl):n(pair.current.orders)}`);
     button.title=button.getAttribute("aria-label");
-    const towers=node("span","year-towers");
+    const towers=node("div","year-towers");
     for(const val of [pair.previous[measure],pair.current[measure]]) {
       const bar=node("i");bar.style.setProperty("--h",Math.max(1,100*val/max)+"%");towers.append(bar);
     }
-    append(button,towers,node("span","",shortMonth[pair.month-1]));
+    append(button,towers,node("span","year-month-label",shortMonth[pair.month-1]));
     button.addEventListener("click",()=>{state.salesMonth=pair.month;render();});
     plot.append(button);
   }
-  const yoy=compareSamePeriod(data.monthly);
+  const year2017=pairs.reduce((sum,p)=>sum+p.previous[measure],0);
+  const year2018=pairs.reduce((sum,p)=>sum+p.current[measure],0);
+  const growth=changePercent(year2018,year2017);
+  const yearlyLabel=measure==="salesBrl"?"Ventes d'articles":"Commandes livrées";
+  const yearlyValue=v=>measure==="salesBrl"?smallAmount(v):n(v);
   $("viz-container").replaceChildren(
-    heading(`+${percent(yoy.salesGrowth)}`,"Ventes d'articles · jan–août 2017 vs jan–août 2018"),
-    append(node("div","year-chart"),legend,plot,append(node("div","year-caption"),node("span","",`2017 · ${smallAmount(yoy.sales2017)}`),node("span","",`2018 · ${smallAmount(yoy.sales2018)}`)))
+    heading(growth,`${yearlyLabel} · jan–août 2017 vs jan–août 2018`),
+    append(node("div","year-chart"),legend,plot,append(node("div","year-caption"),node("span","",`2017 · ${yearlyValue(year2017)}`),node("span","",`2018 · ${yearlyValue(year2018)}`)))
   );
   const selectedDiff=(chosen.current[measure]/chosen.previous[measure]-1)*100;
   setStory({
@@ -357,7 +361,7 @@ function renderYearBars() {
     description:`Pour ${shortMonth[chosen.month-1]}, la mesure « ${yearLabel} » passe de ${measure==="salesBrl"?amount(chosen.previous.salesBrl):n(chosen.previous.orders)} à ${measure==="salesBrl"?amount(chosen.current.salesBrl):n(chosen.current.orders)}. Cette comparaison ne mélange pas les mois incomplets de fin 2018.`,
     label:"VARIATION OBSERVÉE",
     value:`${selectedDiff>=0?"+":""}${percent(selectedDiff)}`,
-    sub:`Janvier–août : +${percent(yoy.salesGrowth)} de ventes d'articles`,
+    sub:`Janvier–août : ${growth} · ${yearlyLabel.toLowerCase()}`,
     caveat:"La croissance observée ne démontre pas les causes commerciales d'une variation.",
   });
 }
@@ -494,7 +498,9 @@ function renderQuality() {
     card.setAttribute("aria-label",`${group.label} : ${measure==="score"?decimal.format(value)+" sur 5":percent(value)}`);
     const track=append(node("span","group-track"),node("i"));
     track.firstChild.style.setProperty("--w",100*value/max+"%");
-    append(card,node("small","",group.label.toUpperCase()),node("strong","",measure==="score"?`${decimal.format(value)} / 5`:percent(value)),track,node("em","",`${n(group.scored)} commandes notées`));
+    append(card,node("small","",group.label.toUpperCase()),node("strong","",measure==="score"?`${decimal.format(value)} / 5`:percent(value)),
+      node("span","group-secondary",measure==="score"?`${percent(group.negativeRate)} d'avis ≤ 2`:`Note moyenne : ${decimal.format(group.score)} / 5`),
+      track,node("em","",`${n(group.scored)} commandes notées`));
     card.addEventListener("click",()=>{state.selectedQuality=group.code;render();});
     chart.append(card);
   }
@@ -687,7 +693,15 @@ function renderDock() {
     });
     return row;
   });
-  $("dock-categories").replaceChildren(...categoryRows);
+  // Residual from the verified national total: includes every category outside the six shown.
+  const displayedSales=categories.slice(0,6).reduce((sum,x)=>sum+x.salesBrl,0);
+  const remainingSales=Math.max(0,Math.round((data.totals.salesBrl-displayedSales)*100)/100);
+  const otherCategory=append(node("div","dock-category-row dock-category-row--other"),
+    node("span","dock-item-label","Autres ventes"),
+    node("span","dock-row-note","Hors top 6"),
+    node("span","dock-item-value",smallAmount(remainingSales)+" · "+percent(observedShare(remainingSales,data.totals.salesBrl),1)));
+  otherCategory.title="Complément du total national : autres catégories, y compris catégories non détaillées.";
+  $("dock-categories").replaceChildren(...categoryRows,otherCategory);
   const regions=[...data.states].sort((a,b)=>b.orders-a.orders);
   renderText("dock-state-coverage",data.meta.coverage.states+" · top volumes ; carte colorée par taux de retard");
   const stateLayout=node("div","dock-state-layout");
@@ -704,6 +718,15 @@ function renderDock() {
     row.addEventListener("click",()=>openDeliveryState(item.code));
     stateRank.append(row);
   });
+  const volumeTop5=regions.slice(0,5).reduce((sum,x)=>sum+x.orders,0);
+  const otherOrders=data.totals.orders-volumeTop5;
+  const otherStates=append(node("div","dock-state-row dock-state-row--other"),
+    node("span","state-rank-index",""),
+    node("span","state-rank-code","Autres"),
+    node("span","dock-row-note","22 États"),
+    append(node("span","state-rank-metrics"),node("strong","",n(otherOrders)),
+      node("small","",percent(observedShare(otherOrders,data.totals.orders),1)+" du total")));
+  stateRank.append(otherStates);
   append(stateLayout,renderBrazilMap(),stateRank);
   $("dock-states").replaceChildren(stateLayout);
   const onTime=data.satisfaction.find(x=>x.code==="on_time");

@@ -194,8 +194,8 @@ a{color:inherit;text-decoration:none}
 .year-towers { display: flex; align-items: flex-end; justify-content: center; gap: 6px; height: 100%; }
 .year-towers > i { display: block; height: var(--h); width: min(23px, 42%); min-height: 1px; background: #5977ae; }
 .year-towers > i:last-child { background: linear-gradient(#b1caff, #7295e5); }
-.year-pair span { position: absolute; transform: translateY(20px); font-size: 9px; color: var(--quiet); align-self: center; }
-.year-pair[aria-pressed="true"] span { color: var(--white); }
+.year-pair > .year-month-label { position: absolute; left: 50%; bottom: 0; transform: translate(-50%, 20px); font-size: 9px; color: var(--quiet); white-space: nowrap; }
+.year-pair[aria-pressed="true"] > .year-month-label { color: var(--white); }
 .year-caption { margin-top: 39px; color: var(--muted); display: flex; justify-content: space-between; gap: 10px; font-size: 10px; }
 .year-caption strong { color: var(--white); font-weight: 500; }
 .lower { margin: 62px 0 38px; border-top: 1px solid var(--border); padding-top: 27px; }
@@ -593,4 +593,72 @@ a{color:inherit;text-decoration:none}
 /* Compact grid rows must not be pushed past their tracks by the dock row min-height. */
 @media (min-width:1180px) and (max-height:850px){
   #dock-quality>.dock-quality-layout>.dock-row{min-height:0;height:23px}
+}
+
+/* E3 third pass — fix annual columns, improve visual storytelling and fidelity. */
+.year-towers{position:relative;display:flex;flex:1 1 auto;width:100%;height:100%;min-height:0;align-items:flex-end;justify-content:center;gap:clamp(5px,1.05vw,14px);transform:none}
+.year-towers>i{display:block;flex:0 1 27%;max-width:36px;min-width:5px;width:27%;min-height:2px;background:linear-gradient(180deg,#4668a4,#213e75)}
+.year-towers>i:last-child{background:linear-gradient(180deg,#85bbff 0%,#3565bd 100%)}
+.year-pair[aria-pressed="true"] .year-towers>i:last-child{background:linear-gradient(180deg,#b3d7ff,#5089e4);box-shadow:0 0 12px rgba(80,151,250,.24)}
+.year-pair:hover .year-towers>i{filter:brightness(1.17)}
+.year-month-label{z-index:2}
+.year-plot{background:repeating-linear-gradient(to top,transparent 0,transparent calc(25% - 1px),rgba(103,147,206,.13) calc(25% - 1px),rgba(103,147,206,.13) 25%)}
+.year-legend i{width:10px;height:10px;border-radius:2px}
+.group-chart{align-items:stretch}
+.group-card{position:relative;justify-content:center;gap:8px;overflow:hidden;min-height:0;background:linear-gradient(150deg,rgba(25,51,93,.25),rgba(5,15,36,.55))}
+.group-card::before{content:"";position:absolute;inset:0 0 auto;height:2px;background:linear-gradient(90deg,transparent,#346bc0,transparent);opacity:.4}
+.group-card[aria-pressed="true"]{background:linear-gradient(150deg,rgba(39,78,141,.27),rgba(6,17,40,.7))}
+.group-card[aria-pressed="true"]::before{opacity:1}
+.group-card strong{font-size:clamp(32px,3vw,50px);margin-top:10px;color:#e6f0ff}
+.group-card .group-secondary{color:#a6c2e9;font-size:12px;line-height:1.4}
+.group-card .group-track{margin-top:clamp(18px,4vh,37px);height:7px;background:rgba(95,136,203,.2)}
+.group-card .group-track>i{background:linear-gradient(90deg,#2b6bd0,#8dc6ff)}
+.group-card em{margin-top:4px;font-size:11px;color:#98afd1}
+.dock-category-row--other{border-top:1px solid rgba(118,158,223,.2);margin-top:2px}
+.dock-category-row--other .dock-item-label{font-weight:600;color:#bad1f0}
+.dock-category-row--other .dock-row-note{font-size:9px;text-align:center;color:#819abc;margin:0}
+.dock-state-row--other{border-top:1px solid rgba(118,158,223,.18);padding-top:7px}
+.dock-state-row--other .state-rank-code{color:#b1cbed;font-size:10px}
+.dock-state-row--other .dock-row-note{font-size:9px;color:#819abc;margin:0;white-space:nowrap}
+#dock-categories{grid-template-rows:repeat(7,minmax(0,1fr))}
+.dock-state-ranks{gap:3px}
+.dock-map-shell{overflow:visible}
+.brazil-map{filter:drop-shadow(0 0 7px rgba(54,133,247,.2))}
+.dock-quality-overview{gap:18px}
+.quality-negative>span{font-size:11px}
+.quality-negative strong{font-size:clamp(25px,2.2vw,34px)}
+/* Earth at night, NASA/Suomi NPP: https://www.nasa.gov/image-article/brilliance-night-americas-darkness/
+   Informational source attribution appears inside the Data methodology dialog. */
+@media (min-width:1180px){
+  .ambient::after{
+    top:-310px;right:-140px;width:min(790px,57vw);
+    background:
+      radial-gradient(circle at 55% 55%,transparent 30%,rgba(1,8,23,.12) 61%,rgba(1,8,23,.85) 79%),
+      url("https://www.nasa.gov/wp-content/uploads/2023/03/city_lights_namerica_8k.jpg") center center / cover no-repeat;
+    opacity:.31;filter:saturate(1.65) contrast(1.25);
+    -webkit-mask-image:radial-gradient(circle,black 28%,rgba(0,0,0,.65) 51%,transparent 76%);
+    mask-image:radial-gradient(circle,black 28%,rgba(0,0,0,.65) 51%,transparent 76%);
+    box-shadow:none;mix-blend-mode:screen
+  }
+  .ambient::before{opacity:.08}
+}
+@media (min-width:1180px) and (max-height:850px){
+  #dock-categories{grid-template-rows:repeat(6,minmax(0,1fr))}
+  .dock-category-row--other,.dock-state-row--other{display:none}
+  .group-card{gap:4px}
+  .group-card strong{font-size:clamp(28px,2.8vw,38px);margin-top:4px}
+  .group-card .group-track{margin-top:13px}
+  .group-card em{font-size:9px}
+}
+@media (max-width:1179px){
+  #dock-categories{grid-template-rows:repeat(7,minmax(0,1fr))}
+  .group-card{min-height:220px}
+  .group-card strong{font-size:36px}
+}
+@media (max-width:460px){
+  .group-card{min-height:195px;padding:13px;gap:6px}
+  .group-card strong{font-size:25px}
+  .group-card .group-secondary{font-size:10px}
+  .year-towers{gap:3px}
+  .year-towers>i{min-width:4px}
 }
