@@ -6,12 +6,12 @@
     "endExclusive": "2018-09-01",
     "currency": "BRL",
     "source": "Références E3/E5/E7, rapport Power BI E6",
-    "mode": "Référence publique vérifiée",
+    "mode": "Exports locaux agrégés validés",
     "coverage": {
-      "states": "3 États documentés parmi 27",
-      "categories": "2 catégories documentées parmi le catalogue",
-      "sellerStates": "Non disponible dans la référence publique",
-      "cohorts": "Non disponible dans la référence publique"
+      "states": "27 États vérifiés",
+      "categories": "12 catégories les plus vendues en prix d'articles",
+      "sellerStates": "15 États vendeurs agrégés (≥ 5 vendeurs)",
+      "cohorts": "20 cohortes mensuelles agrégées"
     },
     "caveat": "Données historiques. Agrégats descriptifs uniquement, aucune information client individuelle."
   },
@@ -132,12 +132,12 @@
   ],
   "states": [
     {
-      "code": "CE",
-      "orders": 1273,
-      "dated": 1273,
-      "late": 196,
-      "rate": 15.4,
-      "days": 21.24
+      "code": "SP",
+      "orders": 40406,
+      "dated": 40399,
+      "late": 2384,
+      "rate": 5.9,
+      "days": 8.74
     },
     {
       "code": "RJ",
@@ -148,12 +148,204 @@
       "days": 15.3
     },
     {
-      "code": "SP",
-      "orders": 40406,
-      "dated": 40399,
-      "late": 2384,
-      "rate": 5.9,
-      "days": 8.74
+      "code": "MG",
+      "orders": 11319,
+      "dated": 11319,
+      "late": 637,
+      "rate": 5.63,
+      "days": 11.99
+    },
+    {
+      "code": "RS",
+      "orders": 5328,
+      "dated": 5327,
+      "late": 382,
+      "rate": 7.17,
+      "days": 15.29
+    },
+    {
+      "code": "PR",
+      "orders": 4903,
+      "dated": 4903,
+      "late": 246,
+      "rate": 5.02,
+      "days": 11.97
+    },
+    {
+      "code": "SC",
+      "orders": 3537,
+      "dated": 3537,
+      "late": 346,
+      "rate": 9.78,
+      "days": 14.95
+    },
+    {
+      "code": "BA",
+      "orders": 3253,
+      "dated": 3253,
+      "late": 457,
+      "rate": 14.05,
+      "days": 19.33
+    },
+    {
+      "code": "DF",
+      "orders": 2074,
+      "dated": 2074,
+      "late": 147,
+      "rate": 7.09,
+      "days": 12.94
+    },
+    {
+      "code": "ES",
+      "orders": 1992,
+      "dated": 1992,
+      "late": 244,
+      "rate": 12.25,
+      "days": 15.78
+    },
+    {
+      "code": "GO",
+      "orders": 1950,
+      "dated": 1950,
+      "late": 160,
+      "rate": 8.21,
+      "days": 15.61
+    },
+    {
+      "code": "PE",
+      "orders": 1587,
+      "dated": 1587,
+      "late": 172,
+      "rate": 10.84,
+      "days": 18.45
+    },
+    {
+      "code": "CE",
+      "orders": 1273,
+      "dated": 1273,
+      "late": 196,
+      "rate": 15.4,
+      "days": 21.24
+    },
+    {
+      "code": "PA",
+      "orders": 942,
+      "dated": 942,
+      "late": 117,
+      "rate": 12.42,
+      "days": 23.76
+    },
+    {
+      "code": "MT",
+      "orders": 885,
+      "dated": 885,
+      "late": 60,
+      "rate": 6.78,
+      "days": 18.07
+    },
+    {
+      "code": "MA",
+      "orders": 713,
+      "dated": 713,
+      "late": 140,
+      "rate": 19.64,
+      "days": 21.54
+    },
+    {
+      "code": "MS",
+      "orders": 701,
+      "dated": 701,
+      "late": 81,
+      "rate": 11.55,
+      "days": 15.62
+    },
+    {
+      "code": "PB",
+      "orders": 516,
+      "dated": 516,
+      "late": 57,
+      "rate": 11.05,
+      "days": 20.39
+    },
+    {
+      "code": "PI",
+      "orders": 475,
+      "dated": 475,
+      "late": 76,
+      "rate": 16,
+      "days": 19.44
+    },
+    {
+      "code": "RN",
+      "orders": 470,
+      "dated": 470,
+      "late": 51,
+      "rate": 10.85,
+      "days": 19.21
+    },
+    {
+      "code": "AL",
+      "orders": 396,
+      "dated": 396,
+      "late": 95,
+      "rate": 23.99,
+      "days": 24.52
+    },
+    {
+      "code": "SE",
+      "orders": 332,
+      "dated": 332,
+      "late": 51,
+      "rate": 15.36,
+      "days": 21.44
+    },
+    {
+      "code": "TO",
+      "orders": 274,
+      "dated": 274,
+      "late": 35,
+      "rate": 12.77,
+      "days": 17.66
+    },
+    {
+      "code": "RO",
+      "orders": 243,
+      "dated": 243,
+      "late": 7,
+      "rate": 2.88,
+      "days": 19.37
+    },
+    {
+      "code": "AM",
+      "orders": 145,
+      "dated": 145,
+      "late": 6,
+      "rate": 4.14,
+      "days": 26.43
+    },
+    {
+      "code": "AC",
+      "orders": 80,
+      "dated": 80,
+      "late": 3,
+      "rate": 3.75,
+      "days": 21.04
+    },
+    {
+      "code": "AP",
+      "orders": 67,
+      "dated": 67,
+      "late": 3,
+      "rate": 4.48,
+      "days": 27.19
+    },
+    {
+      "code": "RR",
+      "orders": 40,
+      "dated": 40,
+      "late": 5,
+      "rate": 12.5,
+      "days": 29.91
     }
   ],
   "categories": [
@@ -164,9 +356,110 @@
     {
       "label": "watches_gifts",
       "salesBrl": 1163465.91
+    },
+    {
+      "label": "bed_bath_table",
+      "salesBrl": 1022955.77
+    },
+    {
+      "label": "sports_leisure",
+      "salesBrl": 952840.4
+    },
+    {
+      "label": "computers_accessories",
+      "salesBrl": 888055.59
+    },
+    {
+      "label": "furniture_decor",
+      "salesBrl": 706237.17
+    },
+    {
+      "label": "housewares",
+      "salesBrl": 614341.62
+    },
+    {
+      "label": "cool_stuff",
+      "salesBrl": 609158
+    },
+    {
+      "label": "auto",
+      "salesBrl": 577838.39
+    },
+    {
+      "label": "garden_tools",
+      "salesBrl": 469135.4
+    },
+    {
+      "label": "toys",
+      "salesBrl": 467179.98
+    },
+    {
+      "label": "baby",
+      "salesBrl": 399050.67
     }
   ],
-  "sellerStates": [],
+  "sellerStates": [
+    {
+      "code": "SP",
+      "salesBrl": 8487299.48
+    },
+    {
+      "code": "PR",
+      "salesBrl": 1226347.62
+    },
+    {
+      "code": "MG",
+      "salesBrl": 975967.19
+    },
+    {
+      "code": "RJ",
+      "salesBrl": 813290.6
+    },
+    {
+      "code": "SC",
+      "salesBrl": 612709.38
+    },
+    {
+      "code": "RS",
+      "salesBrl": 372138.48
+    },
+    {
+      "code": "BA",
+      "salesBrl": 277763.96
+    },
+    {
+      "code": "DF",
+      "salesBrl": 94411.31
+    },
+    {
+      "code": "PE",
+      "salesBrl": 91164.15
+    },
+    {
+      "code": "GO",
+      "salesBrl": 64806.59
+    },
+    {
+      "code": "ES",
+      "salesBrl": 46922.74
+    },
+    {
+      "code": "CE",
+      "salesBrl": 19517.84
+    },
+    {
+      "code": "PB",
+      "salesBrl": 16395.5
+    },
+    {
+      "code": "RN",
+      "salesBrl": 9992.6
+    },
+    {
+      "code": "MS",
+      "salesBrl": 8027.49
+    }
+  ],
   "satisfaction": [
     {
       "code": "on_time",
@@ -247,5 +540,126 @@
       "salesBrl": 1126051.67
     }
   ],
-  "cohorts": []
+  "cohorts": [
+    {
+      "month": "2017-01",
+      "customers": 718,
+      "repeats": 52,
+      "salesBrl": 114607.34
+    },
+    {
+      "month": "2017-02",
+      "customers": 1628,
+      "repeats": 66,
+      "salesBrl": 239788.46
+    },
+    {
+      "month": "2017-03",
+      "customers": 2503,
+      "repeats": 121,
+      "salesBrl": 371645.15
+    },
+    {
+      "month": "2017-04",
+      "customers": 2257,
+      "repeats": 102,
+      "salesBrl": 351596.78
+    },
+    {
+      "month": "2017-05",
+      "customers": 3451,
+      "repeats": 182,
+      "salesBrl": 502508.72
+    },
+    {
+      "month": "2017-06",
+      "customers": 3037,
+      "repeats": 161,
+      "salesBrl": 434368.18
+    },
+    {
+      "month": "2017-07",
+      "customers": 3753,
+      "repeats": 175,
+      "salesBrl": 491075.52
+    },
+    {
+      "month": "2017-08",
+      "customers": 4057,
+      "repeats": 191,
+      "salesBrl": 566249.59
+    },
+    {
+      "month": "2017-09",
+      "customers": 4005,
+      "repeats": 181,
+      "salesBrl": 613931.98
+    },
+    {
+      "month": "2017-10",
+      "customers": 4328,
+      "repeats": 160,
+      "salesBrl": 652054.08
+    },
+    {
+      "month": "2017-11",
+      "customers": 7061,
+      "repeats": 223,
+      "salesBrl": 992099.05
+    },
+    {
+      "month": "2017-12",
+      "customers": 5338,
+      "repeats": 139,
+      "salesBrl": 721523.22
+    },
+    {
+      "month": "2018-01",
+      "customers": 6843,
+      "repeats": 208,
+      "salesBrl": 921941.15
+    },
+    {
+      "month": "2018-02",
+      "customers": 6288,
+      "repeats": 236,
+      "salesBrl": 827691.11
+    },
+    {
+      "month": "2018-03",
+      "customers": 6775,
+      "repeats": 162,
+      "salesBrl": 946999.05
+    },
+    {
+      "month": "2018-04",
+      "customers": 6582,
+      "repeats": 129,
+      "salesBrl": 962225.03
+    },
+    {
+      "month": "2018-05",
+      "customers": 6508,
+      "repeats": 109,
+      "salesBrl": 964173.36
+    },
+    {
+      "month": "2018-06",
+      "customers": 5879,
+      "repeats": 70,
+      "salesBrl": 834842.85
+    },
+    {
+      "month": "2018-07",
+      "customers": 5949,
+      "repeats": 88,
+      "salesBrl": 851647.43
+    },
+    {
+      "month": "2018-08",
+      "customers": 6144,
+      "repeats": 34,
+      "salesBrl": 820059.08
+    }
+  ]
 }
