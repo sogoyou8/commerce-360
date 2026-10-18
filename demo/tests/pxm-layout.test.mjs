@@ -116,3 +116,8 @@ test("E3 overview ranks states by order volume while colouring the map by late r
   assert.match(js,/score-ring/);
   assert.match(css,/grid-template-rows:minmax\(70px,1fr\) 26px 26px/);
 });
+
+test("E3 satisfaction grid overrides dock-content ID specificity at compact desktop sizes",()=>{
+  assert.match(css,/#dock-quality\.dock-quality-layout\{display:grid;grid-template-rows:minmax\(70px,1fr\) 26px 26px/);
+  assert.match(css,/#dock-quality\.dock-quality-layout\{grid-template-rows:minmax\(62px,1fr\) 23px 23px/);
+});
