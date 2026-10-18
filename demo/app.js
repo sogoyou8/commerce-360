@@ -394,11 +394,11 @@ function renderDelivery() {
     {label:"Délai moyen",value:`${decimal.format(t.deliveryDays)} j`,note:"National · délai nettoyé"},
     {label:"État sélectionné",value:stateChoice.code,note:`${n(stateChoice.orders)} commandes livrées`},
   ]);
-  setViz("03 · ANALYSE TERRITORIALE","Des territoires contrastés.","Les valeurs ci-dessous concernent uniquement les États documentés dans la référence publique.","Sélectionner un État pour consulter ses effectifs et son délai ; les KPI nationaux restent nationaux.");
+  setViz("03 · ANALYSE TERRITORIALE","Des territoires contrastés.",data.meta.coverage.states+" · taux calculés sur les livraisons datées de chaque État.","Sélectionner un État pour consulter ses effectifs et son délai ; les KPI nationaux restent nationaux.");
   setOptions([{key:"rate",title:"Retard (%)"},{key:"days",title:"Délai (jours)"}],measure,key=>{state.deliveryMeasure=key;render();});
   $("viz-container").replaceChildren(
     heading(measure==="rate"?percent(stateChoice.rate):`${decimal.format(stateChoice.days)} jours`,`État ${stateChoice.code} · ${measure==="rate"?"retards":"délai moyen nettoyé"}`),
-    renderRankRows(choices,s=>s.code,s=>s[measure],stateChoice.code,code=>{state.selectedState=code;render();},v=>measure==="rate"?percent(v):`${decimal.format(v)} j`,s=>`${n(s.orders)} livraisons`),
+    renderRankRows(choices,s=>s.code,s=>s[measure],stateChoice.code,code=>{state.selectedState=code;render();},v=>measure==="rate"?percent(v):`${decimal.format(v)} j`,s=>`${n(s.orders)} commandes livrées`),
     append(node("div","rank-legend"),node("span","", "BARRES RELATIVES AU MAXIMUM DES ÉTATS AFFICHÉS"),node("span","", "SÉLECTION ACTIVE"))
   );
   setStory({
@@ -408,7 +408,7 @@ function renderDelivery() {
     label:"TAUX DE RETARD",
     value:percent(stateChoice.rate),
     sub:`${n(stateChoice.late)} retards · ${n(stateChoice.orders)} commandes livrées`,
-    caveat:`Données de ${data.meta.coverage.states.toLowerCase()} seulement. Les autres États ne sont pas assimilés à zéro.`,
+    caveat:data.states.length===27?"Couverture des 27 États : attention aux petits effectifs régionaux. Le taux utilise les livraisons datées et le délai est descriptif.":`Données de ${data.meta.coverage.states.toLowerCase()} seulement. Les autres États ne sont pas assimilés à zéro.`,
   });
   setLower("RÉFÉRENCE NATIONALE","Les dénominateurs comptent.",[
     {label:"COMMANDES LIVRÉES",value:n(t.orders),description:"Population totale pour les analyses de ventes."},
