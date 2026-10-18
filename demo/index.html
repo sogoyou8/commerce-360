@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#080e1b" />
+    <meta
+      name="description"
+      content="Commerce 360 : exploration interactive des ventes, des livraisons, des avis et des clients Olist historiques, janvier 2017 à août 2018."
+    />
+    <title>Commerce 360 — Explorer les données Olist</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <div class="ambient" aria-hidden="true"></div>
+    <a class="skip-link" href="#main">Aller au contenu</a>
+    <header class="masthead">
+      <a class="identity" href="#overview" aria-label="Commerce 360, aller à la vue d'ensemble">
+        <span class="identity-mark" aria-hidden="true">C<span>°</span></span>
+        <span class="identity-text">COMMERCE <strong>360</strong><small>INTELLIGENCE / OLIST</small></span>
+      </a>
+      <div class="masthead-middle">
+        <span class="live-dot" aria-hidden="true"></span>
+        <span>ARCHIVE ANALYTIQUE</span>
+        <span class="masthead-divider">/</span>
+        <span>BRÉSIL 2017—2018</span>
+      </div>
+      <div class="masthead-actions">
+        <button id="method-open" class="text-button" type="button">Méthodologie <span aria-hidden="true">↗</span></button>
+        <a class="source-link" href="https://github.com/sogoyou8/commerce-360" target="_blank" rel="noopener noreferrer">Dépôt GitHub <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+
+    <div class="shell">
+      <nav class="side-nav" aria-label="Navigation dans les analyses">
+        <div class="side-heading">EXPLORER <span>05 CHAPITRES</span></div>
+        <div class="nav-items">
+          <a href="#overview" data-view="overview"><span class="nav-index">01</span><span>Vue d'ensemble</span><span class="nav-arrow" aria-hidden="true">↗</span></a>
+          <a href="#sales" data-view="sales"><span class="nav-index">02</span><span>Ventes</span><span class="nav-arrow" aria-hidden="true">↗</span></a>
+          <a href="#delivery" data-view="delivery"><span class="nav-index">03</span><span>Livraisons</span><span class="nav-arrow" aria-hidden="true">↗</span></a>
+          <a href="#quality" data-view="quality"><span class="nav-index">04</span><span>Qualité</span><span class="nav-arrow" aria-hidden="true">↗</span></a>
+          <a href="#customers" data-view="customers"><span class="nav-index">05</span><span>Clients</span><span class="nav-arrow" aria-hidden="true">↗</span></a>
+        </div>
+        <div class="side-bottom">
+          <span class="eyebrow">ÉTUDE HISTORIQUE</span>
+          <strong>20 <span>mois analysés</span></strong>
+          <p>Une même base de référence, des grains différents. Les vues ne simulent pas de filtrage croisé inexistant.</p>
+        </div>
+      </nav>
+
+      <main id="main">
+        <div class="chapter-rule">
+          <span id="chapter-number">01 / 05</span>
+          <span class="rule-line" aria-hidden="true"></span>
+          <span id="chapter-category">COMMERCE INTELLIGENCE</span>
+        </div>
+        <section class="intro" aria-labelledby="page-title">
+          <div>
+            <p class="eyebrow intro-eyebrow">OLIST <span aria-hidden="true">●</span> EXPLORATION INTERACTIVE</p>
+            <h1 id="page-title">La donnée prend <em>du relief.</em></h1>
+            <p id="page-description" class="intro-description">Une lecture analytique du e-commerce brésilien, de janvier 2017 à août 2018.</p>
+          </div>
+          <div class="intro-aside">
+            <span class="dial" aria-hidden="true"><span>360</span><small>DATA</small></span>
+            <div class="intro-aside-label">BASE DE DONNÉES<br /><strong>POSTGRESQL · POWER BI</strong></div>
+          </div>
+        </section>
+
+        <div class="context-strip">
+          <span id="scope-label">PÉRIMÈTRE — COMMANDES LIVRÉES</span>
+          <span class="context-right"><span class="context-beam" aria-hidden="true"></span><span id="coverage-label">RÉFÉRENCE PUBLIQUE VÉRIFIÉE</span></span>
+        </div>
+
+        <section id="metrics" class="metric-strip" aria-label="Indicateurs principaux" aria-live="polite"></section>
+
+        <section class="analysis" aria-label="Exploration interactive">
+          <div class="analysis-main">
+            <header class="analysis-top">
+              <div>
+                <p class="eyebrow" id="viz-eyebrow">01 · TENDANCE</p>
+                <h2 id="viz-title">Évolution mensuelle</h2>
+                <p id="viz-caption">Ventes des articles livrés, hors frais de livraison.</p>
+              </div>
+              <div class="view-options" id="view-options" role="group" aria-label="Mesure à visualiser"></div>
+            </header>
+            <div id="viz-container" class="viz-container" aria-live="polite">
+              <div class="loading">Chargement des agrégats vérifiés…</div>
+            </div>
+            <footer class="viz-footer">
+              <span class="viz-caption-mark" aria-hidden="true">◉</span>
+              <span id="viz-note">Sélectionner un élément pour explorer.</span>
+            </footer>
+          </div>
+
+          <aside class="story-panel" aria-live="polite">
+            <span class="story-topline"><span class="story-dot" aria-hidden="true"></span> INTERPRÉTATION <span id="story-count">01 / 05</span></span>
+            <div class="story-inner">
+              <span class="eyebrow" id="story-kicker">DANS LES DONNÉES</span>
+              <h2 id="story-title">Une lecture vérifiable.</h2>
+              <p id="story-description">Sélectionnez un mois, un territoire, un groupe de satisfaction ou un segment client.</p>
+              <div class="story-stat">
+                <span id="story-stat-label">RÉFÉRENCE</span>
+                <strong id="story-stat-value">—</strong>
+                <span id="story-stat-sub">Indicateurs historiques observés</span>
+              </div>
+            </div>
+            <div class="story-foot"><span>NOTE MÉTHODOLOGIQUE</span><p id="story-caveat">Ces données ne décrivent pas la situation actuelle d'Olist.</p></div>
+          </aside>
+        </section>
+
+        <section class="lower" aria-labelledby="lower-heading">
+          <div class="lower-header">
+            <span class="eyebrow" id="lower-kicker">LECTURE COMPLÉMENTAIRE</span>
+            <h2 id="lower-heading">Regarder plus loin.</h2>
+          </div>
+          <div class="lower-content" id="lower-content"></div>
+        </section>
+
+        <footer class="main-footer">
+          <span><strong>COMMERCE 360</strong> · DATA PROJECT</span>
+          <span>OLIST · BRÉSIL · JAN 2017 — AOÛT 2018</span>
+          <a href="https://github.com/sogoyou8/commerce-360/blob/main/docs/e8-bilan.md" target="_blank" rel="noopener noreferrer">Sources et limites ↗</a>
+        </footer>
+      </main>
+    </div>
+
+    <dialog id="method-dialog" class="method-dialog" aria-labelledby="method-title">
+      <div class="method-top"><span class="eyebrow">TRANSPARENCE DES DONNÉES</span><button id="method-close" type="button" aria-label="Fermer la méthodologie">✕</button></div>
+      <h2 id="method-title">Comprendre<br /><em>ce que l'on mesure.</em></h2>
+      <p>Cette démonstration représente des données <strong>historiques Olist</strong> pour les achats réalisés du 1er janvier 2017 au 31 août 2018. Elle s'appuie sur les référentiels SQL E3/E5/E7 et les analyses Power BI E6.</p>
+      <div class="method-columns">
+        <div><small>01 / VENTES</small><p>Somme des prix d'articles de commandes livrées, exprimée en BRL, hors frais de transport. Ni marge ni chiffre d'affaires net.</p></div>
+        <div><small>02 / LIVRAISONS</small><p>Le taux de retard utilise uniquement les livraisons dotées des dates nécessaires. Les mesures d'avis sont calculées parmi les commandes notées.</p></div>
+        <div><small>03 / CLIENTS</small><p>Clients uniques observés et segments RFM au 1er septembre 2018. Un achat unique en 2018 ne signifie pas qu'un client est perdu aujourd'hui.</p></div>
+        <div><small>04 / INTERACTIVITÉ</small><p>Les sélections filtrent uniquement la série agrégée correspondante. Aucun croisement entre dimensions indépendantes n'est inventé.</p></div>
+      </div>
+      <a class="method-link" href="https://github.com/sogoyou8/commerce-360/blob/main/docs/e8-reproduction.md" target="_blank" rel="noopener noreferrer">Consulter le protocole complet ↗</a>
+    </dialog>
+    <noscript><p class="noscript">Cette démo nécessite JavaScript pour explorer les données agrégées.</p></noscript>
+  </body>
+</html>
