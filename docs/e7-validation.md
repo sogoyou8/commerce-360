@@ -63,6 +63,16 @@ docker compose exec -T postgres psql -X -v ON_ERROR_STOP=1 -U commerce360 -d com
 
 **Succès attendu :** `NOTICE: E7 SQL OK ...` puis tableaux de résultats et code de sortie 0. Toute `EXCEPTION`, colonne introuvable ou absence de PostgreSQL bloque le statut « E7 validé ». Ne pas utiliser `docker compose down -v`.
 
+**Ressources du conteneur PostgreSQL :** le script applique `SET max_parallel_workers_per_gather = 0;` dans sa propre session afin d'éviter que les scans parallèles ne saturent la mémoire partagée Docker (`/dev/shm`). Cela n'affecte pas les données et ne nécessite ni redémarrage ni suppression de volume.
+
+En cas de persistance de `could not resize shared memory segment ... No space left on device`, examiner d'abord l'occupation de `/dev/shm` :
+
+```powershell
+docker compose exec -T postgres sh -c 'df -h /dev/shm; df -i /dev/shm'
+```
+
+Ne pas vider manuellement `/dev/shm` ni recréer les volumes de données. Si le segment reste saturé, une augmentation contrôlée de `shm_size` sur le service PostgreSQL (`compose.yaml`) sera examinée séparément, avec arrêt/redémarrage planifié et sauvegarde préalable du volume.
+
 Exécuter ensuite **sur les exports locaux E4/E5** le contrôle de fichiers :
 
 ```powershell
