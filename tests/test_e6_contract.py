@@ -68,8 +68,9 @@ class E6PowerBIContractTests(unittest.TestCase):
             self.assertIn(key, dax)
         self.assertIn("REMOVEFILTERS()", dax)
         doc = (ROOT / "docs/e6-powerbi.md").read_text(encoding="utf-8")
-        for token in ("Pilotage", "Ventes", "Clients", "Livraisons",
-                      "Qualité", "Actualiser", "non filtr", "PBIX"):
+        for token in ("01_Vue d'ensemble", "02_Ventes", "03_Livraisons",
+                      "04_Qualité", "05_Clients", "Actualiser",
+                      "pas automatiquement filtrées", "PBIX"):
             self.assertIn(token.lower(), doc.lower())
         self.assertIn("lecture seule", doc.lower())
 
