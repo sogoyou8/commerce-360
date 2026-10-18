@@ -4,6 +4,17 @@ Une expérience web **statique, sans serveur ni cookies**, pour explorer les don
 
 La démo est un produit de **data storytelling interactif**, pas une duplication trompeuse du PBIX et pas un accès à la base PostgreSQL. Les cinq vues partagent les définitions, mais les interactions sont volontairement **limitées à leur grain** : mois, État client, groupe de satisfaction ou segment RFM.
 
+## Comprendre l'étude avant d'explorer — E1
+
+Commerce 360 est une **étude de cas Data Analyst indépendante** sur neuf sources e-commerce Olist (Brésil, achats historiques de janvier 2017 à août 2018). La question métier est : *comment transformer des transactions brutes en indicateurs fiables pour analyser les ventes, les livraisons, la satisfaction et les comportements clients ?*
+
+- Le bandeau identifie immédiatement le sujet **Olist · Brésil · 2017–2018** ; la vue d'ensemble explicite la problématique.
+- Le contrôle **« À propos / Données »** dans l'en-tête ouvre un panneau flottant, fermable par **Échap**, clic extérieur ou bouton de fermeture. Il détaille les neuf sources, la démarche SQL/Python/Power BI, les KPI de référence et un accordéon de limites méthodologiques.
+- Le panneau relie directement au **[dépôt GitHub](https://github.com/sogoyou8/commerce-360)** et au **[bilan analytique vérifié](../docs/e8-bilan.md)**.
+- Les données historiques ne sont ni l'activité actuelle d'Olist ni une mesure de marge ; les retards, avis et clients ont leurs propres dénominateurs. Aucun croisement analytique inexistant n'est simulé.
+
+**Ce changement concerne seulement la présentation du sujet (E1)**. La restructuration PXM « un seul écran / cinq modes » est prévue dans une étape ultérieure et n'est pas présentée comme réalisée.
+
 ## Prévisualisation Vercel
 
 Une prévisualisation de la branche `feature/demo-web-interactive` a été déployée avec le statut **READY** : [Commerce 360 — démo web](https://commerce-360-explorer-git-featu-9178df-yoanns-projects-e74472b3.vercel.app/).
