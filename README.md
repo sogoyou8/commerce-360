@@ -2,9 +2,21 @@
 
 **Projet DATA 02 · Olist (Brésil, données e-commerce historiques ; fenêtre d'analyse principale : janvier 2017 à août 2018).**
 
-> **Résultats clés** — 96 211 commandes livrées · 13 181 027,13 BRL de prix d'articles hors fret · 93 104 clients observés · 8,13 % de retards sur livraisons datées. Étude descriptive, pas d'indicateur actuel d'Olist. **Pas de tableau de bord public : le PBIX reste local.**
+> **Résultats clés** — 96 211 commandes livrées · 13 181 027,13 BRL de prix d'articles hors fret · 93 104 clients observés · 8,13 % de retards sur livraisons datées. Étude descriptive, pas d'indicateur actuel d'Olist. **Le PBIX reste local ; une démo web d'agrégats historiques est en cours de construction.**
 
 **Accès rapide :** [Bilan et limites E8](docs/e8-bilan.md) · [Reproduire et contrôler](docs/e8-reproduction.md) · [Présentation portfolio / CV](docs/e8-portfolio.md) · [Mesures publiques agrégées](docs/e8-public-metrics.json) · [Méthode Power BI](docs/e6-powerbi.md) · [Validation SQL](docs/e7-validation.md).
+
+## Nouvelle démo web interactive (en préparation)
+
+Le dossier **[\`demo/\`](demo/)** contient une démo **statique**, responsive et sans API de données : cinq chapitres (vue d'ensemble, ventes, livraisons, qualité, clients), sélection de mois/États/groupes RFM, comparaisons temporelles et notes de méthode. Les métriques proviennent d'agrégats historiques E3/E5/E7 contrôlés ; **aucune ligne client ou commande n'est exposée**.
+
+- [Démarrer localement la démo](demo/README.md) : \`py -m http.server 8000 --directory demo\`
+- [Jeu public d'agrégats vérifiés](demo/data/public.json) : 20 mois, sept segments, trois États documentés et deux catégories documentées au stade initial
+- [Exporteur des agrégats complémentaires](scripts/build_web_data.py) : pour compléter les 27 États et les catégories depuis les CSV agrégés du poste local, avec vérification des manifestes SHA-256
+- [Contrôles automatiques](demo/tests/contracts.test.mjs) : dénominateurs, sommes, cohérence des champs et absence d'identifiants
+- **Le PBIX demeure local** ; la démo n'est pas un accès au serveur PostgreSQL ni un rapport Power BI Service partagé.
+
+**Statut : branche \`feature/demo-web-interactive\` et recette en cours ; ne pas annoncer d'URL publique avant vérification d'un déploiement.**
 
 ## Statut réel
 
