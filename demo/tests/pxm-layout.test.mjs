@@ -35,8 +35,8 @@ test("E3 chart combines actual monthly sales and orders with distinct visual enc
   assert.match(js,/function renderMonthBars\(\)/);
   assert.match(js,/const maxSales=Math\.max/);
   assert.match(js,/const maxOrders=Math\.max/);
-  assert.match(js,/entry\.salesBrl\/maxSales/);
-  assert.match(js,/entry\.orders\/maxOrders/);
+  assert.match(js,/entry\.salesBrl\/salesCeil/);
+  assert.match(js,/entry\.orders\/ordersCeil/);
   assert.match(js,/document\.createElementNS\("http:\/\/www\.w3\.org\/2000\/svg","polyline"\)/);
   assert.match(js,/setAttribute\("aria-label",strMonth/);
   assert.match(js,/function changePercent/);
@@ -100,4 +100,19 @@ test("E3 selection, map and satisfaction use real public aggregates",()=>{
   assert.match(js,/data\.totals\.negativeRate/);
   assert.match(js,/categories\.slice\(0,6\)/);
   assert.doesNotMatch(js,/925421|6421|8\.7/);
+});
+
+test("E3 polish uses rounded chart axes and does not replace observations",()=>{
+  assert.match(js,/function niceAxisCeil\(max\)/);
+  assert.match(js,/const salesCeil=niceAxisCeil\(maxSales\)/);
+  assert.match(js,/const ordersCeil=niceAxisCeil\(maxOrders\)/);
+  assert.match(js,/data\.monthly/);
+  assert.match(css,/grid-template-rows:104px minmax\(0,1fr\) clamp\(236px,29vh,292px\)/);
+});
+test("E3 overview ranks states by order volume while colouring the map by late rate",()=>{
+  assert.match(js,/\.sort\(\(a,b\)=>b\.orders-a\.orders\)/);
+  assert.match(js,/100\*item\.orders\/maxVolume/);
+  assert.match(js,/const alpha=\.22\+\.72\*\(item\.rate\/maxRate\)/);
+  assert.match(js,/score-ring/);
+  assert.match(css,/grid-template-rows:minmax\(70px,1fr\) 26px 26px/);
 });

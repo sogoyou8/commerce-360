@@ -1,3 +1,11 @@
+## Passe de finition E3/PXM — direction artistique / visualisation (18 octobre 2026)
+
+Sur PR #7, raffinement de la version E3 existante : axes de ventes et de commandes arrondis à des bornes lisibles (sans modifier les valeurs), colonnes inactives assombries, courbe et grille allégées, comparaisons de l'inspecteur regroupées, bordures atténuées, dock agrandi sur desktop ≥1180px et hauteur >850px. Sur les petits écrans desktop, conservation de la variante compacte. La carte reste colorée par **taux de retard des livraisons datées** mais le mini-classement de la vue d'ensemble porte maintenant sur les **commandes livrées par État** avec taux affiché, pour éviter de confondre volume et performance. Satisfaction : deux comparaisons visibles et anneau lisible (arrondi d'affichage 4,2/5, valeur 4,16/5 conservée dans le mode Qualité).
+
+Les agrégats `demo/data/public.json`, les cinq modes, les contrats de grain et les données de référence **ne sont pas modifiés**. La PR reste draft jusqu'à validation des captures desktop/mobile et test des sélections.
+
+---
+
 ## Passe visuelle E3/PXM — 18 octobre 2026
 
 Sur la branche de prévisualisation de la PR #7 (toujours draft) : hiérarchie desktop ramenée à trois lignes utiles, KPI renforcés, graphique mensuel avec règle de sélection et navigation clavier roving, inspecteur sans défilement interne, repères détaillés déplacés dans « Données », six catégories vérifiées, carte SVG cliquable des 27 UF, anneau de satisfaction issu du JSON. Les cinq modes et le flux mobile sont conservés. Le mode Vue d'ensemble affiche simultanément ventes et commandes, sans toggle trompeur. La carte représente le taux de retard parmi les livraisons datées et ne prétend pas montrer une causalité.

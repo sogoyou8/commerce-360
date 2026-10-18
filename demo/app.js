@@ -160,9 +160,11 @@ function setSelectionNavigation(items, selectedId, getId, onSelect) {
   }
 }
 function renderComparisonRows(items) {
-  $("story-comparisons").replaceChildren(...items.filter(x=>x.value!==null).map(({label,value,note})=>{
-    const row=node("div","comparison-row");
-    append(row,node("span","comparison-label",label),node("strong","comparison-value",value));
+  $("story-comparisons").replaceChildren(...items.filter(x=>x.value!==null).map(({label,value,note,kind})=>{
+    const row=node("div","comparison-row"+(kind?" comparison-row--"+kind:""));
+    const valueNode=node("strong","comparison-value",value);
+    if(kind==="delta")valueNode.dataset.trend=value.trim().startsWith("+")?"up":value.trim().startsWith("-")?"down":"even";
+    append(row,node("span","comparison-label",label),valueNode);
     if(note) row.append(node("small","comparison-note",note));
     return row;
   }));
@@ -171,6 +173,16 @@ function changePercent(now, before) {
   if (!Number.isFinite(now) || !Number.isFinite(before) || before<=0) return null;
   const value=100*(now/before-1);
   return (value>0?"+":"")+percent(value);
+}
+// Round axes upward to legible domains without altering the underlying observations.
+function niceAxisCeil(max) {
+  if (!(max > 0)) return 1;
+  const magnitude=10**Math.floor(Math.log10(max));
+  return [1,1.25,1.5,2,2.5,4,5,8,10].find(x=>x*magnitude>=max-1e-9)*magnitude;
+}
+function briefAxisNumber(v) {
+  if (v===0) return "0";
+  return new Intl.NumberFormat("fr-FR",{notation:"compact",maximumFractionDigits:2}).format(v);
 }
 function selectOverviewMonth(month, focus = false) {
   state.overviewMonth = month;
@@ -189,6 +201,8 @@ function renderMonthBars() {
   const index=items.indexOf(chosen);
   const maxSales=Math.max(...items.map(x=>x.salesBrl));
   const maxOrders=Math.max(...items.map(x=>x.orders));
+  const salesCeil=niceAxisCeil(maxSales);
+  const ordersCeil=niceAxisCeil(maxOrders);
   const root=$("viz-container");
   const shell=node("div","combo-graph"),axisLeft=node("div","combo-axis combo-axis-left");
   const axisRight=node("div","combo-axis combo-axis-right"),scroll=node("div","combo-scroll");
@@ -198,7 +212,7 @@ function renderMonthBars() {
   svg.setAttribute("viewBox","0 0 1000 300");
   svg.setAttribute("preserveAspectRatio","none");
   svg.setAttribute("aria-hidden","true");
-  const xy=items.map((entry,i)=>[((i+.5)/items.length)*1000,286-(entry.orders/maxOrders)*255]);
+  const xy=items.map((entry,i)=>[((i+.5)/items.length)*1000,286-(entry.orders/ordersCeil)*255]);
   const rule=document.createElementNS("http://www.w3.org/2000/svg","line");
   for(const [key,value] of Object.entries({
     x1:xy[index][0],x2:xy[index][0],y1:16,y2:286,
@@ -209,8 +223,8 @@ function renderMonthBars() {
   const path=document.createElementNS("http://www.w3.org/2000/svg","polyline");
   path.setAttribute("points",xy.map(p=>p.join(",")).join(" "));
   path.setAttribute("fill","none");
-  path.setAttribute("stroke","#d5e4ff");
-  path.setAttribute("stroke-width","2.4");
+  path.setAttribute("stroke","#bad4ff");
+  path.setAttribute("stroke-width","1.9");
   path.setAttribute("stroke-linejoin","round");
   path.setAttribute("vector-effect","non-scaling-stroke");
   svg.append(path);
@@ -223,7 +237,7 @@ function renderMonthBars() {
     button.setAttribute("aria-pressed",String(active));
     button.setAttribute("aria-label",strMonth(entry.month,true)+" : "+amount(entry.salesBrl,true)+", "+n(entry.orders)+" commandes");
     button.title=button.getAttribute("aria-label");
-    button.style.setProperty("--h",Math.max(1,100*entry.salesBrl/maxSales)+"%");
+    button.style.setProperty("--h",Math.max(1,100*entry.salesBrl/salesCeil)+"%");
     button.addEventListener("click",()=>selectOverviewMonth(entry.month));
     button.addEventListener("keydown",event=>{
       if(!["ArrowLeft","ArrowRight","Home","End"].includes(event.key))return;
@@ -239,7 +253,7 @@ function renderMonthBars() {
     const circle=document.createElementNS("http://www.w3.org/2000/svg","circle");
     circle.setAttribute("cx",String(xy[i][0]));
     circle.setAttribute("cy",String(xy[i][1]));
-    circle.setAttribute("r",active?"5.2":"3.2");
+    circle.setAttribute("r",active?"5.2":"2.6");
     circle.setAttribute("fill",active?"#ffffff":"#d1e1ff");
     circle.setAttribute("stroke",active?"#367de2":"#17335c");
     circle.setAttribute("stroke-width",active?"3":"2");
@@ -247,8 +261,8 @@ function renderMonthBars() {
     svg.append(circle);
   });
   for(let tick=4;tick>=0;tick--){
-    axisLeft.append(node("span","",smallAmount(maxSales*tick/4).replace(" BRL","")));
-    axisRight.append(node("span","",n(Math.round(maxOrders*tick/4))));
+    axisLeft.append(node("span","",briefAxisNumber(salesCeil*tick/4)));
+    axisRight.append(node("span","",n(Math.round(ordersCeil*tick/4))));
   }
   append(plot,bars,svg);scroll.append(plot);append(shell,axisLeft,scroll,axisRight);
   const legend=append(node("div","combo-legend"),
@@ -258,11 +272,11 @@ function renderMonthBars() {
   const previous=index>0?items[index-1]:null;
   const previousYear=items.find(x=>x.month===String(Number(chosen.month.slice(0,4))-1)+chosen.month.slice(4));
   const compare=[
-    {label:"Commandes livrées",value:n(chosen.orders)},
-    {label:"Panier moyen",value:amount(chosen.salesBrl/chosen.orders,true)},
+    {label:"Commandes livrées",value:n(chosen.orders),kind:"support"},
+    {label:"Panier moyen",value:amount(chosen.salesBrl/chosen.orders,true),kind:"support"},
   ];
-  if(previous)compare.push({label:"Ventes vs mois précédent",value:changePercent(chosen.salesBrl,previous.salesBrl)});
-  if(previousYear)compare.push({label:"Ventes vs même mois en 2017",value:changePercent(chosen.salesBrl,previousYear.salesBrl)});
+  if(previous)compare.push({label:"vs "+strMonth(previous.month,true),value:changePercent(chosen.salesBrl,previous.salesBrl),kind:"delta"});
+  if(previousYear)compare.push({label:"vs "+strMonth(previousYear.month,true),value:changePercent(chosen.salesBrl,previousYear.salesBrl),kind:"delta"});
   setStory({
     kicker:"MOIS SÉLECTIONNÉ",title:strMonth(chosen.month,true),
     description:"Commandes livrées et ventes d'articles du mois sélectionné ; les indicateurs nationaux restent indépendants.",
@@ -650,7 +664,7 @@ function renderBrazilMap() {
     updateActive();
   });
   updateActive();
-  holder.append(svg);
+  holder.append(svg,node("span","map-legend","Carte : taux de retard"));
   return holder;
 }
 function renderDock() {
@@ -674,18 +688,19 @@ function renderDock() {
     return row;
   });
   $("dock-categories").replaceChildren(...categoryRows);
-  const regions=[...data.states].sort((a,b)=>b.rate-a.rate);
-  renderText("dock-state-coverage",data.meta.coverage.states+" · taux de retard des livraisons datées");
+  const regions=[...data.states].sort((a,b)=>b.orders-a.orders);
+  renderText("dock-state-coverage",data.meta.coverage.states+" · top volumes ; carte colorée par taux de retard");
   const stateLayout=node("div","dock-state-layout");
   const stateRank=node("div","dock-state-ranks");
-  const maxRate=regions[0]?.rate||1;
+  const maxVolume=regions[0]?.orders||1;
   regions.slice(0,5).forEach((item,i)=>{
     const row=node("button","dock-state-row");
     row.type="button";
     row.title=item.code+" : "+n(item.late)+" retards sur "+n(item.dated)+" livraisons datées";
     const track=append(node("span","dock-track"),node("i"));
-    track.firstChild.style.setProperty("--w",100*item.rate/maxRate+"%");
-    append(row,node("span","state-rank-index",String(i+1)),node("span","state-rank-code",item.code),track,node("strong","",percent(item.rate)));
+    track.firstChild.style.setProperty("--w",100*item.orders/maxVolume+"%");
+    const label=append(node("span","state-rank-metrics"),node("strong","",n(item.orders)),node("small","",percent(item.rate,1)+" ret."));
+    append(row,node("span","state-rank-index",String(i+1)),node("span","state-rank-code",item.code),track,label);
     row.addEventListener("click",()=>openDeliveryState(item.code));
     stateRank.append(row);
   });
@@ -698,7 +713,7 @@ function renderDock() {
   const ring=node("div","score-ring");
   ring.style.setProperty("--score-pct",100*data.totals.averageScore/5+"%");
   append(ring,append(node("div","score-ring-center"),
-    node("strong","",decimal.format(data.totals.averageScore)+" / 5"),node("span","","Note moyenne")));
+    node("strong","",new Intl.NumberFormat("fr-FR",{maximumFractionDigits:1,minimumFractionDigits:1}).format(data.totals.averageScore)+" / 5"),node("span","","Note moyenne")));
   const negative=append(node("div","quality-negative"),
     node("span","","Avis négatifs · notes ≤ 2"),
     node("strong","",percent(data.totals.negativeRate)),
@@ -766,6 +781,7 @@ function renderInspectorDetails() {
 function render() {
   if (!data) return;
   focusView(state.view);
+  document.querySelector(".story-panel").dataset.mode=state.view;
   ({overview:renderOverview,sales:renderSales,delivery:renderDelivery,quality:renderQuality,customers:renderCustomers})[state.view]();
   renderInspectorDetails();
   renderDock();
