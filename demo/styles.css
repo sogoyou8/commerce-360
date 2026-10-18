@@ -162,7 +162,7 @@ main { min-width: 0; padding: 44px clamp(24px, 4vw, 70px) 24px; }
 .year-legend i { display: inline-block; width: 7px; height: 7px; background: #5370a9; }
 .year-legend .this-year { background: #99b8ff; }
 .year-plot { display: grid; grid-template-columns: repeat(8, minmax(0,1fr)); gap: 7px; height: 248px; border-bottom: 1px solid var(--border); background: repeating-linear-gradient(to top, transparent 0px, transparent calc(25% - 1px), rgba(148,170,211,.08) 25%, transparent calc(25% + 1px)); }
-.year-pair { display: flex; align-items: stretch; gap: 7px; flex-direction: column; justify-content: flex-end; background: transparent; border: 0; padding: 0 4px; min-width: 0; }
+.year-pair { position: relative; display: flex; align-items: stretch; gap: 7px; flex-direction: column; justify-content: flex-end; background: transparent; border: 0; padding: 0 4px; min-width: 0; }
 .year-pair[aria-pressed="true"], .year-pair:hover { background: rgba(120,150,225,.06); }
 .year-towers { display: flex; align-items: flex-end; justify-content: center; gap: 6px; height: 100%; }
 .year-towers > i { display: block; height: var(--h); width: min(23px, 42%); min-height: 1px; background: #5977ae; }
@@ -242,8 +242,8 @@ main { min-width: 0; padding: 44px clamp(24px, 4vw, 70px) 24px; }
   .identity-text { font-size: 10px; letter-spacing: .09em; }
   .identity-text small { font-size: 7px; }
   .masthead-actions { gap: 7px; }
-  .source-link { padding: 10px 10px; font-size: 10px; }
-  .masthead-actions .text-button { display: none; }
+  .source-link { padding: 10px 8px; font-size: 9px; }
+  .masthead-actions .text-button { font-size: 10px; padding: 8px 3px; }
   .side-nav { top: 69px; padding: 0 8px; }
   .nav-items a { font-size: 10px; padding: 13px 12px; }
   .nav-index { font-size: 9px; }
