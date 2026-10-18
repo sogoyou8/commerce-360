@@ -181,9 +181,9 @@ test("F1/F2 isolates independent desktop panels and grows the lower exploration 
 
 test("F3 builds a generated Earth atmosphere without altering layout or analytical data",()=>{
   const f3=readFileSync(new URL("../ambience-f3.css",import.meta.url),"utf8");
-  assert.match(html,/ambience-f3\.css\?v=e3-f3-20261019-original/);
+  assert.match(html,/ambience-f3\.css\?v=e3-f3-20261019-hd1024/);
   assert.match(f3,/création originale/);
-  assert.match(f3,/assets\/earth-f3\.webp/);
+  assert.match(f3,/assets\/earth-f3-hd\.webp/);
   assert.match(f3,/\.ambient::after \{/);
   assert.match(f3,/\.ambient::before \{/);
   assert.match(f3,/\.metric:last-child \{/);
@@ -197,8 +197,8 @@ test("F3 builds a generated Earth atmosphere without altering layout or analytic
 
 test("F3 framing: smaller spherical photo, protected KPI and complete layout isolation",()=>{
   const f3=readFileSync(new URL("../ambience-f3.css",import.meta.url),"utf8");
-  assert.match(f3,/width:clamp\(525px,49vw,740px\)/);
-  assert.match(f3,/right:clamp\(-154px,-8vw,-72px\)/);
+  assert.match(f3,/width:clamp\(455px,37vw,590px\)/);
+  assert.match(f3,/right:clamp\(-142px,-7vw,-70px\)/);
   assert.match(f3,/mask-image:none/);
   assert.match(f3,/\.metric:last-child \{\s*background:linear-gradient/);
   assert.match(f3,/\.story-panel \{/);
@@ -206,12 +206,12 @@ test("F3 framing: smaller spherical photo, protected KPI and complete layout iso
 });
 
 test("F3 globe is a real, lightweight transparent WebP asset, not an image mask",()=>{
-  const asset=readFileSync(new URL("../assets/earth-f3.webp",import.meta.url));
+  const asset=readFileSync(new URL("../assets/earth-f3-hd.webp",import.meta.url));
   const f3=readFileSync(new URL("../ambience-f3.css",import.meta.url),"utf8");
-  assert.ok(asset.length > 2000 && asset.length < 150000);
+  assert.ok(asset.length > 170000 && asset.length < 500000);
   assert.equal(asset.subarray(0,4).toString("ascii"),"RIFF");
   assert.equal(asset.subarray(8,12).toString("ascii"),"WEBP");
-  assert.match(f3,/background:url\("\.\/assets\/earth-f3\.webp"\) center \/ contain no-repeat/);
+  assert.match(f3,/background:url\("\.\/assets\/earth-f3-hd\.webp"\) center \/ contain no-repeat/);
   assert.doesNotMatch(f3,/city_lights_namerica_8k|mask-image:radial-gradient/);
 });
 
@@ -229,4 +229,15 @@ test("F4 uses shared visual tokens for all five navigation modes",()=>{
   assert.match(f4,/prefers-reduced-motion:reduce/);
   assert.match(f4,/forced-colors:active/);
   assert.doesNotMatch(f4,/\.workspace\s*\{|\.analysis\s*\{|grid-template-rows/);
+});
+
+test("F3 HD asset dimensions and native alpha are validated",()=>{
+  const asset=readFileSync(new URL("../assets/earth-f3-hd.webp",import.meta.url));
+  const f3=readFileSync(new URL("../ambience-f3.css",import.meta.url),"utf8");
+  assert.equal(asset.subarray(12,16).toString("ascii"),"VP8X");
+  const w=asset.readUIntLE(24,3)+1,h=asset.readUIntLE(27,3)+1;
+  assert.ok(w>=1024 && h>=1024,`Globe still low res: ${w}x${h}`);
+  assert.ok((asset[20]&0x10)!==0,"Transparent alpha flag required");
+  assert.match(f3,/earth-f3-hd\.webp/);
+  assert.doesNotMatch(f3,/url\("\.\/assets\/earth-f3\.webp"\)/);
 });

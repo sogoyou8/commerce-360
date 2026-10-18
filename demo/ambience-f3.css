@@ -1,5 +1,5 @@
 /* E3.F F3 — photographie Terre indépendante sur fond réellement transparent.
-   Asset produit pour Commerce 360 : version WebP légère d'une création originale.
+   Asset produit pour Commerce 360 : version WebP 1024px d'une création originale.
    La Terre est décorative (aria-hidden), jamais une carte de données.
    Pas de découpe SVG, de masque radial ou de photographie NASA rectangulaire. */
 @media (min-width:1180px) {
@@ -14,15 +14,15 @@
     display:block;
     content:"";
     position:absolute;
-    width:clamp(550px,52vw,775px);
+    width:clamp(480px,40vw,625px);
     aspect-ratio:1;
-    top:clamp(-172px,-14vh,-90px);
-    right:clamp(-174px,-9vw,-90px);
+    top:clamp(-126px,-10vh,-68px);
+    right:clamp(-162px,-8vw,-82px);
     border:0;
     border-radius:50%;
     background:radial-gradient(circle,transparent 42%,rgba(40,128,248,.13) 48%,rgba(40,128,248,.11) 57%,transparent 76%);
     filter:blur(17px);
-    opacity:.65;
+    opacity:.45;
     box-shadow:none;
     pointer-events:none;
   }
@@ -30,15 +30,15 @@
     display:block;
     content:"";
     position:absolute;
-    width:clamp(525px,49vw,740px);
+    width:clamp(455px,37vw,590px);
     aspect-ratio:1;
-    top:clamp(-146px,-12vh,-65px);
-    right:clamp(-154px,-8vw,-72px);
+    top:clamp(-112px,-8vh,-48px);
+    right:clamp(-142px,-7vw,-70px);
     border:0;
     border-radius:0;
-    background:url("./assets/earth-f3.webp") center / contain no-repeat;
-    opacity:.77;
-    filter:saturate(1.18) brightness(.93) contrast(1.05);
+    background:url("./assets/earth-f3-hd.webp") center / contain no-repeat;
+    opacity:.53;
+    filter:saturate(1.08) brightness(.89) contrast(1.03);
     mix-blend-mode:normal;
     box-shadow:none;
     -webkit-mask-image:none;
@@ -46,7 +46,7 @@
     pointer-events:none;
   }
   .metric:last-child {
-    background:linear-gradient(90deg,rgba(4,10,23,.11),rgba(4,10,24,.62));
+    background:linear-gradient(90deg,rgba(4,10,23,.11),rgba(4,10,24,.73));
   }
   .story-panel {
     background:linear-gradient(155deg,rgba(10,26,56,.86),rgba(4,13,31,.975) 83%);
@@ -54,16 +54,16 @@
 }
 @media (min-width:1180px) and (max-height:850px) {
   .ambient::before {
-    width:clamp(510px,46vw,680px);
-    top:-122px;
-    right:clamp(-120px,-8vw,-75px);
-    opacity:.56;
+    width:clamp(465px,40vw,575px);
+    top:-100px;
+    right:clamp(-140px,-8vw,-75px);
+    opacity:.4;
   }
   .ambient::after {
-    width:clamp(500px,45vw,660px);
-    top:-102px;
-    right:clamp(-112px,-7vw,-65px);
-    opacity:.66;
+    width:clamp(450px,37vw,550px);
+    top:-78px;
+    right:clamp(-127px,-7vw,-68px);
+    opacity:.49;
   }
 }
 @media (max-width:1179px), (prefers-reduced-data:reduce), (forced-colors:active) {
