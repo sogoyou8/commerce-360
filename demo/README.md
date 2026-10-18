@@ -1,3 +1,11 @@
+## F3 — Retouche de cadrage (18/10/2026)
+
+Après contrôle visuel du propriétaire, la première F3 laissait une surface bleue trop étalée : l'arc de la planète était principalement visible sur le bord de la fenêtre. Retouche **ciblée** : Terre NASA/Suomi NPP à la taille de 49vw plafonnée à 760px, recentrée dans la partie droite, bord circulaire mieux défini et halo plus proche du limbe. L'opacité derrière le quatrième KPI est atténuée pour préserver le contraste ; l'inspecteur reçoit un fond translucide plus protecteur. Sur desktop compact, une taille et une transparence réduites sont appliquées. Le globe reste totalement décoratif, avec son crédit dans Données.
+
+Aucun changement du layout F1/F2, du CSS des graphiques et cartes, du JS ou des données Olist. Tests CI, déploiement Vercel et recette viewport avant validation visuelle.
+
+---
+
 ## E3.F / F3 — Terre et ambiance (18/10/2026)
 
 La direction artistique nocturne reçoit une couche CSS indépendante `demo/ambience-f3.css`, chargée après F1/F2. Elle utilise l'image NASA/Suomi NPP déjà créditée dans la fenêtre Données, avec un masque sphérique plus progressif, une mise à l'échelle qui laisse voir les continents et un halo atmosphérique bleu. Les dégradés sont conservés comme secours si la photo NASA ne charge pas. Les KPI à droite et l'inspecteur ont un fond de protection pour préserver le contraste et la lisibilité. Sur mobile, mode économie de données ou contraste forcé, la photo est masquée.

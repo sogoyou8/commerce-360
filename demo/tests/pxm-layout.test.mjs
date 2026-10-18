@@ -181,7 +181,7 @@ test("F1/F2 isolates independent desktop panels and grows the lower exploration 
 
 test("F3 builds a grounded NASA Earth atmosphere without altering layout or analytical data",()=>{
   const f3=readFileSync(new URL("../ambience-f3.css",import.meta.url),"utf8");
-  assert.match(html,/ambience-f3\.css\?v=e3-f3-20261018-earth/);
+  assert.match(html,/ambience-f3\.css\?v=e3-f3-20261018-framed/);
   assert.match(f3,/NASA\/Suomi NPP/);
   assert.match(f3,/city_lights_namerica_8k\.jpg/);
   assert.match(f3,/\.ambient::after \{/);
@@ -193,4 +193,14 @@ test("F3 builds a grounded NASA Earth atmosphere without altering layout or anal
   assert.match(f3,/prefers-reduced-data:reduce/);
   assert.match(f3,/forced-colors:active/);
   assert.doesNotMatch(f3,/\.workspace\s*\{|\.analysis\s*\{|grid-template-rows/);
+});
+
+test("F3 framing: smaller spherical photo, protected KPI and complete layout isolation",()=>{
+  const f3=readFileSync(new URL("../ambience-f3.css",import.meta.url),"utf8");
+  assert.match(f3,/width:clamp\(570px,49vw,760px\)/);
+  assert.match(f3,/right:clamp\(-240px,-14vw,-140px\)/);
+  assert.match(f3,/mask-image:radial-gradient\(circle at 50% 50%/);
+  assert.match(f3,/\.metric:last-child \{\s*background:linear-gradient/);
+  assert.match(f3,/\.story-panel \{/);
+  assert.doesNotMatch(f3,/grid-template|\.workspace\s*\{|\.analysis-main\s*\{|\.analysis\s*\{/);
 });
