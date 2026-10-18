@@ -98,7 +98,7 @@ test("E1 explains the independent Olist study in the UI without exposing raw dat
 
 test("E2 rejects misleading partial/full coverage, incorrect totals and fabricated regions", () => {
   const cases=[
-    d=>{ d.meta.coverage.states="27 États vérifiés"; },
+    d=>{ d.meta.coverage.states=d.states.length===27 ? "3 États documentés parmi 27" : "27 États vérifiés"; },
     d=>{ d.states[0].orders+=1; },
     d=>{ d.states[0].code="ZZ"; },
     d=>{ d.states.push({...d.states[0],code:"BA"}); },
