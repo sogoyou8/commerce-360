@@ -7,7 +7,7 @@ const compact = new Intl.NumberFormat("fr-FR", { notation: "compact", maximumFra
 const shortMonth = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Aoû", "Sep", "Oct", "Nov", "Déc"];
 const pages = ["overview", "sales", "delivery", "quality", "customers"];
 const chapters = {
-  overview: { n: "01", category: "VISION D'ENSEMBLE", kicker: "UNE HISTOIRE EN VINGT MOIS", title: "La donnée prend <em>du relief.</em>", desc: "Vingt mois d'activité e-commerce. Une lecture structurée des ventes, des commandes et de leurs limites." },
+  overview: { n: "01", category: "VISION D'ENSEMBLE", kicker: "ÉTUDE E-COMMERCE OLIST · BRÉSIL 2017–2018", title: "Explorer le commerce <em>brésilien.</em>", desc: "Une étude de cas indépendante : neuf sources Olist historiques pour comprendre les ventes, les livraisons, les avis et les clients." },
   sales: { n: "02", category: "VENTES & CATÉGORIES", kicker: "PERFORMANCE COMMERCIALE", title: "Lire la <em>trajectoire.</em>", desc: "Comparer des périodes équivalentes, puis identifier les principales catégories documentées." },
   delivery: { n: "03", category: "LIVRAISONS & TERRITOIRES", kicker: "GÉOGRAPHIE DE LA LIVRAISON", title: "Le territoire <em>compte.</em>", desc: "Distinguer les écarts régionaux et comprendre les vrais dénominateurs des retards." },
   quality: { n: "04", category: "SATISFACTION & PONCTUALITÉ", kicker: "EXPÉRIENCE OBSERVÉE", title: "Le retard laisse <em>une trace.</em>", desc: "Comparer les avis des commandes livrées ponctuellement ou en retard, sans confondre association et causalité." },
@@ -440,9 +440,18 @@ function onHashChange() {
 
 function setupDialog() {
   const dialog=$("method-dialog");
-  $("method-open").addEventListener("click",()=>dialog.showModal());
+  const trigger=$("method-open");
+  trigger.addEventListener("click",()=>{
+    if (dialog.open) return;
+    dialog.showModal();
+    trigger.setAttribute("aria-expanded", "true");
+  });
   $("method-close").addEventListener("click",()=>dialog.close());
   dialog.addEventListener("click",(event)=>{if(event.target===dialog)dialog.close();});
+  dialog.addEventListener("close",()=>{
+    trigger.setAttribute("aria-expanded", "false");
+    trigger.focus();
+  });
 }
 
 async function start() {
