@@ -52,11 +52,21 @@ test("public data refuses raw identifiers and personal fields", () => {
   }
 });
 
-test("only three published regional baselines are shown in reference mode", () => {
-  assert.equal(source.states.length, 3);
-  assert.equal(source.meta.coverage.states, "3 États documentés parmi 27");
-  assert.equal(source.sellerStates.length, 0);
-  assert.equal(source.cohorts.length, 0);
+test("regional coverage is explicit in both reference and enriched modes", () => {
+  assert.ok([3, 27].includes(source.states.length));
+  if (source.states.length === 3) {
+    assert.deepEqual(source.states.map((state) => state.code), ["CE", "RJ", "SP"]);
+    assert.equal(source.meta.coverage.states, "3 États documentés parmi 27");
+    assert.equal(source.sellerStates.length, 0);
+    assert.equal(source.cohorts.length, 0);
+  } else {
+    assert.equal(source.meta.coverage.states, "27 États vérifiés");
+    assert.equal(source.states.reduce((total, state) => total + state.orders, 0), source.totals.orders);
+    assert.equal(source.states.reduce((total, state) => total + state.late, 0), source.totals.late);
+    assert.equal(source.categories.length, 12);
+    assert.ok(source.sellerStates.every((state) => /^[A-Z]{2}$/.test(state.code)));
+    assert.ok(source.cohorts.every((cohort) => cohort.customers >= 20));
+  }
 });
 
 test("comparable sales categories use article prices, not profit", () => {
