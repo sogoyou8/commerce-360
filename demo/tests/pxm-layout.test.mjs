@@ -178,3 +178,19 @@ test("F1/F2 isolates independent desktop panels and grows the lower exploration 
   assert.match(layer,/grid-template-rows:82px minmax\(0,1fr\) 180px/);
   assert.match(layer,/@media \(max-width:1179px\)/);
 });
+
+test("F3 builds a grounded NASA Earth atmosphere without altering layout or analytical data",()=>{
+  const f3=readFileSync(new URL("../ambience-f3.css",import.meta.url),"utf8");
+  assert.match(html,/ambience-f3\.css\?v=e3-f3-20261018-earth/);
+  assert.match(f3,/NASA\/Suomi NPP/);
+  assert.match(f3,/city_lights_namerica_8k\.jpg/);
+  assert.match(f3,/\.ambient::after \{/);
+  assert.match(f3,/\.ambient::before \{/);
+  assert.match(f3,/\.metric:last-child \{/);
+  assert.match(f3,/\.story-panel \{/);
+  assert.match(f3,/max-height:850px/);
+  assert.match(f3,/max-width:1179px/);
+  assert.match(f3,/prefers-reduced-data:reduce/);
+  assert.match(f3,/forced-colors:active/);
+  assert.doesNotMatch(f3,/\.workspace\s*\{|\.analysis\s*\{|grid-template-rows/);
+});

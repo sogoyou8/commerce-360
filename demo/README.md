@@ -1,3 +1,11 @@
+## E3.F / F3 — Terre et ambiance (18/10/2026)
+
+La direction artistique nocturne reçoit une couche CSS indépendante `demo/ambience-f3.css`, chargée après F1/F2. Elle utilise l'image NASA/Suomi NPP déjà créditée dans la fenêtre Données, avec un masque sphérique plus progressif, une mise à l'échelle qui laisse voir les continents et un halo atmosphérique bleu. Les dégradés sont conservés comme secours si la photo NASA ne charge pas. Les KPI à droite et l'inspecteur ont un fond de protection pour préserver le contraste et la lisibilité. Sur mobile, mode économie de données ou contraste forcé, la photo est masquée.
+
+**Portée exclusivement visuelle :** aucun changement de layout F1/F2, de données Olist, de navigation, de carte SVG métier, de JS métier, ou de comparaison. La Terre reste décorative et n'est jamais une carte de données. Vérification visuelle requise en desktop à 1440×900, 1180×750, 1920×993, et sur mobile 390×844 ; vérifier les effets de transparence et la lisibilité des KPI sur toute la navigation. PR #7 reste draft/non fusionnée.
+
+---
+
 ## E3.F — F1+F2 (18/10/2026) : structure et proportions globales
 
 Le graphique principal et l'inspecteur deviennent deux surfaces indépendantes sur desktop, avec deux bordures complètes et un espacement visuel de 12 à 20px. Leurs niveaux de données, contenus et interactions ne sont pas modifiés. La structure responsive conserve les deux surfaces en colonne sous 1180px.
