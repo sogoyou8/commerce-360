@@ -7,11 +7,11 @@ const compact = new Intl.NumberFormat("fr-FR", { notation: "compact", maximumFra
 const shortMonth = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Aoû", "Sep", "Oct", "Nov", "Déc"];
 const pages = ["overview", "sales", "delivery", "quality", "customers"];
 const chapters = {
-  overview: { n: "01", category: "VISION D'ENSEMBLE", kicker: "ÉTUDE E-COMMERCE OLIST · BRÉSIL 2017–2018", title: "Explorer le commerce <em>brésilien.</em>", desc: "Une étude de cas indépendante : neuf sources Olist historiques pour comprendre les ventes, les livraisons, les avis et les clients." },
-  sales: { n: "02", category: "VENTES & CATÉGORIES", kicker: "PERFORMANCE COMMERCIALE", title: "Lire la <em>trajectoire.</em>", desc: "Comparer des périodes équivalentes, puis identifier les principales catégories documentées." },
-  delivery: { n: "03", category: "LIVRAISONS & TERRITOIRES", kicker: "GÉOGRAPHIE DE LA LIVRAISON", title: "Le territoire <em>compte.</em>", desc: "Distinguer les écarts régionaux et comprendre les vrais dénominateurs des retards." },
-  quality: { n: "04", category: "SATISFACTION & PONCTUALITÉ", kicker: "EXPÉRIENCE OBSERVÉE", title: "Le retard laisse <em>une trace.</em>", desc: "Comparer les avis des commandes livrées ponctuellement ou en retard, sans confondre association et causalité." },
-  customers: { n: "05", category: "CLIENTS & SEGMENTATION RFM", kicker: "COMPORTEMENTS OBSERVÉS", title: "Comprendre <em>les profils.</em>", desc: "Sept segments exclusifs, un historique limité et une distinction essentielle entre achat observé et fidélité réelle." },
+  overview: { n: "01", category: "VUE D'ENSEMBLE", kicker: "20 MOIS · 2017–2018", title: "Explorer le commerce <em>brésilien.</em>", desc: "Ventes d'articles et commandes livrées · étude indépendante sur neuf sources Olist." },
+  sales: { n: "02", category: "VENTES", kicker: "VENTES D'ARTICLES · HORS FRET", title: "Ventes et <em>catégories.</em>", desc: "Comparer janvier–août 2017 et 2018, puis explorer les catégories réellement documentées." },
+  delivery: { n: "03", category: "LIVRAISONS", kicker: "ÉTATS DES ACHETEURS", title: "Délais et <em>retards.</em>", desc: "Comparer les États documentés, en distinguant commandes livrées et livraisons datées." },
+  quality: { n: "04", category: "QUALITÉ", kicker: "AVIS · PONCTUALITÉ", title: "Notes et <em>satisfaction.</em>", desc: "Observer l'association entre retard et avis, sans en déduire de causalité." },
+  customers: { n: "05", category: "CLIENTS", kicker: "SEPT SEGMENTS RFM · 2018", title: "Profils <em>observés.</em>", desc: "Récence, fréquence et montants historiques ; aucune prédiction de fidélité actuelle." },
 };
 
 let data;
@@ -435,7 +435,24 @@ function onHashChange() {
   const next=location.hash.slice(1);
   state.view=pages.includes(next)?next:"overview";
   render();
-  if(window.scrollY>120)window.scrollTo({top:0,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"instant":"smooth"});
+  // Modes share one workspace; never force a page scroll on navigation.
+}
+
+function setupModeNavigation() {
+  const links = [...document.querySelectorAll(".mode-nav [data-view]")];
+  const navbar = document.querySelector(".mode-nav");
+  if (!navbar) return;
+  navbar.addEventListener("keydown", event => {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    if (!(event.target instanceof HTMLAnchorElement)) return;
+    const current = links.indexOf(event.target);
+    if (current < 0) return;
+    event.preventDefault();
+    const next = event.key === "Home" ? 0 : event.key === "End" ? links.length - 1 :
+      (current + (event.key === "ArrowRight" ? 1 : -1) + links.length) % links.length;
+    links[next].focus();
+    location.hash = links[next].dataset.view;
+  });
 }
 
 function setupDialog() {
@@ -456,6 +473,7 @@ function setupDialog() {
 
 async function start() {
   setupDialog();
+  setupModeNavigation();
   window.addEventListener("hashchange",onHashChange);
   try {
     const response=await fetch(new URL("./data/public.json",import.meta.url),{cache:"no-cache"});
@@ -464,6 +482,13 @@ async function start() {
     const errors=validatePublicData(dataset);
     if(errors.length)throw new Error("Contrat de données invalide : "+errors.join("; "));
     data=dataset;
+    const aboutCoverage = $("method-data-coverage");
+    if (aboutCoverage) {
+      aboutCoverage.textContent = "Couverture publique : " +
+        dataset.meta.coverage.states + " ; " +
+        dataset.meta.coverage.categories.toLowerCase() +
+        ". Les absences ne sont jamais assimilées à zéro.";
+    }
     onHashChange();
   } catch(error) {
     const explanation=error instanceof Error?error.message:"Données indisponibles";
