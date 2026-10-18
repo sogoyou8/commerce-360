@@ -23,7 +23,19 @@ Le socle de la démo est désormais **un seul espace de travail** : navigation h
 
 **Données :** E3 ne modifie pas les chiffres publiés. Les 20 mois, 7 segments et 3 États/2 catégories du snapshot initial restent vérifiés et transparents ; le même UI reçoit automatiquement les 27 États et 12 catégories après la procédure E2 locale. Les KPI nationaux ne simulent aucun filtrage impossible.
 
-Cette PR est encore une **prévisualisation**. La recette navigateur desktop/mobile et l'intégration complète des exports E2 restent requises avant publication finale.
+Cette PR est encore une **prévisualisation** ; la deuxième passe PXM E3.1–E3.5 et les tests automatisés ont suivi. La recette navigateur desktop/mobile et l'intégration complète des exports E2 restent requises avant publication finale.
+
+## E3.1–E3.5 — Deuxième passe PXM (18 octobre 2026)
+
+**Direction :** se rapprocher de la composition conceptuelle premium sans en copier les données fictives, ses pourcentages inventés ou sa carte nationale non justifiée.
+
+- **E3.1 — Socle :** une seule navbar avec cinq modes, période historique, accès GitHub et panneau « À propos / Données ». Titre métier compact et quatre KPI contextuels ; disparition de l'ancienne ligne de navigation secondaire.
+- **E3.2 — Visualisation principale :** sur la vue d'ensemble, **colonnes = ventes d'articles hors fret**, **courbe = commandes livrées**, sur **20 mois exacts (janvier 2017 à août 2018)**, avec deux axes séparés. Chaque mois est sélectionnable ; les années et données inexistantes ne sont jamais extrapolées.
+- **E3.3 — Inspecteur :** précédent/suivant, montants et commandes du mois, panier moyen *réellement calculable* par le ratio mensuel et comparaisons mois précédent / même mois de l'année précédente **uniquement quand les deux périodes existent**. Pour les autres modes : inspecteur de l'état, du groupe de satisfaction ou du segment RFM, avec dénominateurs explicites.
+- **E3.4 — Trois explorations secondaires** accessibles sans quitter la page : catégories **uniquement publiées**, États des acheteurs **uniquement publiés**, et satisfaction nationale par groupe de ponctualité. Tant que le JSON contient seulement **2 catégories et 3 États**, les titres indiquent clairement cette couverture. **Aucune carte pleine du Brésil ni catégorie fictive.**
+- **E3.5 — Mise en page responsive :** le cockpit est contenu dans une hauteur de viewport sur desktop ≥ 1180 px et ≥ 750 px ; sur écrans plus petits, les sections deviennent verticales avec scroll accessible et les tableaux longs défilent dans leur région. La navigation reste utilisable au clavier.
+
+**Aucune mutation du fichier `demo/data/public.json`** dans E3.1–E3.5. La recette CI valide la syntaxe, les contrats de grains et de données, la structure UI ; le passage E2 à 27 États reste conditionné à l'exécution de l'exporteur sur le PC possédant les CSV vérifiés. Le statut Vercel READY ne garantit pas à lui seul la conformité visuelle : une recette manuelle desktop/mobile et les cinq modes restent à confirmer.
 
 ## Prévisualisation Vercel
 
