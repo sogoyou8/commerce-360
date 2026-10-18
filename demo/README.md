@@ -21,7 +21,7 @@ Le socle de la démo est désormais **un seul espace de travail** : navigation h
 
 **Affichage :** le viewport desktop devient l'espace principal (sans scroll de page sur les écrans d'au moins 960 px de large et 670 px de haut) ; le graphique et l'inspecteur gèrent leurs propres débordements. Les écrans plus petits s'adaptent en colonne et autorisent le scroll nécessaire à l'accessibilité.
 
-**Données :** E3 ne modifie pas les chiffres publiés. Les 20 mois, 7 segments et 3 États/2 catégories du snapshot initial restent vérifiés et transparents ; le même UI reçoit automatiquement les 27 États et 12 catégories après la procédure E2 locale. Les KPI nationaux ne simulent aucun filtrage impossible.
+**Données :** E3 conserve les KPI nationaux vérifiés et ne simule aucun filtrage croisé impossible. E2 a ensuite enrichi le JSON public à partir des 12 CSV E4/E5 et des manifestes SHA-256 validés : 27 États clients, 12 catégories commerciales, 7 segments RFM, 20 cohortes et 15 États vendeurs agrégés.
 
 Cette PR est encore une **prévisualisation** ; la deuxième passe PXM E3.1–E3.5 et les tests automatisés ont suivi. La recette navigateur desktop/mobile et l'intégration complète des exports E2 restent requises avant publication finale.
 
@@ -32,16 +32,16 @@ Cette PR est encore une **prévisualisation** ; la deuxième passe PXM E3.1–E3
 - **E3.1 — Socle :** une seule navbar avec cinq modes, période historique, accès GitHub et panneau « À propos / Données ». Titre métier compact et quatre KPI contextuels ; disparition de l'ancienne ligne de navigation secondaire.
 - **E3.2 — Visualisation principale :** sur la vue d'ensemble, **colonnes = ventes d'articles hors fret**, **courbe = commandes livrées**, sur **20 mois exacts (janvier 2017 à août 2018)**, avec deux axes séparés. Chaque mois est sélectionnable ; les années et données inexistantes ne sont jamais extrapolées.
 - **E3.3 — Inspecteur :** précédent/suivant, montants et commandes du mois, panier moyen *réellement calculable* par le ratio mensuel et comparaisons mois précédent / même mois de l'année précédente **uniquement quand les deux périodes existent**. Pour les autres modes : inspecteur de l'état, du groupe de satisfaction ou du segment RFM, avec dénominateurs explicites.
-- **E3.4 — Trois explorations secondaires** accessibles sans quitter la page : catégories **uniquement publiées**, États des acheteurs **uniquement publiés**, et satisfaction nationale par groupe de ponctualité. Tant que le JSON contient seulement **2 catégories et 3 États**, les titres indiquent clairement cette couverture. **Aucune carte pleine du Brésil ni catégorie fictive.**
+- **E3.4 — Trois explorations secondaires** accessibles sans quitter la page : les 12 catégories principales réellement publiées, les 27 États clients vérifiés et la satisfaction nationale par ponctualité. **Aucune catégorie fictive ni total régional inventé.**
 - **E3.5 — Mise en page responsive :** le cockpit est contenu dans une hauteur de viewport sur desktop ≥ 1180 px et ≥ 750 px ; sur écrans plus petits, les sections deviennent verticales avec scroll accessible et les tableaux longs défilent dans leur région. La navigation reste utilisable au clavier.
 
-**Aucune mutation du fichier `demo/data/public.json`** dans E3.1–E3.5. La recette CI valide la syntaxe, les contrats de grains et de données, la structure UI ; le passage E2 à 27 États reste conditionné à l'exécution de l'exporteur sur le PC possédant les CSV vérifiés. Le statut Vercel READY ne garantit pas à lui seul la conformité visuelle : une recette manuelle desktop/mobile et les cinq modes restent à confirmer.
+**E3.1–E3.5** ont été développées sans modifier les références du snapshot initial. **E2 a maintenant enrichi `demo/data/public.json`** à partir des 12 exports locaux validés. La CI vérifie la syntaxe, la sécurité, les contrats de données et la structure UI ; une recette visuelle desktop/mobile et des cinq modes reste nécessaire avant fusion. Le statut Vercel READY ne garantit pas la conformité visuelle.
 
 ## Prévisualisation Vercel
 
 Une prévisualisation de la branche `feature/demo-web-interactive` a été déployée avec le statut **READY** : [Commerce 360 — démo web](https://commerce-360-explorer-git-featu-9178df-yoanns-projects-e74472b3.vercel.app/).
 
-Cette URL est une **prévisualisation de branche**, pas une validation de publication définitive. Le statut READY et la CI réussie ne remplacent pas une recette visuelle et interactive dans le navigateur. Le jeu publié actuellement est volontairement partiel (3 États, 2 catégories) ; les exports du poste local peuvent étendre cette couverture de manière vérifiable.
+Cette URL est une **prévisualisation de branche**, pas une validation de publication définitive. Le statut READY et la CI réussie ne remplacent pas une recette visuelle et interactive dans le navigateur. La couverture E2 de la branche est complète sur les agrégats publiables : 27 États clients, 12 catégories principales, 20 cohortes et 15 États vendeurs sous seuil d'au moins 5 vendeurs.
 
 ## Démarrage local (Windows / Antigravity)
 
@@ -62,7 +62,7 @@ La page nécessite JavaScript et un serveur HTTP statique : ouvrir directement l
 | Mode | Interaction | Grain et source |
 |---|---|---|
 | 01 Vue d'ensemble | Changer ventes/commandes et sélectionner chacun des 20 mois | `mart.e3_monthly_sales` / référence E3 |
-| 02 Ventes | Choisir ventes/commandes et comparer janvier–août 2017 avec les mêmes mois de 2018 | Référence E3 ; **deux catégories** de tête seulement dans la version sans export |
+| 02 Ventes | Choisir ventes/commandes et comparer janvier–août 2017 avec les mêmes mois de 2018 | Référence E3 ; **12 catégories** principales dans le JSON enrichi |
 | 03 Livraisons | Choisir un État et basculer entre taux de retard et délai | États **CE, RJ, SP** documentés dans la validation E7 |
 | 04 Qualité | Choisir ponctuel/retard et basculer entre note et avis négatifs | `mart.e3_delivery_satisfaction` : un avis sélectionné par commande |
 | 05 Clients | Trier les sept segments par clients, ventes ou réacheteurs ; cliquer sur un segment | `mart.e5_segments_summary` ; 93 104 clients et 2 789 réacheteurs |
@@ -71,7 +71,7 @@ La page nécessite JavaScript et un serveur HTTP statique : ouvrir directement l
 
 ## E2 — Finaliser les données avec les exports validés du PC
 
-La première version publique est **intentionnellement partielle** : 20 mois, 7 segments RFM, les États clients **CE / RJ / SP** et seulement **2 catégories**. Les 27 États et 12 catégories **ne peuvent pas être reconstitués honnêtement à partir du JSON public**. Il faut les **12 exports locaux E4/E5** produits par les scripts PostgreSQL antérieurs. Ne pas saisir ni inventer les valeurs manquantes.
+La **version initiale** présentait 3 États (CE / RJ / SP) et 2 catégories. **E2 a été validée à partir des 12 exports CSV E4/E5 et de leurs manifestes SHA-256**, puis le JSON public enrichi a été intégré à la PR #7 : 27 États clients, 12 catégories principales, 15 États vendeurs agrégés, 20 cohortes mensuelles et 7 segments RFM. Les fichiers détaillés (CSV, XLSX, PBIX) ne sont pas publiés.
 
 ### Une seule procédure — PowerShell, dans le dépôt Commerce 360
 
@@ -106,7 +106,7 @@ L'export **échoue sans écrire** si les dossiers locaux E4/E5 sont absents, si 
 
 ### Si le PC ne possède plus les 12 exports
 
-Ne **pas** mettre à jour `public.json` et ne **pas** annoncer la couverture complète. Les références publiques existantes restent utilisables et honnêtes. Régénérer d'abord les exports via les procédures [E4](../docs/e4-excel-recette.md) et [E5](../docs/e5-rfm.md), à partir du PostgreSQL local validé ; ne pas publier les sources détaillées.
+**Réimportation future :** ne jamais publier les sources détaillées. Si les agrégats doivent être régénérés, utiliser les procédures [E4](../docs/e4-excel-recette.md) et [E5](../docs/e5-rfm.md), valider les manifestes SHA-256 et exécuter les contrats Web avant mise en production.
 
 
 ## Validation hors ligne
