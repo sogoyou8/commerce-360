@@ -1,25 +1,79 @@
-# Commerce 360 — analyse e-commerce historique | PostgreSQL · Python · Excel · Power BI
+# Commerce 360 — Comprendre le commerce à travers ses données
 
-**Projet DATA 02 · Olist (Brésil, données e-commerce historiques ; fenêtre d'analyse principale : janvier 2017 à août 2018).**
+**Étude de cas Data Analyst · E-commerce · Olist, Brésil · Janvier 2017 — Août 2018**
 
-> **Résultats clés** — 96 211 commandes livrées · 13 181 027,13 BRL de prix d'articles hors fret · 93 104 clients observés · 8,13 % de retards sur livraisons datées. Étude descriptive, pas d'indicateur actuel d'Olist. **Pas de tableau de bord public : le PBIX reste local.**
+**Comment transformer neuf fichiers de transactions en informations fiables pour comprendre les ventes, les livraisons, la satisfaction et les comportements clients ?**
 
-**Accès rapide :** [Bilan et limites E8](docs/e8-bilan.md) · [Reproduire et contrôler](docs/e8-reproduction.md) · [Présentation portfolio / CV](docs/e8-portfolio.md) · [Mesures publiques agrégées](docs/e8-public-metrics.json) · [Méthode Power BI](docs/e6-powerbi.md) · [Validation SQL](docs/e7-validation.md).
+Commerce 360 répond à cette problématique avec une chaîne analytique complète : préparation et contrôle des données, analyses SQL, segmentation RFM, restitution Power BI et exploration web. L'objectif est de **produire des indicateurs cohérents et utiles à la décision**, en documentant leurs limites — et non de simplement afficher un tableau de bord.
 
-## Statut réel
+**[Explorer la démo web (prévisualisation)](https://commerce-360-explorer-git-featu-9178df-yoanns-projects-e74472b3.vercel.app/)** · **[Voir les résultats](docs/e8-bilan.md)** · **[Reproduire l'analyse](docs/e8-reproduction.md)**
 
-- ✅ **E0** : cadrage métier.
-- ✅ **E1** : audit direct des 9 CSV (`docs/audit-e1.md`).
-- ✅ **E2 — terminé le 16 octobre 2026** : neuf tables typées, import transactionnel, contraintes FK/PK, grains commande et article, vues analytiques, tests hors ligne et contrôle de qualité SQL.
-- ✅ **E2 — intégration PostgreSQL locale confirmée par l'utilisateur** : conteneur Docker PostgreSQL 16 `healthy`, neuf CSV importés, contrôles SQL réussis (`E2 PostgreSQL : import, contrôles et vues validés. Transaction confirmée.`) et requête `mart.v_kpi_global` exécutée avec résultats conformes à E1. Preuves : sorties du terminal Antigravity fournies le 16 octobre 2026 ; ce n'est pas un déploiement cloud.
-- ✅ **E2 — GitHub** : code publié sur `main` dans [sogoyou8/commerce-360](https://github.com/sogoyou8/commerce-360) ; commit initial [`656d5fa`](https://github.com/sogoyou8/commerce-360/commit/656d5fa1ad8c2218cd927b8dc466a684c7ac9ee1). `.env`, `.venv` et `archive.zip` ne sont pas versionnés.
-- ✅ **E3 — clôturée le 16 octobre 2026** : 12 vues SQL appliquées sur PostgreSQL local, 13 tests Python réussis, rapprochement des commandes et ventes avec les CSV indépendants (96 211 commandes livrées ; 13 181 027,13 BRL d'articles sur janvier 2017–août 2018). [Recette E3](docs/e3-analyses-sql.md) ; [référence CSV indépendante](docs/e3-reference-offline.md). **[PR #1 fusionnée dans `main`](https://github.com/sogoyou8/commerce-360/pull/1)**, commit [`10117a9`](https://github.com/sogoyou8/commerce-360/commit/10117a96b950a73498c8b92d08c3e0de4af49858). Aucune modification de la base PostgreSQL lors de la fusion.
-- ✅ **E4 — clôturée le 17 octobre 2026** : neuf CSV exportés depuis E3, classeur local réel de 18 feuilles, Power Query et modèle de données (96 211 commandes), deux TCD et un graphique croisé dynamique filtrés par le segment commun `customer_state`. L'utilisateur a confirmé une actualisation Excel sans erreur. **[PR #2 fusionnée dans `main`](https://github.com/sogoyou8/commerce-360/pull/2)**, commit [`861fd14`](https://github.com/sogoyou8/commerce-360/commit/861fd14d101f52bdcc955d2311b074b4940963f4). Le XLSX reste local, non distribué publiquement : [recette E4](docs/e4-excel-recette.md).
-- ✅ **E5 — clôturée le 17 octobre 2026** : tests Python, recette SQL PostgreSQL locale, 7 segments, 83 lignes d'agrégats cohorte, 3 CSV locaux et réconciliation de **93 104 clients / 96 211 commandes / 13 181 027,13 BRL**. Sortie Docker et KPI attestés par les captures de l'utilisateur. **[PR #3 fusionnée dans `main`](https://github.com/sogoyou8/commerce-360/pull/3)**, commit [`e8964cc`](https://github.com/sogoyou8/commerce-360/commit/e8964cc1daa4e34e8d1a81dde33426ad29b802c1). [Méthode et recette E5](docs/e5-rfm.md).
-- ✅ **E6 — réalisée et validée localement sur captures** : rapport Power BI Desktop de cinq pages, 12 exports E4/E5 et SHA-256 reconciliés (`E6 OK`). **[PR #4 fusionnée dans `main`](https://github.com/sogoyou8/commerce-360/pull/4)**.
-- ✅ **E7 — validation SQL locale réussie le 18 octobre 2026** : `E7 SQL OK`, 35 tests Python, concordance des indicateurs et filtres Power BI observés. **[PR #5 fusionnée dans `main`](https://github.com/sogoyou8/commerce-360/pull/5)**, CI finale verte sur `24cd2760`.
-- 🛠️ **E8 — finalisation de la restitution et de la reproductibilité** : bilan analytique public, guide de recette, fiche portfolio/CV et garde-fou de diffusion. La PR E8 est en cours de revue ; **aucun PBIX, CSV ni XLSX brut n'est ajouté**.
+> **Contexte :** il s'agit d'une étude personnelle et **non officielle**, fondée sur les données historiques du jeu Olist. Les achats analysés vont du **1er janvier 2017 inclus au 1er septembre 2018 exclu** (20 mois). Les montants sont en **BRL**, calculés à partir du prix des articles de commandes livrées, **hors frais de livraison** : ce n'est ni le chiffre d'affaires net ni la marge d'Olist. Aucun chiffre ne décrit son activité actuelle.
 
+## Le sujet et les questions métier
+
+Le jeu de données Olist regroupe **neuf fichiers CSV** relatifs aux commandes, articles, produits, clients, vendeurs, paiements, avis et informations géographiques. Leur analyse soulève un problème concret : les informations se trouvent à différents **grains** (commande, article, client, avis), ce qui peut fausser les résultats lorsqu'on les joint sans précaution.
+
+L'étude explore cinq dimensions complémentaires :
+
+| Analyse | Question à laquelle elle répond |
+|---|---|
+| **Vue d'ensemble** | Comment évoluent les ventes et les commandes pendant les 20 mois étudiés ? |
+| **Ventes** | Quelles catégories et quels territoires concentrent les ventes d'articles ? |
+| **Livraisons** | Où les livraisons prennent-elles du retard et quels sont les délais observés ? |
+| **Qualité** | Quelle association observe-t-on entre ponctualité et avis clients ? |
+| **Clients** | Quels profils d'achat distingue-t-on à l'aide d'une segmentation RFM historique ? |
+
+## La démarche : de neuf sources à cinq analyses
+
+**Sources Olist** → **PostgreSQL / SQL** (ingestion, grains, vues métier, contrôles) → **Python** (validation et exports) → **Excel / Power Query** → **Power BI Desktop / DAX** (cinq pages) → **Démo web interactive** (agrégats partageables uniquement).
+
+Les étapes techniques et les décisions sont traçables dans le dépôt. Un même nombre n'a pas nécessairement le même dénominateur : les commandes livrées, les livraisons datées, les commandes notées et les clients observés sont distingués explicitement.
+
+## Résultats principaux
+
+| Indicateur historique | Valeur vérifiée |
+|---|---:|
+| **Commandes livrées** | **96 211** |
+| **Ventes d'articles livrés, hors fret** | **13 181 027,13 BRL** |
+| **Clients uniques observés** | **93 104** |
+| Panier moyen par commande livrée | 137,00 BRL |
+| Livraisons tardives / livraisons datées | 7 822 / 96 203 — **8,13 %** |
+| Note moyenne des commandes notées | 4,16 / 5 |
+| Clients ayant au moins deux commandes livrées observées | 2 789 — **3,00 %** |
+| Segments clients RFM exclusifs | 7 |
+
+**Deux enseignements à explorer :** dans l'État du Ceará (CE), le retard observé atteint **15,40 %** ; parmi les livraisons tardives notées, **54,05 %** des avis sont négatifs (notes ≤ 2), contre **9,20 %** parmi les livraisons ponctuelles notées. **Ce sont des constats descriptifs, pas des preuves de causalité.** Le réachat décrit uniquement la fenêtre historique ; ce n'est pas une prédiction de fidélité ou de churn.
+
+Ces chiffres sont rapprochés entre les références indépendantes, PostgreSQL et les captures du Power BI ; les [définitions, méthodes et limites](docs/e8-bilan.md) détaillent ce qui a effectivement été vérifié.
+
+## Ce qui est disponible
+
+| Livrable | État |
+|---|---|
+| **Pipeline analytique E0–E8** | Réalisé, testé et intégré dans `main` ; [bilan et niveaux de preuve](docs/e8-bilan.md) |
+| **Rapport Power BI** | Cinq pages réalisées dans Power BI Desktop, **fichier PBIX conservé localement** |
+| **Démo web** | Prévisualisation interactive à cinq thèmes disponible sur Vercel ; [PR #7](https://github.com/sogoyou8/commerce-360/pull/7) **en brouillon**, non fusionnée |
+| **Couverture de la démo actuelle** | 20 mois de ventes, 7 segments RFM, 3 États sur 27 et 2 catégories documentées ; enrichissement en cours à partir des exports agrégés validés |
+| **Code et documentation** | Scripts SQL/Python, requêtes Power Query et DAX, tests, protocole de reproduction et références agrégées publics |
+
+La démo web est **une exploration des agrégats historiques**, pas une connexion en temps réel à PostgreSQL ni une publication du PBIX. Aucun CSV brut, donnée client individuelle, classeur détaillé ou PBIX n'est rendu public. L'interface et la couverture de la démo sont encore en cours de finalisation.
+
+## Documentation et preuves
+
+- **[Bilan analytique : résultats, cinq pages, limites](docs/e8-bilan.md)**.
+- **[Reproduire et valider : environnement, SQL, Power BI, confidentialité](docs/e8-reproduction.md)**.
+- **[Contrôles croisés E7 SQL ↔ Power BI](docs/e7-validation.md)** et **[référence indépendante E3](docs/e3-reference-offline.md)**.
+- **[Méthodologie RFM E5](docs/e5-rfm.md)** et **[construction Power BI E6](docs/e6-powerbi.md)**.
+- **[Présentation portfolio et CV](docs/e8-portfolio.md)** ; **[mesures historiques agrégées](docs/e8-public-metrics.json)**.
+- **[PR #1 à #6 fusionnées](https://github.com/sogoyou8/commerce-360/pulls?q=is%3Apr+is%3Amerged)** : étapes E3–E8 ; le travail de démo web se poursuit dans la PR #7.
+
+## Technologies
+
+**PostgreSQL 16, SQL, Python, Docker, Excel, Power Query, Power BI Desktop, DAX, GitHub Actions, HTML/CSS/JavaScript** pour la démo en préparation.
+
+---
+ 
 ## Structure
 
 ```text
@@ -83,8 +137,6 @@ Les vues E3 couvrent ventes et paniers mensuels, comparaison janvier-août 2017/
 
 Pour appliquer puis tester **sans réimporter les CSV**, suivre les commandes de [docs/e3-analyses-sql.md](docs/e3-analyses-sql.md). Le contrôle de données E3 doit reproduire, sur la période de janvier 2017 à août 2018, **96 211 commandes livrées** et **13 181 027,13 BRL de prix d'articles**, indépendamment recalculés depuis l'archive d'origine. Ces mesures ne remplacent pas les chiffres globaux E1/E2.
 
-**Statut actualisé au 18 octobre 2026 :** E3, E4 et E5 intégrées à `main` ; rapport Power BI E6 à cinq pages réalisé et testé en captures sur le PC utilisateur ; 12 exports E4/E5 validés (`E6 OK`) ; rapprochement PostgreSQL E7 validé (`E7 SQL OK`) et 35 tests Python locaux réussis. **Les PR #4 (E6) et #5 (E7) ne sont pas encore fusionnées dans `main`**. Voir `docs/e6-powerbi.md` et `docs/e7-validation.md` (sur la branche E7).
-
 ## E4 — Excel (recette fonctionnelle validée)
 
 Les neuf exports E4 issus de PostgreSQL E3 ont été générés localement en lecture seule avec `scripts/export_e4.py` le 16 octobre 2026. Le classeur **`Commerce_360_E4_Final.xlsx` a été fourni et audité le 17 octobre 2026** : 18 feuilles, 96 211 commandes dans le modèle de données, deux TCD, un graphique croisé dynamique mensuel et un segment géographique relié aux trois objets. Les KPI sont réconciliés avec E3 (96 211 commandes, 13 181 027,13 BRL de prix d'articles hors fret ; filtre SP : 40 406 commandes). **Actualiser tout** a été exécuté sans erreur, selon confirmation de l'utilisateur.
@@ -141,7 +193,7 @@ Cette étape fournit uniquement des documents, un fichier de **métriques agrég
 - [Référentiel public d'agrégats](docs/e8-public-metrics.json)
 - `scripts/validate_e8.py` : contrôles d'intégrité et détection de fichiers locaux suivis par Git.
 
-Les visuels publics du portfolio restent **à sélectionner manuellement** dans Power BI Desktop, après suppression des éléments privés et vérification des droits d'usage. Aucun site web ni Power BI Service n'est publié par cette étape.
+Les visuels publics du portfolio restent **à sélectionner et valider** après vérification des données affichées et des droits d'usage. Le PBIX demeure local ; une **démo web statique distincte** dispose d'une prévisualisation Vercel depuis la branche de la [PR #7](https://github.com/sogoyou8/commerce-360/pull/7), sans être encore fusionnée ni recettée définitivement.
 
 ## Tests hors ligne
 
@@ -166,6 +218,6 @@ Ces tests vérifient les contrats sans connexion PostgreSQL. La **validation ré
 
 ## Limites et garde-fous
 
-Ce projet fournit un socle analytique **local**, pas une application en production. Aucun serveur cloud, déploiement, abonnement ou coût n'a été engagé. Le pilote Python contient une fonction de remise à zéro **uniquement des neuf tables du schéma `source`** de la base indiquée ; utilisez une base Commerce 360 dédiée. Les CSV bruts ne sont pas modifiés. Les vues peuvent être reconstruites sans double comptage.
+Le pipeline PostgreSQL, les exports détaillés et le PBIX demeurent **locaux**. Une **prévisualisation statique de la démo** est hébergée sur Vercel ; ce n'est ni un serveur SQL public, ni une application métier en temps réel, ni une mise en production officielle d'Olist. Le pilote Python contient une fonction de remise à zéro **uniquement des neuf tables du schéma `source`** de la base indiquée ; utilisez une base Commerce 360 dédiée. Les CSV bruts ne sont pas modifiés. Les vues peuvent être reconstruites sans double comptage.
 
 À la fin de l'import PostgreSQL, confronter les résultats de `mart.v_kpi_global` aux métriques E1. **Contrôle E2 exécuté et confirmé le 16 octobre 2026 sur PostgreSQL local : résultats conformes aux références E1.** Pour toute nouvelle installation, cette vérification reste à rejouer avant de commencer E3.
