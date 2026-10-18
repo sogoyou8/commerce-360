@@ -105,7 +105,7 @@ test("E2 rejects misleading partial/full coverage, incorrect totals and fabricat
     d=>{ d.states[2].dated+=1; },
     d=>{ d.categories[0].salesBrl+=0.01; },
     d=>{ d.categories[1].label=d.categories[0].label; },
-    d=>{ d.meta.coverage.categories="12 catégories les plus vendues en prix d'articles"; },
+    d=>{ d.meta.coverage.categories=d.categories.length===12 ? "2 catégories documentées parmi le catalogue" : "12 catégories les plus vendues en prix d'articles"; },
     d=>{ d.sellerStates=[{code:"SP",salesBrl:1}]; },
     d=>{ d.cohorts=[{month:"2017-01",customers:1,repeats:0,salesBrl:1}]; },
     d=>{ d.cohorts=[{month:"2018-12",customers:25,repeats:0,salesBrl:1}]; },
