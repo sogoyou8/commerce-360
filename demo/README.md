@@ -1,3 +1,11 @@
+## F3 final — planète détourée intégrée (19/10/2026)
+
+**Asset produit et ajouté dans le dépôt :** `demo/assets/earth-f3.webp` (WebP RGBA, 160×160, ~8 Ko), version légère de l'illustration Terre nocturne générée pour Commerce 360. L'image source haute définition reste disponible séparément ; l'asset WebP est une variante décorative basse résolution pour chargement rapide, non une carte de données.
+
+L'ancienne photo rectangulaire NASA et son masque radial sont retirés de la feuille `demo/ambience-f3.css` active ; le visuel généré est une sphère autonome réellement transparente, accompagnée d'un halo léger. Le quatrième KPI et l'inspecteur disposent d'un fond de contraste. Le décor est supprimé sur écrans étroits, économie de données et modes de contraste forcé. Son attribution est corrigée dans Données. Aucun fichier `public.json`, comportement ni layout F1/F2 n'est modifié. Une nouvelle validation visuelle reste nécessaire avant approbation par le propriétaire.
+
+---
+
 ## F3 — Retouche de cadrage (18/10/2026)
 
 Après contrôle visuel du propriétaire, la première F3 laissait une surface bleue trop étalée : l'arc de la planète était principalement visible sur le bord de la fenêtre. Retouche **ciblée** : Terre NASA/Suomi NPP à la taille de 49vw plafonnée à 760px, recentrée dans la partie droite, bord circulaire mieux défini et halo plus proche du limbe. L'opacité derrière le quatrième KPI est atténuée pour préserver le contraste ; l'inspecteur reçoit un fond translucide plus protecteur. Sur desktop compact, une taille et une transparence réduites sont appliquées. Le globe reste totalement décoratif, avec son crédit dans Données.

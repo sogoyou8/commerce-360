@@ -138,7 +138,7 @@ test("E3 reference-compliant detail remains grounded in national aggregates",()=
   assert.match(js,/remainingSales=Math\.max\(0,Math\.round\(\(data\.totals\.salesBrl-displayedSales\)/);
   assert.match(js,/otherOrders=data\.totals\.orders-volumeTop5/);
   assert.match(js,/group-secondary/);
-  assert.match(html,/NASA \/ Suomi NPP/);
+  assert.match(html,/Visuel terrestre généré pour Commerce 360/);
   assert.match(css,/city_lights_namerica_8k\.jpg/);
 });
 
@@ -179,11 +179,11 @@ test("F1/F2 isolates independent desktop panels and grows the lower exploration 
   assert.match(layer,/@media \(max-width:1179px\)/);
 });
 
-test("F3 builds a grounded NASA Earth atmosphere without altering layout or analytical data",()=>{
+test("F3 builds a generated Earth atmosphere without altering layout or analytical data",()=>{
   const f3=readFileSync(new URL("../ambience-f3.css",import.meta.url),"utf8");
-  assert.match(html,/ambience-f3\.css\?v=e3-f3-20261018-framed/);
-  assert.match(f3,/NASA\/Suomi NPP/);
-  assert.match(f3,/city_lights_namerica_8k\.jpg/);
+  assert.match(html,/ambience-f3\.css\?v=e3-f3-20261019-original/);
+  assert.match(f3,/création originale/);
+  assert.match(f3,/assets\/earth-f3\.webp/);
   assert.match(f3,/\.ambient::after \{/);
   assert.match(f3,/\.ambient::before \{/);
   assert.match(f3,/\.metric:last-child \{/);
@@ -197,10 +197,20 @@ test("F3 builds a grounded NASA Earth atmosphere without altering layout or anal
 
 test("F3 framing: smaller spherical photo, protected KPI and complete layout isolation",()=>{
   const f3=readFileSync(new URL("../ambience-f3.css",import.meta.url),"utf8");
-  assert.match(f3,/width:clamp\(570px,49vw,760px\)/);
-  assert.match(f3,/right:clamp\(-240px,-14vw,-140px\)/);
-  assert.match(f3,/mask-image:radial-gradient\(circle at 50% 50%/);
+  assert.match(f3,/width:clamp\(525px,49vw,740px\)/);
+  assert.match(f3,/right:clamp\(-154px,-8vw,-72px\)/);
+  assert.match(f3,/mask-image:none/);
   assert.match(f3,/\.metric:last-child \{\s*background:linear-gradient/);
   assert.match(f3,/\.story-panel \{/);
   assert.doesNotMatch(f3,/grid-template|\.workspace\s*\{|\.analysis-main\s*\{|\.analysis\s*\{/);
+});
+
+test("F3 globe is a real, lightweight transparent WebP asset, not an image mask",()=>{
+  const asset=readFileSync(new URL("../assets/earth-f3.webp",import.meta.url));
+  const f3=readFileSync(new URL("../ambience-f3.css",import.meta.url),"utf8");
+  assert.ok(asset.length > 2000 && asset.length < 150000);
+  assert.equal(asset.subarray(0,4).toString("ascii"),"RIFF");
+  assert.equal(asset.subarray(8,12).toString("ascii"),"WEBP");
+  assert.match(f3,/background:url\("\.\/assets\/earth-f3\.webp"\) center \/ contain no-repeat/);
+  assert.doesNotMatch(f3,/city_lights_namerica_8k|mask-image:radial-gradient/);
 });
