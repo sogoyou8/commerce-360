@@ -121,3 +121,7 @@ test("E3 satisfaction grid overrides dock-content ID specificity at compact desk
   assert.match(css,/#dock-quality\.dock-quality-layout\{display:grid;grid-template-rows:minmax\(70px,1fr\) 26px 26px/);
   assert.match(css,/#dock-quality\.dock-quality-layout\{grid-template-rows:minmax\(62px,1fr\) 23px 23px/);
 });
+
+test("E3 compact satisfaction rows stay within their 23px grid tracks",()=>{
+  assert.match(css,/#dock-quality>\.dock-quality-layout>\.dock-row\{min-height:0;height:23px\}/);
+});
