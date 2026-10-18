@@ -36,7 +36,7 @@ jobs:
           node --check demo/data-contract.mjs
           node --check demo/tests/contracts.test.mjs
       - name: Vérifier les données publiques, les taux et la confidentialité
-        run: node --test demo/tests/contracts.test.mjs
+        run: node --test demo/tests/*.test.mjs
       - name: Ne pas publier de sources détaillées dans la démo
         shell: bash
         run: |
