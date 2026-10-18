@@ -161,7 +161,7 @@ def build(e4: Path, e5: Path, snapshot: dict) -> dict:
         or checked_amounts([x["salesBrl"] for x in categories])
         != Decimal("13181027.13")
         or categories[0]["label"] != "health_beauty"
-        or dec(str(categories[0]["salesBrl"])) != Decimal("1229557.50"):
+        or dec(str(categories[0]["salesBrl"])) != Decimal("1229557.50")):
         raise ValueError("Classement des catégories ou ventes globales non conformes à E3.")
     for known in snapshot["categories"]:
         match = next((x for x in categories if x["label"] == known["label"]), None)
