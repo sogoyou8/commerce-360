@@ -4,6 +4,12 @@ Une expérience web **statique, sans serveur ni cookies**, pour explorer les don
 
 La démo est un produit de **data storytelling interactif**, pas une duplication trompeuse du PBIX et pas un accès à la base PostgreSQL. Les cinq vues partagent les définitions, mais les interactions sont volontairement **limitées à leur grain** : mois, État client, groupe de satisfaction ou segment RFM.
 
+## Prévisualisation Vercel
+
+Une prévisualisation de la branche `feature/demo-web-interactive` a été déployée avec le statut **READY** : [Commerce 360 — démo web](https://commerce-360-explorer-git-featu-9178df-yoanns-projects-e74472b3.vercel.app/).
+
+Cette URL est une **prévisualisation de branche**, pas une validation de publication définitive. Le statut READY et la CI réussie ne remplacent pas une recette visuelle et interactive dans le navigateur. Le jeu publié actuellement est volontairement partiel (3 États, 2 catégories) ; les exports du poste local peuvent étendre cette couverture de manière vérifiable.
+
 ## Démarrage local (Windows / Antigravity)
 
 Depuis la racine du dépôt :
