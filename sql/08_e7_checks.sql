@@ -10,7 +10,7 @@ DO $e7$
 DECLARE
   delivered bigint;
   sales numeric;
-  customers bigint;
+  v_customers bigint;
   late_n bigint;
   dated_n bigint;
   avg_review numeric;
@@ -29,12 +29,12 @@ BEGIN
          round(avg(review_score)::numeric,2),
          round(avg(delivery_days) FILTER
            (WHERE NOT carrier_date_after_delivery)::numeric,2)
-    INTO delivered, sales, customers, late_n, dated_n, avg_review, avg_days
+    INTO delivered, sales, v_customers, late_n, dated_n, avg_review, avg_days
   FROM mart.e3_delivered_orders;
 
-  IF delivered <> 96211 OR sales <> 13181027.13 OR customers <> 93104 THEN
+  IF delivered <> 96211 OR sales <> 13181027.13 OR v_customers <> 93104 THEN
     RAISE EXCEPTION 'E7: KPI ventes/commandes/clients differents des references (% / % / %)',
-      delivered, sales, customers;
+      delivered, sales, v_customers;
   END IF;
   IF late_n <> 7822 OR dated_n <> 96203 OR
      round(100.0 * late_n / nullif(dated_n,0),2) <> 8.13 THEN
