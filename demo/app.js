@@ -131,41 +131,111 @@ function heading(value, subtitle) {
   return el;
 }
 
+
+function setSelectionNavigation(items, selectedId, getId, onSelect) {
+  const nav = $("story-navigation");
+  const index = items.findIndex(item => getId(item) === selectedId);
+  nav.replaceChildren();
+  if (index < 0 || items.length < 2) return;
+  for (const [direction, symbol, name] of [[-1,"‹","Précédent"],[1,"›","Suivant"]]) {
+    const btn = node("button","inspector-arrow",symbol);
+    btn.type = "button";
+    btn.disabled = index+direction<0 || index+direction>=items.length;
+    btn.setAttribute("aria-label",name+" : "+(items[index+direction]?getId(items[index+direction]):""));
+    btn.addEventListener("click",()=>onSelect(getId(items[index+direction])));
+    nav.append(btn);
+  }
+}
+function renderComparisonRows(items) {
+  $("story-comparisons").replaceChildren(...items.filter(x=>x.value!==null).map(({label,value,note})=>{
+    const row=node("div","comparison-row");
+    append(row,node("span","comparison-label",label),node("strong","comparison-value",value));
+    if(note) row.append(node("small","comparison-note",note));
+    return row;
+  }));
+}
+function changePercent(now, before) {
+  if (!Number.isFinite(now) || !Number.isFinite(before) || before<=0) return null;
+  const value=100*(now/before-1);
+  return (value>0?"+":"")+percent(value);
+}
 function renderMonthBars() {
   const measure=state.overviewMeasure;
   const items=data.monthly;
-  const maximum=Math.max(...items.map(x=>x[measure]));
   const chosen=items.find(x=>x.month===state.overviewMonth)||items.at(-1);
+  const index=items.indexOf(chosen);
+  const maxSales=Math.max(...items.map(x=>x.salesBrl));
+  const maxOrders=Math.max(...items.map(x=>x.orders));
   const root=$("viz-container");
-  const scroll=node("div","bar-scroll");
-  const chart=node("div","monthly-chart");
-  for(const entry of items) {
+  const shell=node("div","combo-graph"),axisLeft=node("div","combo-axis combo-axis-left");
+  const axisRight=node("div","combo-axis combo-axis-right"),scroll=node("div","combo-scroll");
+  const plot=node("div","combo-plot"),bars=node("div","combo-bars");
+  const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
+  svg.setAttribute("class","combo-line");
+  svg.setAttribute("viewBox","0 0 1000 300");
+  svg.setAttribute("preserveAspectRatio","none");
+  svg.setAttribute("role","img");
+  svg.setAttribute("aria-label","Courbe des commandes livrées : axe droit");
+  const xy=items.map((entry,i)=>[((i+.5)/items.length)*1000,286-(entry.orders/maxOrders)*255]);
+  const path=document.createElementNS("http://www.w3.org/2000/svg","polyline");
+  path.setAttribute("points",xy.map(p=>p.join(",")).join(" "));
+  path.setAttribute("fill","none");
+  path.setAttribute("stroke","#d5e4ff");
+  path.setAttribute("stroke-width","2.4");
+  path.setAttribute("stroke-linejoin","round");
+  path.setAttribute("vector-effect","non-scaling-stroke");
+  svg.append(path);
+  items.forEach((entry,i)=>{
     const active=entry.month===chosen.month;
-    const button=node("button","chart-bar");
+    const button=node("button","combo-month");
     button.type="button";
-    button.title=`${strMonth(entry.month,true)} : ${measure==="salesBrl"?amount(entry.salesBrl,true):n(entry.orders)+" commandes"}`;
-    button.setAttribute("aria-label",button.title);
     button.setAttribute("aria-pressed",String(active));
-    button.style.setProperty("--h", `${Math.max(1,100*entry[measure]/maximum)}%`);
+    button.setAttribute("aria-label",strMonth(entry.month,true)+" : "+amount(entry.salesBrl,true)+", "+n(entry.orders)+" commandes");
+    button.title=button.getAttribute("aria-label");
+    button.style.setProperty("--h",Math.max(1,100*entry.salesBrl/maxSales)+"%");
     button.addEventListener("click",()=>{state.overviewMonth=entry.month;render();});
-    append(button,node("span","bar-top",measure==="salesBrl"?smallAmount(entry.salesBrl):n(entry.orders)),node("span","bar-fill"),node("span","bar-foot",entry.month.endsWith("-01")?entry.month.slice(0,4):entry.month.endsWith("-07")?"Juil":""));
-    chart.append(button);
-  }
-  scroll.append(chart);
-  root.replaceChildren(
-    heading(measure==="salesBrl"?amount(chosen.salesBrl):`${n(chosen.orders)} commandes`, `Mois sélectionné · ${strMonth(chosen.month,true)}`),
-    scroll,
-    append(node("div","chart-labels"),node("span","", "JAN 2017"),node("span","", "AOÛ 2018"))
-  );
-  setStory({
-    kicker:"MOIS SÉLECTIONNÉ",
-    title:`Le mois de ${strMonth(chosen.month,true)}.`,
-    description:`Sur cette période, ${n(chosen.orders)} commandes livrées correspondent à ${amount(chosen.salesBrl,true)} de prix d’articles, hors transport. La sélection porte uniquement sur la série mensuelle.`,
-    label:"VENTES DU MOIS",
-    value:smallAmount(chosen.salesBrl),
-    sub:`${n(chosen.orders)} commandes livrées`,
-    caveat:"La ponctualité et la satisfaction restent des indicateurs nationaux : aucun croisement par mois n'est calculé ici.",
+    append(button,node("span","combo-value",smallAmount(entry.salesBrl)),
+      node("span","combo-column"),
+      node("span","combo-month-label",["01","05","09"].includes(entry.month.slice(5))||
+        entry.month==="2018-08"?strMonth(entry.month):""));
+    bars.append(button);
+    const circle=document.createElementNS("http://www.w3.org/2000/svg","circle");
+    circle.setAttribute("cx",String(xy[i][0]));
+    circle.setAttribute("cy",String(xy[i][1]));
+    circle.setAttribute("r",active?"5":"3.2");
+    circle.setAttribute("fill",active?"#ffffff":"#d1e1ff");
+    circle.setAttribute("stroke","#17335c");
+    circle.setAttribute("stroke-width","2");
+    circle.setAttribute("vector-effect","non-scaling-stroke");
+    svg.append(circle);
   });
+  for(let tick=4;tick>=0;tick--){
+    axisLeft.append(node("span","",smallAmount(maxSales*tick/4).replace(" BRL","")));
+    axisRight.append(node("span","",n(Math.round(maxOrders*tick/4))));
+  }
+  append(plot,bars,svg);scroll.append(plot);append(shell,axisLeft,scroll,axisRight);
+  const legend=append(node("div","combo-legend"),
+    append(node("span",""),node("i","legend-sales"),node("span","","Ventes (BRL) · colonnes")),
+    append(node("span",""),node("i","legend-orders"),node("span","","Commandes · courbe")));
+  root.replaceChildren(legend,shell);
+  const previous=index>0?items[index-1]:null;
+  const previousYear=items.find(x=>x.month===String(Number(chosen.month.slice(0,4))-1)+chosen.month.slice(4));
+  const compare=[
+    {label:"Commandes livrées",value:n(chosen.orders),note:"Mois sélectionné"},
+    {label:"Panier moyen",value:amount(chosen.salesBrl/chosen.orders,true),note:"Articles par commande"},
+  ];
+  if(previous)compare.push({label:"Ventes vs mois précédent",value:changePercent(chosen.salesBrl,previous.salesBrl),note:"Variation mensuelle constatée"});
+  if(previousYear)compare.push({label:"Ventes vs même mois 2017",value:changePercent(chosen.salesBrl,previousYear.salesBrl),note:"Année précédente · mois équivalent"});
+  setStory({
+    kicker:"MOIS SÉLECTIONNÉ",title:strMonth(chosen.month,true),
+    description:"Commandes livrées et ventes d'articles du mois sélectionné ; les indicateurs nationaux restent indépendants.",
+    label:measure==="salesBrl"?"VENTES DU MOIS":"COMMANDES DU MOIS",
+    value:measure==="salesBrl"?smallAmount(chosen.salesBrl):n(chosen.orders),
+    sub:measure==="salesBrl"?"Prix des articles hors fret":"Commandes livrées observées",
+    caveat:"Les taux de retard et les avis nationaux ne sont pas filtrés par mois : ces croisements ne figurent pas dans les agrégats publiés.",
+  });
+  renderComparisonRows(compare);
+  setSelectionNavigation(items,chosen.month,x=>x.month,month=>{state.overviewMonth=month;render();});
 }
 
 function renderOverview() {
