@@ -1,3 +1,13 @@
+## F0 — Stabilisation (18/10/2026)
+
+Vérifications sur PR #7 : GitHub Web/Python réussis, Vercel READY sur le même HEAD, 27 États, 12 catégories, 7 segments, 20 cohortes, 20 mois. Totaux Olist réconciliés : 96 211 commandes, 93 104 clients, 2 789 réacheteurs, 13 181 027,13 BRL de ventes d'articles. La branche ne contient qu'un JSON agrégé dans demo/data ; aucun export client brut dans la démo. Le fichier .env.example ne contient qu'une URL PostgreSQL locale de démonstration (non secrète).
+
+Correctif conservateur : suppression du min-width HTML/body de 320px qui forçait 15px de débordement à 320px de viewport avec la barre de défilement. La navigation conserve son défilement horizontal interne, sans rendre la page horizontalement défilante. Les dimensions desktop et les agrégats ne changent pas.
+
+F0 ne comprend aucune modification visuelle de F1–F6 ; PR #7 reste draft.
+
+---
+
 ## Finition E3 premium — carte territoriale, Qualité et Clients (18/10/2026)
 
 La livraison principale affiche une grande carte cliquable des 27 États à côté du classement intégral. Les couleurs de la carte représentent toujours les taux de retard parmi les livraisons datées ; la liste bascule entre taux et délai moyen. Qualité utilise deux jauges radiales pour le groupe ponctuel / en retard et la mesure sélectionnée ; tous les chiffres sont issus du JSON de données vérifiées. Clients renforce visuellement les sept segments RFM et conserve les cohortes historiques. Terre NASA rendue plus visible en fond (crédit dans Données). Aucune modification des agrégats, aucune comparaison fictive. La PR #7 reste draft.

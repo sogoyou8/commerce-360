@@ -159,3 +159,10 @@ test("E3 finish: two radial visualisations computed from verified satisfaction",
  assert.match(js,/group\.scored/);
  assert.match(js,/rank-row--customer/);
 });
+
+test("F0 allows reflow at 320px including browser scrollbar, without forcing page overflow",()=>{
+  assert.match(css,/html,body\{margin:0;min-width:0;min-height:100%/);
+  assert.doesNotMatch(css,/html,body\{margin:0;min-width:320px/);
+  assert.match(css,/\.mode-nav\{order:3;flex-basis:100%;justify-content:flex-start;overflow-x:auto/);
+  assert.match(html,/styles\.css\?v=f0-20261018-reflow/);
+});
