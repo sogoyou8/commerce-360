@@ -6,6 +6,11 @@
 -- docs/e3-analyses-sql.md, docs/e5-rfm.md et des captures de recette Power BI E6.
 -- Une execution PostgreSQL locale reste obligatoire avant de marquer E7 "reussi".
 
+-- Limiter la memoire partagee dynamique dans le conteneur Docker local.
+-- Ce parametre est propre a la session psql de recette : ni schema ni donnees modifies.
+-- Evite les workers paralleles susceptibles de saturer /dev/shm (souvent 64 Mio).
+SET max_parallel_workers_per_gather = 0;
+
 DO $e7$
 DECLARE
   delivered bigint;
