@@ -54,7 +54,7 @@ Ces chiffres sont rapprochés entre les références indépendantes, PostgreSQL 
 | **Pipeline analytique E0–E8** | Réalisé, testé et intégré dans `main` ; [bilan et niveaux de preuve](docs/e8-bilan.md) |
 | **Rapport Power BI** | Cinq pages réalisées dans Power BI Desktop, **fichier PBIX conservé localement** |
 | **Démo web** | Prévisualisation interactive à cinq thèmes disponible sur Vercel ; [PR #7](https://github.com/sogoyou8/commerce-360/pull/7) **en brouillon**, non fusionnée |
-| **Couverture de la démo actuelle** | 20 mois de ventes, 7 segments RFM, 3 États sur 27 et 2 catégories documentées ; enrichissement en cours à partir des exports agrégés validés |
+| **Couverture de la démo actuelle** | 20 mois, 7 segments RFM, 27 États clients vérifiés, 12 catégories commerciales, 15 États vendeurs agrégés et 20 cohortes ; exports E4/E5 et manifestes SHA-256 validés le 18 octobre 2026 |
 | **Code et documentation** | Scripts SQL/Python, requêtes Power Query et DAX, tests, protocole de reproduction et références agrégées publics |
 
 La démo web est **une exploration des agrégats historiques**, pas une connexion en temps réel à PostgreSQL ni une publication du PBIX. Aucun CSV brut, donnée client individuelle, classeur détaillé ou PBIX n'est rendu public. L'interface et la couverture de la démo sont encore en cours de finalisation.
