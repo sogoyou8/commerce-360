@@ -47,26 +47,45 @@ La page nécessite JavaScript et un serveur HTTP statique : ouvrir directement l
 
 **Les quatre KPI nationaux ne changent pas artificiellement quand on sélectionne un mois ou un État** : le jeu public initial ne fournit pas les tables de jointure nécessaires. Les fiches de détail indiquent explicitement le filtre appliqué.
 
-## Compléter la démo avec les agrégats E4/E5 du PC
+## E2 — Finaliser les données avec les exports validés du PC
 
-Le fichier `demo/data/public.json` est une **référence minimale vérifiée** (20 mois, sept segments, trois États et deux catégories), sans aucune ligne transactionnelle. Pour intégrer de vrais classements sur les 27 États, 12 catégories et cohortes mensuelles :
+La première version publique est **intentionnellement partielle** : 20 mois, 7 segments RFM, les États clients **CE / RJ / SP** et seulement **2 catégories**. Les 27 États et 12 catégories **ne peuvent pas être reconstitués honnêtement à partir du JSON public**. Il faut les **12 exports locaux E4/E5** produits par les scripts PostgreSQL antérieurs. Ne pas saisir ni inventer les valeurs manquantes.
 
-1. Sur le PC où `.data/e4/` et `.data/e5/` ont déjà été créés et contrôlés, exécuter d'abord :
-   ```powershell
-   .\.venv\Scripts\python.exe scripts\validate_e6.py
-   ```
-2. Puis exécuter l'exporteur, qui relit et contrôle les manifestes SHA-256 des **12 exports** et refuse toute incohérence de références :
-   ```powershell
-   .\.venv\Scripts\python.exe scripts\build_web_data.py
-   ```
-3. Contrôler le fichier **agrégé** `demo/data/public.json`, puis les tests :
-   ```powershell
-   node --test demo/tests/contracts.test.mjs
-   python -m unittest discover -s tests -v
-   ```
-4. Ne committer que `demo/data/public.json`, après revue des agrégats et de la couverture. Les CSV locaux, le PBIX, les ZIP sources, les identifiants et les manifestes contenant des chemins locaux restent **exclus du dépôt**.
+### Une seule procédure — PowerShell, dans le dépôt Commerce 360
 
-Ce processus ne se connecte ni à PostgreSQL ni à des API ; il ne publie rien automatiquement. Les données par État vendeur sont regroupées par État et supprimées si moins de cinq vendeurs, sans jamais révéler un identifiant ou une ville.
+Avant de modifier quoi que ce soit, vérifier que les changements locaux sont sauvegardés ; ne pas écraser un travail en cours en changeant de branche.
+
+```powershell
+git status --short
+git fetch origin
+git switch feature/demo-web-interactive
+git pull --ff-only origin feature/demo-web-interactive
+
+# Vérifie les 9 CSV E4 + les 3 CSV E5, les empreintes, les grains et les totaux.
+.\.venv\Scripts\python.exe scripts\validate_e6.py
+
+# Recette E2 SANS modifier demo/data/public.json.
+.\.venv\Scripts\python.exe scripts\build_web_data.py --check-only
+
+# Exporte seulement les agrégats vérifiés ; ne copie aucune ligne client/commande.
+.\.venv\Scripts\python.exe scripts\build_web_data.py
+
+# Recette finale du vrai fichier public.
+node --test demo/tests/*.test.mjs
+.\.venv\Scripts\python.exe -m unittest discover -s tests -v
+git diff -- demo/data/public.json
+```
+
+L'export **échoue sans écrire** si les dossiers locaux E4/E5 sont absents, si l'un des 12 SHA-256 diffère, si les volumes ne concordent pas ou si les agrégats publiés contredisent les références E3/E5/E7.
+
+**Résultat attendu après la procédure locale :** 20 mois, **27 États clients**, **12 catégories en tête**, 7 segments RFM, États vendeurs agrégés uniquement à partir de **5 vendeurs par État** et cohortes avec au moins **20 clients** par groupe. Les cohortes trop petites sont exclues explicitement, pas présentées comme des zéros.
+
+**Avant tout commit :** vérifier que seul `demo/data/public.json` est destiné à être diffusé ; le répertoire `.data/`, les archives Olist, le PBIX, les identifiants individuels et les manifests locaux ne doivent **jamais** être versionnés. Ne publier le JSON enrichi qu'après inspection des mesures réelles, revue des graphiques et contrôle des tests CI sur la PR #7.
+
+### Si le PC ne possède plus les 12 exports
+
+Ne **pas** mettre à jour `public.json` et ne **pas** annoncer la couverture complète. Les références publiques existantes restent utilisables et honnêtes. Régénérer d'abord les exports via les procédures [E4](../docs/e4-excel-recette.md) et [E5](../docs/e5-rfm.md), à partir du PostgreSQL local validé ; ne pas publier les sources détaillées.
+
 
 ## Validation hors ligne
 
