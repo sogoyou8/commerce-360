@@ -27,6 +27,12 @@ class E7ValidationContractTests(unittest.TestCase):
         self.assertIn("v_customers bigint;", SQL)
         self.assertIn("sum(customers)", SQL)
 
+    def test_parallel_query_disabled_in_local_validation_session(self):
+        # L'agrégation E7 peut saturer /dev/shm du PostgreSQL Docker local.
+        self.assertIn("SET max_parallel_workers_per_gather = 0;", SQL)
+        self.assertLess(SQL.index("SET max_parallel_workers_per_gather = 0;"),
+                        SQL.index("DO $e7$"))
+
     def test_sql_is_read_only(self):
         uncommented = re.sub(r"--[^\n]*", "", SQL)
         self.assertNotRegex(
