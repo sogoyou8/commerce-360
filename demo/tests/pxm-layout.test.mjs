@@ -166,3 +166,15 @@ test("F0 allows reflow at 320px including browser scrollbar, without forcing pag
   assert.match(css,/\.mode-nav\{order:3;flex-basis:100%;justify-content:flex-start;overflow-x:auto/);
   assert.match(html,/styles\.css\?v=f0-20261018-reflow/);
 });
+
+test("F1/F2 isolates independent desktop panels and grows the lower exploration row",()=>{
+  const layer=readFileSync(new URL("../layout-f1f2.css",import.meta.url),"utf8");
+  assert.match(html,/layout-f1f2\.css\?v=e3-f1f2-20261018/);
+  assert.match(layer,/@media \(min-width:1180px\)/);
+  assert.match(layer,/\.analysis \{[\s\S]*?column-gap:clamp\(12px,1\.4vw,20px\)/);
+  assert.match(layer,/\.analysis-main \{[\s\S]*?border:1px solid/);
+  assert.match(layer,/\.story-panel \{[\s\S]*?border:1px solid/);
+  assert.match(layer,/grid-template-rows:clamp\(86px,10\.2vh,100px\) minmax\(0,1fr\) clamp\(240px,31vh,306px\)/);
+  assert.match(layer,/grid-template-rows:82px minmax\(0,1fr\) 180px/);
+  assert.match(layer,/@media \(max-width:1179px\)/);
+});

@@ -1,3 +1,15 @@
+## E3.F — F1+F2 (18/10/2026) : structure et proportions globales
+
+Le graphique principal et l'inspecteur deviennent deux surfaces indépendantes sur desktop, avec deux bordures complètes et un espacement visuel de 12 à 20px. Leurs niveaux de données, contenus et interactions ne sont pas modifiés. La structure responsive conserve les deux surfaces en colonne sous 1180px.
+
+Les lignes du cockpit desktop sont recalibrées en KPI, visualisation et dock. Le dock passe à 31vh (240–306px) au-dessus de 850px de hauteur et 180px sur desktop compact (1180×750), afin de valoriser les trois panneaux permanents tout en conservant la page sans scroll. Le rendu est isolé dans `demo/layout-f1f2.css`, chargé après les anciens styles pour permettre une recette visuelle et une éventuelle consolidation à F6.
+
+Les agrégats Olist `demo/data/public.json`, les vues et le JavaScript métier restent intégralement inchangés. La PR #7 reste draft, non fusionnée.
+
+**Validation demandée :** captures 1920×993, 1440×900, 1180×750, 390×844, 430×932 ; bordures des deux panneaux entièrement visibles, aucun chevauchement, aucune disparition de valeur, pas de défilement desktop ni débordement horizontal mobile, mêmes cinq modes et interactions.
+
+---
+
 ## F0 — Stabilisation (18/10/2026)
 
 Vérifications sur PR #7 : GitHub Web/Python réussis, Vercel READY sur le même HEAD, 27 États, 12 catégories, 7 segments, 20 cohortes, 20 mois. Totaux Olist réconciliés : 96 211 commandes, 93 104 clients, 2 789 réacheteurs, 13 181 027,13 BRL de ventes d'articles. La branche ne contient qu'un JSON agrégé dans demo/data ; aucun export client brut dans la démo. Le fichier .env.example ne contient qu'une URL PostgreSQL locale de démonstration (non secrète).
