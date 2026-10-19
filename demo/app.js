@@ -419,13 +419,19 @@ function renderYearBars() {
   );
   // On phones, show the chosen comparison immediately inside the chart scroll.
   const yearScroll=$("viz-container").querySelector(".year-chart");
-  requestAnimationFrame(()=>{
-    if(!yearScroll.isConnected)return;
-    if(yearScroll.scrollWidth>yearScroll.clientWidth){
+  if(window.matchMedia("(max-width:800px)").matches){
+    const centerActive=()=>{
+      if(!yearScroll.isConnected)return true;
+      if(yearScroll.scrollWidth<=yearScroll.clientWidth)return false;
       const active=plot.querySelector('.year-pair[aria-pressed="true"]');
       yearScroll.scrollLeft=Math.max(0,active.offsetLeft+active.offsetWidth/2-yearScroll.clientWidth/2);
-    }
-  });
+      return true;
+    };
+    // Width can settle after fonts and the inspector/dock have rendered.
+    const observer=new ResizeObserver(()=>{if(centerActive())observer.disconnect();});
+    observer.observe(yearScroll);
+    requestAnimationFrame(()=>{if(centerActive())observer.disconnect();});
+  }
   const selectedDiff=(chosen.current[measure]/chosen.previous[measure]-1)*100;
   setStory({
     kicker:"COMPARAISON À MOIS ÉQUIVALENT",
