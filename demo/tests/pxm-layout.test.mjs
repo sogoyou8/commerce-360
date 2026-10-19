@@ -246,7 +246,7 @@ test("F3 HD asset dimensions and native alpha are validated",()=>{
 test("F5 upgrades all three exploration cards without altering the cockpit or data",()=>{
   const f5=readFileSync(new URL("../dock-f5.css",import.meta.url),"utf8");
   assert.match(html,/dock-f5\.css\?v=e3-f5-20261019-a11y5/);
-  assert.match(html,/app\.js\?v=quality-20261019-4/);
+  assert.match(html,/app\.js\?v=customers-20261019-5/);
   assert.match(f5,/#dock-categories \.dock-category-row/);
   assert.match(f5,/#dock-states \.dock-state-layout/);
   assert.match(f5,/#dock-quality \.score-ring/);
@@ -383,13 +383,13 @@ test("F5.7 the 27-state SVG has a complete screen-reader data table",()=>{
  assert.match(js,/node\("td","",percent\(item\.rate,1\)\)/);
  assert.match(js,/holder\.append\(table\)/);
  assert.match(css,/\.sr-only\{position:absolute!important/);
- assert.match(html,/app\.js\?v=quality-20261019-4/);
+ assert.match(html,/app\.js\?v=customers-20261019-5/);
 });
 
 test("E3.P overview timeline keeps month focused and accessible",()=>{
  const p1=readFileSync(new URL("../overview-e3p.css",import.meta.url),"utf8");
  assert.match(html,/overview-e3p\.css\?v=e3p-20261019-p1/);
- assert.match(html,/app\.js\?v=quality-20261019-4/);
+ assert.match(html,/app\.js\?v=customers-20261019-5/);
  assert.match(js,/bars\.setAttribute\("role","group"\)/);
  assert.match(js,/button\.addEventListener\("click",\(\)=>selectOverviewMonth\(entry\.month,true\)\)/);
  assert.match(js,/scroll\.scrollLeft=Math\.max\(0,activeButton\.offsetLeft\+activeButton\.offsetWidth\/2-scroll\.clientWidth\/2\)/);
@@ -405,7 +405,7 @@ test("E3.P overview timeline keeps month focused and accessible",()=>{
 test("Jalon 1/5 — overview visual finish and complete data alternatives",()=>{
  const finish=readFileSync(new URL("../overview-finish.css",import.meta.url),"utf8");
  assert.match(html,/overview-finish\.css\?v=finish-20261019-1/);
- assert.match(html,/app\.js\?v=quality-20261019-4/);
+ assert.match(html,/app\.js\?v=customers-20261019-5/);
  assert.match(js,/function accessibleDataTable\(label, columns, rows\)/);
  assert.match(js,/items\.map\(entry=>\[strMonth\(entry\.month,true\),amount\(entry\.salesBrl,true\),n\(entry\.orders\)\]\)/);
  assert.match(js,/categories\.map\(item=>\[labelCategory\(item\.label\),amount\(item\.salesBrl,true\),percent\(observedShare/);
@@ -421,7 +421,7 @@ test("Jalon 1/5 — overview visual finish and complete data alternatives",()=>{
 test("Jalon 2/5 — sales comparisons are keyboard accessible and truthful",()=>{
  const sales=readFileSync(new URL("../sales-finish.css",import.meta.url),"utf8");
  assert.match(html,/sales-finish\.css\?v=sales-20261019-2/);
- assert.match(html,/app\.js\?v=quality-20261019-4/);
+ assert.match(html,/app\.js\?v=customers-20261019-5/);
  assert.match(js,/function selectSalesMonth\(month, focus=false\)/);
  assert.match(js,/button\.dataset\.month=String\(pair\.month\)/);
  assert.match(js,/button\.tabIndex=pair\.month===chosen\.month\?0:-1/);
