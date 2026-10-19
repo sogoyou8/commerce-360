@@ -196,6 +196,22 @@ function briefAxisNumber(v) {
   if (v===0) return "0";
   return new Intl.NumberFormat("fr-FR",{notation:"compact",maximumFractionDigits:2}).format(v);
 }
+// Alternative structurée aux visualisations : les mêmes agrégats publics,
+// sans valeurs synthétiques, sans requête supplémentaire ni effet de filtrage.
+function accessibleDataTable(label, columns, rows) {
+  const table=node("table","sr-only");
+  table.setAttribute("aria-label",label);
+  const caption=node("caption","",label);
+  const thead=node("thead"), header=node("tr"),tbody=node("tbody");
+  for(const column of columns){const th=node("th","",column);th.setAttribute("scope","col");header.append(th);}
+  thead.append(header);
+  for(const cells of rows){
+    const tr=node("tr");
+    cells.forEach((value,index)=>{const cell=node(index===0?"th":"td","",value);if(index===0)cell.setAttribute("scope","row");tr.append(cell);});
+    tbody.append(tr);
+  }
+  return append(table,caption,thead,tbody);
+}
 function selectOverviewMonth(month, focus = false) {
   state.overviewMonth = month;
   render();
@@ -282,7 +298,11 @@ function renderMonthBars() {
   const legend=append(node("div","combo-legend"),
     append(node("span",""),node("i","legend-sales"),node("span","","Ventes (BRL) · colonnes")),
     append(node("span",""),node("i","legend-orders"),node("span","","Commandes · courbe")));
-  root.replaceChildren(legend,shell);
+  root.replaceChildren(legend,shell,accessibleDataTable(
+    "Évolution mensuelle Olist : ventes d’articles hors fret et commandes livrées, janvier 2017 à août 2018",
+    ["Mois","Ventes d’articles (BRL)","Commandes livrées"],
+    items.map(entry=>[strMonth(entry.month,true),amount(entry.salesBrl,true),n(entry.orders)])
+  ));
   // The selected month must be visible when the timeline scrolls internally.
   if(scroll.scrollWidth>scroll.clientWidth){
     const activeButton=bars.children[index];
@@ -814,7 +834,11 @@ function renderDock() {
     node("span","dock-row-note","Hors top 6"),
     node("span","dock-item-value",smallAmount(remainingSales)+" · "+percent(observedShare(remainingSales,data.totals.salesBrl),1)));
   otherCategory.title="Complément du total national : autres catégories, y compris catégories non détaillées.";
-  $("dock-categories").replaceChildren(...categoryRows,otherCategory);
+  $("dock-categories").replaceChildren(...categoryRows,otherCategory,accessibleDataTable(
+    "Ventes des catégories Olist documentées, en BRL et en part des ventes nationales",
+    ["Catégorie","Ventes d’articles (BRL)","Part nationale"],
+    categories.map(item=>[labelCategory(item.label),amount(item.salesBrl,true),percent(observedShare(item.salesBrl,data.totals.salesBrl),1)])
+  ));
   const regions=[...data.states].sort((a,b)=>b.orders-a.orders);
   renderText("dock-state-coverage",data.meta.coverage.states+" · top volumes ; carte colorée par taux de retard");
   const stateLayout=node("div","dock-state-layout");
@@ -861,7 +885,15 @@ function renderDock() {
   append(top,ring,negative);
   append(quality,top,
     dockRow("Livraisons à l’heure",decimal.format(onTime.score)+" / 5",20*onTime.score),
-    dockRow("Livraisons en retard",decimal.format(late.score)+" / 5",20*late.score));
+    dockRow("Livraisons en retard",decimal.format(late.score)+" / 5",20*late.score),
+    accessibleDataTable("Satisfaction Olist des commandes notées : notes descriptives, sans inférence causale",
+      ["Mesure","Valeur"],[
+        ["Note moyenne",decimal.format(data.totals.averageScore)+" / 5"],
+        ["Avis négatifs (notes ≤ 2)",percent(data.totals.negativeRate)],
+        ["Livraisons à l’heure : note moyenne",decimal.format(onTime.score)+" / 5"],
+        ["Livraisons en retard : note moyenne",decimal.format(late.score)+" / 5"]
+      ])
+  );
   $("dock-quality").replaceChildren(quality);
 }
 

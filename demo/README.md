@@ -1,3 +1,15 @@
+## Jalon 1/5 — Vue d'ensemble, finition visuelle (19/10/2026)
+
+**Nomenclature unique à compter de maintenant :** Jalon 1/5 Vue d'ensemble ; 2/5 Ventes ; 3/5 Livraisons ; 4/5 Qualité ; 5/5 Clients. Les anciens E3/F1–F6 et P1 sont des noms de lots historiques, pas des étapes supplémentaires.
+
+Le rapport approfondi signalait les textes condensés, la carte et l'anneau trop discrets, le vide dans l'inspecteur et les alternatives accessibles. L'audit navigateur de la version P1 à **1649×928** montre déjà un dock de **288px**, une carte SVG de **240×211px** et un anneau de **145×145px** : les captures antérieures sous-estimaient les tailles de la version actuelle. Retouches **mesurées** plutôt que refonte : hiérarchie typographique et contraste renforcés, inspecteur plus équilibré, carte un peu élargie, anneau à 151px maximum ; couche `overview-finish.css` séparée. La géométrie principale et les échelles des données ne changent pas.
+
+Trois alternatives structurées en vrais tableaux HTML `sr-only` sont générées depuis `data.monthly` (20 mois), `data.categories` (12 catégories) et `data.totals`/`data.satisfaction` (notes). La carte des 27 États avait déjà son tableau F5. Les 44px mobiles et le sélecteur natif d'État restent en place. **Les KPI nationaux ne changent pas lors d'une sélection mensuelle** : grains distincts, aucun filtrage croisé fictif. Aucun appel API Olist temps réel : données publiques agrégées statiques et validées.
+
+Recette : tailles 320,390,430,768,1024,1180,1440,1649,1920 ; contrôle des 3 tableaux alternatifs, focus mois et État, absence de scroll document horizontal et desktop vertical, carte et anneau non tronqués, navigation cinq modes, GitHub Web/Python et Vercel READY même SHA. Ce n'est pas une certification WCAG 2.2 ni un test humain avec lecteur d'écran. PR #7 reste **draft**, sans fusion.
+
+---
+
 ## E3.P / P1 — Vue d'ensemble (19/10/2026)
 
 Après validation technique de F5, la finition du graphique mensuel corrige trois problèmes observés sur le navigateur : sur mobile 320px les barres ne font que ~31px, le graphique ouvert sur janvier cache le dernier mois pourtant sélectionné (août 2018), et les sélections par clic perdent le focus lorsque l'interface est reconstruite.
