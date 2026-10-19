@@ -6,7 +6,7 @@
 
 Commerce 360 répond à cette problématique avec une chaîne analytique complète : préparation et contrôle des données, analyses SQL, segmentation RFM, restitution Power BI et exploration web. L'objectif est de **produire des indicateurs cohérents et utiles à la décision**, en documentant leurs limites — et non de simplement afficher un tableau de bord.
 
-**[Explorer la démo web (prévisualisation)](https://commerce-360-explorer-git-featu-9178df-yoanns-projects-e74472b3.vercel.app/)** · **[Voir les résultats](docs/e8-bilan.md)** · **[Reproduire l'analyse](docs/e8-reproduction.md)**
+**[Explorer le dashboard en ligne](https://commerce-360-explorer.vercel.app/)** · **[Voir les résultats](docs/e8-bilan.md)** · **[Présentation portfolio](docs/e8-portfolio.md)** · **[Reproduire l'analyse](docs/e8-reproduction.md)**
 
 > **Contexte :** il s'agit d'une étude personnelle et **non officielle**, fondée sur les données historiques du jeu Olist. Les achats analysés vont du **1er janvier 2017 inclus au 1er septembre 2018 exclu** (20 mois). Les montants sont en **BRL**, calculés à partir du prix des articles de commandes livrées, **hors frais de livraison** : ce n'est ni le chiffre d'affaires net ni la marge d'Olist. Aucun chiffre ne décrit son activité actuelle.
 
@@ -47,13 +47,25 @@ Les étapes techniques et les décisions sont traçables dans le dépôt. Un mê
 
 Ces chiffres sont rapprochés entre les références indépendantes, PostgreSQL et les captures du Power BI ; les [définitions, méthodes et limites](docs/e8-bilan.md) détaillent ce qui a effectivement été vérifié.
 
+## Aperçu visuel — démo publiée
+
+Captures réalisées le **19 octobre 2026** sur la [version de production](https://commerce-360-explorer.vercel.app/) (écran 1440 × 810). Les données sont des **agrégats historiques** ; il ne s'agit pas de captures du PBIX local.
+
+| Vue d'ensemble — évolution mensuelle | Livraisons — carte des 27 États |
+|:--|:--|
+| ![Vue d'ensemble Commerce 360 : indicateurs et évolution mensuelle des commandes et ventes historiques](docs/assets/commerce-360-overview.jpg) | ![Livraisons Commerce 360 : carte du Brésil et comparaison des retards entre États](docs/assets/commerce-360-delivery.jpg) |
+| **Qualité** — retards et avis | **Clients** — segmentation RFM |
+| ![Qualité Commerce 360 : association descriptive entre ponctualité et avis clients](docs/assets/commerce-360-quality.jpg) | ![Clients Commerce 360 : sept segments RFM sur les achats observés de 2017 à 2018](docs/assets/commerce-360-customers.jpg) |
+
+**Démo interactive :** [Vue d'ensemble](https://commerce-360-explorer.vercel.app/#overview) · [Ventes](https://commerce-360-explorer.vercel.app/#sales) · [Livraisons](https://commerce-360-explorer.vercel.app/#delivery) · [Qualité](https://commerce-360-explorer.vercel.app/#quality) · [Clients](https://commerce-360-explorer.vercel.app/#customers).
+
 ## Ce qui est disponible
 
 | Livrable | État |
 |---|---|
 | **Pipeline analytique E0–E8** | Réalisé, testé et intégré dans `main` ; [bilan et niveaux de preuve](docs/e8-bilan.md) |
 | **Rapport Power BI** | Cinq pages réalisées dans Power BI Desktop, **fichier PBIX conservé localement** |
-| **Démo web** | Démo interactive à cinq vues disponible sur Vercel ; [PR #7](https://github.com/sogoyou8/commerce-360/pull/7) (historique de livraison et de validation) |
+| **Démo web** | [Cinq vues interactives publiées sur Vercel](https://commerce-360-explorer.vercel.app/) ; [PR #7](https://github.com/sogoyou8/commerce-360/pull/7) (application) et [PR #9](https://github.com/sogoyou8/commerce-360/pull/9) (panneau À propos), toutes deux fusionnées |
 | **Couverture de la démo actuelle** | 20 mois, 7 segments RFM, 27 États clients vérifiés, 12 catégories commerciales, 15 États vendeurs agrégés et 20 cohortes ; exports E4/E5 et manifestes SHA-256 validés le 18 octobre 2026 |
 | **Code et documentation** | Scripts SQL/Python, requêtes Power Query et DAX, tests, protocole de reproduction et références agrégées publics |
 
@@ -68,7 +80,7 @@ La démo web est **une exploration des agrégats historiques**, pas une connexio
 - **[Contrôles croisés E7 SQL ↔ Power BI](docs/e7-validation.md)** et **[référence indépendante E3](docs/e3-reference-offline.md)**.
 - **[Méthodologie RFM E5](docs/e5-rfm.md)** et **[construction Power BI E6](docs/e6-powerbi.md)**.
 - **[Présentation portfolio et CV](docs/e8-portfolio.md)** ; **[mesures historiques agrégées](docs/e8-public-metrics.json)**.
-- **[PR #1 à #6 fusionnées](https://github.com/sogoyou8/commerce-360/pulls?q=is%3Apr+is%3Amerged)** : étapes E3–E8 ; la démo web est livrée par la PR #7, avec la réserve d'accessibilité précisée ci-dessus.
+- **[Historique des PR fusionnées](https://github.com/sogoyou8/commerce-360/pulls?q=is%3Apr+is%3Amerged)** : étapes E3–E8, démo web via PR #7, finition du panneau via PR #9. Réserve NVDA/VoiceOver documentée ci-dessus.
 
 ## Technologies
 
@@ -149,7 +161,7 @@ Procédure d'export depuis le dépôt :
 .\\.venv\\Scripts\\python.exe scripts\\export_e4.py
 ```
 
-Les neuf fichiers CSV et le manifeste restent dans `.data/e4/` et **ne sont pas publiés**. Le classeur XLSX n'est **pas ajouté à cette PR** : il contient les lignes détaillées dans son modèle de données et conserve un chemin Windows absolu, à nettoyer ou à documenter avant toute distribution publique. Seule la requête `fact_delivered_orders` est alimentée par Power Query ; les huit feuilles de synthèse `D_*` ne disposent pas toutes d'une requête d'actualisation autonome.
+Les neuf fichiers CSV et le manifeste restent dans `.data/e4/` et **ne sont pas publiés**. Le classeur XLSX n'est **pas publié dans le dépôt** : il contient les lignes détaillées dans son modèle de données et conserve un chemin Windows absolu, à nettoyer ou à documenter avant toute distribution publique. Seule la requête `fact_delivered_orders` est alimentée par Power Query ; les huit feuilles de synthèse `D_*` ne disposent pas toutes d'une requête d'actualisation autonome.
 
 - [Spécifications E4](docs/e4-excel-plan.md)
 - [Recette et limites de publication du classeur E4](docs/e4-excel-recette.md)
@@ -195,7 +207,7 @@ Cette étape fournit uniquement des documents, un fichier de **métriques agrég
 - [Référentiel public d'agrégats](docs/e8-public-metrics.json)
 - `scripts/validate_e8.py` : contrôles d'intégrité et détection de fichiers locaux suivis par Git.
 
-Les visuels publics du portfolio restent **à sélectionner et valider** après vérification des données affichées et des droits d'usage. Le PBIX demeure local ; une **démo web statique distincte** dispose d'une prévisualisation Vercel depuis la branche de la [PR #7](https://github.com/sogoyou8/commerce-360/pull/7), sans être encore fusionnée ni recettée définitivement.
+Quatre **captures de la démo web publiée**, sans données individuelles, figurent dans [`docs/assets/`](docs/assets/) et dans la [présentation portfolio](docs/e8-portfolio.md). Elles illustrent la version web (et **non** le fichier Power BI local). La démo a été publiée par les PR #7 et #9 ; la recette automatisée est favorable, sous réserve du test humain NVDA/VoiceOver non effectué.
 
 ## Tests hors ligne
 
@@ -220,6 +232,6 @@ Ces tests vérifient les contrats sans connexion PostgreSQL. La **validation ré
 
 ## Limites et garde-fous
 
-Le pipeline PostgreSQL, les exports détaillés et le PBIX demeurent **locaux**. Une **prévisualisation statique de la démo** est hébergée sur Vercel ; ce n'est ni un serveur SQL public, ni une application métier en temps réel, ni une mise en production officielle d'Olist. Le pilote Python contient une fonction de remise à zéro **uniquement des neuf tables du schéma `source`** de la base indiquée ; utilisez une base Commerce 360 dédiée. Les CSV bruts ne sont pas modifiés. Les vues peuvent être reconstruites sans double comptage.
+Le pipeline PostgreSQL, les exports détaillés et le PBIX demeurent **locaux**. Une **démo web statique publique** est hébergée sur Vercel ; ce n'est ni un serveur SQL public, ni une application métier en temps réel, ni une mise en production officielle d'Olist. Le pilote Python contient une fonction de remise à zéro **uniquement des neuf tables du schéma `source`** de la base indiquée ; utilisez une base Commerce 360 dédiée. Les CSV bruts ne sont pas modifiés. Les vues peuvent être reconstruites sans double comptage.
 
 À la fin de l'import PostgreSQL, confronter les résultats de `mart.v_kpi_global` aux métriques E1. **Contrôle E2 exécuté et confirmé le 16 octobre 2026 sur PostgreSQL local : résultats conformes aux références E1.** Pour toute nouvelle installation, cette vérification reste à rejouer avant de commencer E3.
