@@ -879,7 +879,7 @@ function renderBrazilMap(withMobilePicker=false) {
     if(!item)continue;
     const alpha=.22+.72*(item.rate/maxRate);
     path.setAttribute("fill",`rgba(65, 145, 255, ${alpha.toFixed(3)})`);
-    path.setAttribute("aria-label",code+" : "+percent(item.rate)+" de retard");
+    // Each SVG path is pointer-only; the focusable map group announces the\n    // active state, and the adjacent accessible table exposes all 27 values.\n    // aria-label on an unroled SVG path is invalid (axe aria-prohibited-attr).
     path.dataset.uf=code;
     path.addEventListener("click",()=>openDeliveryState(code));
   }
