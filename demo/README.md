@@ -1,3 +1,11 @@
+## F3 — Source native et cadrage complet (19/10/2026)
+
+L'illustration originale disponible mesure **1254×1254 RGBA** et non 2048 px comme l'indiquait le rapport de recherche. Elle a été exportée en WebP transparent **1254×1254**, `demo/assets/earth-f3-native.webp` (~379 KiB), sans agrandissement artificiel. L'ancienne variante WebP 1024px n'est plus référencée par le CSS actif.
+
+Le globe reste **entièrement dans la fenêtre** via une marge droite positive de 10 à 24px et une largeur desktop de 455 à 620px. Le halo est réduit et aligné ; le quatrième KPI et l'inspecteur ont un fond de contraste renforcé. La Terre reste décorative (non associée à des données), masquée sur mobile (<1180px), mode économie de données et contraste forcé. Les couches F1/F2 et F4/F5, les valeurs Olist et les interactions sont inchangées. Tests CI et recette navigateur requis avant validation visuelle ; PR #7 toujours draft et non fusionnée.
+
+---
+
 ## F5 — Cartes inférieures et lisibilité (19/10/2026)
 
 Couche de présentation indépendante `demo/dock-f5.css`, chargée après F4. Les trois cartes permanentes (catégories, États, satisfaction) reçoivent une hiérarchie homogène, des barres plus lisibles, une carte du Brésil agrandie selon l'espace disponible, un anneau de note renforcé et des états de focus cohérents. Les lignes « Autres ventes » et « Autres (22 États) », calculées à partir des totaux nationaux vérifiés, restent visibles même sur desktop compact. Sur mobile, les cartes s'empilent et gardent les valeurs accessibles sans débordement horizontal.
