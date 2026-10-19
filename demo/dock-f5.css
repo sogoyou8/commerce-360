@@ -290,3 +290,132 @@
     stroke:Highlight;filter:none;
   }
 }
+ 
+/* F5.3 — audit du rapport : real SVG, no chart-library/image conversions.
+   Visual contrasts use the bright end of each actual dark panel as a
+   conservative reference (#223d60); the palette is tested in node.
+   Phone-only min-heights deliberately allow vertical scrolling. */
+.exploration-dock{
+  --f5-fg:#dceaff;
+  --f5-sub:#b8d3f4;
+  --f5-mark:#7fb5fa;
+}
+.exploration-dock .dock-coverage,
+.exploration-dock .dock-category-row--other .dock-row-note,
+.exploration-dock .dock-heading a,
+#dock-states .state-rank-index,
+#dock-states .state-rank-metrics small,
+#dock-states .dock-state-row--other .dock-row-note,
+#dock-quality .quality-negative small,
+#dock-quality .score-ring-center span{
+  color:var(--f5-sub);
+}
+#dock-categories .dock-item-label,
+#dock-states .state-rank-code,
+#dock-quality .dock-item-label{color:var(--f5-fg)}
+#dock-categories .dock-track>i,
+#dock-states .dock-track>i,
+#dock-quality .dock-track>i{
+  background:linear-gradient(90deg,#4389ef,#88bdff);
+}
+#dock-states .brazil-map path{
+  stroke:#b8d3f4;
+  stroke-width:1.4;
+}
+#dock-states .brazil-map path.is-map-active{
+  stroke:#f0f6ff;
+  stroke-width:2.4;
+}
+.exploration-dock .dock-heading a:focus-visible,
+.exploration-dock .dock-category-row:focus-visible,
+.exploration-dock .dock-state-row:focus-visible,
+.exploration-dock .brazil-map:focus-visible{
+  outline:2px solid #dceaff;
+  outline-offset:2px;
+}
+@media (max-width:480px){
+  .exploration-dock .dock-heading a{
+    display:inline-flex;
+    min-height:38px;
+    min-width:52px;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+  }
+  .exploration-dock .dock-coverage{
+    font-size:11px;
+    line-height:1.35;
+    margin:5px 0 9px;
+  }
+  .exploration-dock .dock-panel:has(#dock-categories){min-height:380px}
+  #dock-categories{grid-template-rows:repeat(7,minmax(40px,1fr));gap:2px}
+  #dock-categories .dock-category-row{
+    min-height:40px;
+    padding:5px 3px;
+    align-items:center;
+  }
+  #dock-categories .dock-category-row .dock-item-label{
+    white-space:normal;
+    overflow:visible;
+    text-overflow:clip;
+    overflow-wrap:anywhere;
+    font-size:11px;
+    line-height:1.2;
+  }
+  #dock-categories .dock-category-row .dock-item-value{font-size:10px}
+  #dock-categories .dock-category-row--other .dock-row-note{font-size:10px}
+  .exploration-dock .dock-panel:has(#dock-states){min-height:500px}
+  #dock-states .dock-state-layout{
+    display:flex;
+    flex-direction:column;
+    grid-template-columns:none;
+    min-height:390px;
+    gap:10px;
+  }
+  #dock-states .dock-map-shell{
+    flex:0 0 158px;
+    height:158px;
+    min-height:158px;
+    overflow:visible;
+  }
+  #dock-states .brazil-map{width:100%;height:158px;max-height:158px}
+  #dock-states .dock-state-ranks{
+    display:grid;
+    flex:1 1 auto;
+    grid-template-rows:repeat(6,minmax(40px,1fr));
+    min-height:230px;
+    gap:3px;
+  }
+  #dock-states .dock-state-row{
+    min-height:40px;
+    padding:4px 5px;
+    gap:5px;
+  }
+  #dock-states .state-rank-code,
+  #dock-states .state-rank-metrics strong{font-size:12px}
+  #dock-states .state-rank-metrics small,
+  #dock-states .dock-state-row--other .dock-row-note{font-size:10px}
+  #dock-states .dock-state-row--other{min-height:40px;padding-top:4px}
+  .exploration-dock .dock-panel:has(#dock-quality){min-height:275px}
+  #dock-quality .quality-negative>span{font-size:12px}
+  #dock-quality .quality-negative small,
+  #dock-quality .dock-item-label{font-size:11px}
+}
+@media (max-width:340px){
+  #dock-categories .dock-category-row .dock-item-value{font-size:9.5px}
+  #dock-categories .dock-category-row{gap:4px}
+  #dock-states .dock-state-row{gap:4px}
+}
+@media (prefers-contrast:more){
+  .exploration-dock .dock-panel{border-color:#b8d3f4}
+  .exploration-dock .dock-coverage,
+  .exploration-dock .dock-row-note,
+  .exploration-dock .dock-item-label,
+  .exploration-dock .dock-item-value,
+  .exploration-dock .state-rank-metrics small{color:#f0f6ff}
+}
+@media (forced-colors:active){
+  #dock-states .brazil-map path{stroke:CanvasText}
+  #dock-states .brazil-map path.is-map-active{stroke:Highlight}
+  .exploration-dock .dock-track>i{background:Highlight}
+}

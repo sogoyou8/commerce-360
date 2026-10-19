@@ -1,3 +1,17 @@
+## F5.3 — Accessibilité et coût réel de la carte (19/10/2026)
+
+Le rapport F5 recommandait couleurs WCAG, grandes cibles tactiles, performances et gestion des assets. La vérification du dépôt a révélé une **carte SVG native de 27 États (~65 Ko)**, des visualisations DOM/SVG, un `app.js` ES module d'environ 51 Ko et **aucune dépendance Chart.js/Recharts**, aucune rasterisation de carte et aucun bénéfice à imposer un build ou une conversion WebP.
+
+Corrections effectives ciblées :
+- Palette de contraste renforcée pour les sous-titres, métadonnées, barres et contours de la carte ; garde-fous de contrastes conservateurs dans les tests (texte ≥4,5:1, marques ≥3:1 contre une surface de référence `#223d60`), sans revendication d'audit WCAG exhaustif.
+- Sur écrans ≤480 px, catégories et lignes d'État ont des zones tactiles d'au moins **40 px** ; les trois cartes restent réelles, et la carte du Brésil passe au-dessus des classements jusqu'à 480 px. Les cartes mobiles peuvent grandir verticalement pour éviter d'écraser les valeurs ; desktop sans scroll inchangé.
+- La carte SVG déjà vectorielle n'est plus téléchargée immédiatement lorsqu'elle est hors écran sur mobile : **IntersectionObserver** déclenche la récupération à l'approche de la carte (marge 400 px), avec chargement immédiat de secours si l'API est indisponible. Desktop continue de la charger directement. La carte est décrite comme utilisable au toucher ou avec les flèches/Entrée.
+- Mode de contraste renforcé et couleurs forcées respectés. Les montants, taux, catégories, États, cohortes et métadonnées d'Olist sont inchangés. F1/F2, F3, F4, F6 non modifiés. PR #7 toujours en brouillon.
+
+**À valider sur le déploiement HEAD :** tests Web/Python, carte SVG réseau mobile (avant/après intersection), focus, tap, dimensions 320/390/430/480 et 1180/1440/1920. Les mesures statiques de contraste ne remplacent pas une analyse automatisée d'accessibilité complète.
+
+---
+
 ## F5.2 — Finition des trois cartes permanentes (19/10/2026)
 
 Améliorations **strictement de présentation** dans `demo/dock-f5.css` : libellés, valeurs et barres des catégories plus lisibles en grand viewport ; carte du Brésil mise en valeur (les couleurs restent fondées sur les taux Olist réels) ; classement d'États moins comprimé en desktop ; anneau de satisfaction un peu plus lisible, sans prétendre disposer d'une comparaison temporelle absente. Un nouvel affichage sur téléphone **≤420px** empile la carte du Brésil et son classement au lieu de réduire le texte et les barres à quelques pixels. Le défilement vertical mobile est autorisé, contrairement au cockpit desktop qui reste sans scroll. Les boutons conservent un focus clavier visible, y compris en contraste forcé.

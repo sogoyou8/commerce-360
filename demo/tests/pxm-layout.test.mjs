@@ -245,8 +245,8 @@ test("F3 HD asset dimensions and native alpha are validated",()=>{
 
 test("F5 upgrades all three exploration cards without altering the cockpit or data",()=>{
   const f5=readFileSync(new URL("../dock-f5.css",import.meta.url),"utf8");
-  assert.match(html,/dock-f5\.css\?v=e3-f5-20261019-polish3/);
-  assert.match(html,/app\.js\?v=e3-20261019-f5-accessible/);
+  assert.match(html,/dock-f5\.css\?v=e3-f5-20261019-a11y3/);
+  assert.match(html,/app\.js\?v=e3-20261019-f5-lazy-svg/);
   assert.match(f5,/#dock-categories \.dock-category-row/);
   assert.match(f5,/#dock-states \.dock-state-layout/);
   assert.match(f5,/#dock-quality \.score-ring/);
@@ -304,5 +304,31 @@ test("F5.2 legible dock rows and mobile map layout stay isolated",()=>{
  assert.match(f5,/\.dock-state-row:focus-visible/);
  assert.match(f5,/#dock-states \.dock-state-row\{padding:1px 2px\}/);
  assert.match(f5,/@media \(forced-colors:active\)/);
+ assert.doesNotMatch(f5,/\.workspace\s*\{|\.analysis\s*\{|\.metric\s*\{/);
+});
+
+function relativeLuminance(hex) {
+ const rgba=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);
+ return .2126*rgba[0]+.7152*rgba[1]+.0722*rgba[2];
+}
+function contrastRatio(a,b){
+ const v=[relativeLuminance(a),relativeLuminance(b)].sort((x,y)=>y-x);
+ return (v[0]+.05)/(v[1]+.05);
+}
+test("F5.3 contrast palette and touch zones preserve data without chart libraries",()=>{
+ const f5=readFileSync(new URL("../dock-f5.css",import.meta.url),"utf8");
+ assert.ok(contrastRatio("#b8d3f4","#223d60")>=4.5,"Supplemental labels must remain readable");
+ assert.ok(contrastRatio("#dceaff","#223d60")>=4.5,"Main dock text must remain readable");
+ assert.ok(contrastRatio("#4389ef","#223d60")>=3,"Bar marks need contrast against a bright dock surface");
+ assert.match(f5,/@media \(max-width:480px\)/);
+ assert.match(f5,/#dock-categories \.dock-category-row\s*\{\s*min-height:40px/);
+ assert.match(f5,/#dock-states \.dock-state-row\s*\{\s*min-height:40px/);
+ assert.match(f5,/#dock-states \.dock-state-layout\s*\{\s*display:flex;\s*flex-direction:column/);
+ assert.match(f5,/@media \(prefers-contrast:more\)/);
+ assert.match(js,/new IntersectionObserver\(entries=>/);
+ assert.match(js,/rootMargin:"400px 0px"/);
+ assert.match(js,/queueBrazilMap\(holder\)/);
+ assert.match(js,/Toucher un État pour explorer/);
+ assert.doesNotMatch(js,/Chart\.js|Recharts|chart\.js/);
  assert.doesNotMatch(f5,/\.workspace\s*\{|\.analysis\s*\{|\.metric\s*\{/);
 });

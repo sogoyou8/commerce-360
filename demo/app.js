@@ -16,6 +16,7 @@ const categoryLabels = {
 function labelCategory(code) { return categoryLabels[code] || code.replaceAll("_", " "); }
 let brazilMapTemplate = null;
 let brazilMapLoading = null;
+let brazilMapObserver = null;
 const chapters = {
   overview: { n: "01", category: "VUE D'ENSEMBLE", kicker: "20 MOIS · 2017–2018", title: "Explorer le commerce <em>brésilien.</em>", desc: "Ventes d'articles et commandes livrées · étude indépendante sur neuf sources Olist." },
   sales: { n: "02", category: "VENTES", kicker: "VENTES D'ARTICLES · HORS FRET", title: "Ventes et <em>catégories.</em>", desc: "Comparer janvier–août 2017 et 2018, puis explorer les catégories réellement documentées." },
@@ -645,11 +646,29 @@ function loadBrazilMap() {
     })
     .catch(error=>{console.warn("Commerce 360 — carte indisponible :",error);});
 }
+// A 65 KB vector map is needed immediately on desktop, but sits below
+// the first mobile screen: defer network work until the dock approaches view.
+// IntersectionObserver has an eager fallback, preserving older browsers.
+function queueBrazilMap(holder) {
+  if(brazilMapTemplate||brazilMapLoading)return;
+  if(!("IntersectionObserver" in window)||!window.matchMedia("(max-width:1179px)").matches) {
+    loadBrazilMap();
+    return;
+  }
+  brazilMapObserver?.disconnect();
+  brazilMapObserver=new IntersectionObserver(entries=>{
+    if(!entries.some(entry=>entry.isIntersecting))return;
+    brazilMapObserver?.disconnect();
+    brazilMapObserver=null;
+    loadBrazilMap();
+  },{rootMargin:"400px 0px"});
+  brazilMapObserver.observe(holder);
+}
 function renderBrazilMap() {
   const holder=node("div","dock-map-shell");
   if(!brazilMapTemplate){
-    holder.append(node("span","map-placeholder","Chargement de la carte…"));
-    loadBrazilMap();
+    holder.append(node("span","map-placeholder","Carte des 27 États — chargement à l’affichage…"));
+    queueBrazilMap(holder);
     return holder;
   }
   const svg=document.importNode(brazilMapTemplate,true);
@@ -665,7 +684,7 @@ function renderBrazilMap() {
     for(const path of svg.querySelectorAll("path[id]"))
       path.classList.toggle("is-map-active",path.id.toUpperCase()===activeCode);
     const item=regionsByCode.get(activeCode);
-    svg.setAttribute("aria-label","Carte des 27 États. "+activeCode+" : "+percent(item.rate)+" de retard. Flèches pour choisir, Entrée pour explorer.");
+    svg.setAttribute("aria-label","Carte interactive des 27 États. "+activeCode+" : "+percent(item.rate)+" de retard. Toucher un État pour explorer, ou utiliser les flèches et Entrée au clavier.");
   };
   for(const path of svg.querySelectorAll("path[id]")){
     const code=path.id.toUpperCase();
