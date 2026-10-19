@@ -60,7 +60,7 @@ test("Accessibilité — les KPI 3 et 4 restent lisibles sur la Terre lumineuse"
 
 test("À propos — géométrie équilibrée, défilement discret et mise en page mobile",()=>{
   assert.match(css,/\.method-dialog \{ --method-edge:clamp\(16px,4vh,40px\)/);
-  assert.match(css,/width:min\(640px,calc\(100vw - var\(--method-side\) - var\(--method-side\)\)\)/);
+  assert.match(css,/max-width:none; width:min\(640px,calc\(100% - var\(--method-side\) - var\(--method-side\)\)\)/);
   assert.match(css,/max-height:calc\(100dvh - var\(--method-edge\) - var\(--method-edge\)\)/);
   assert.match(css,/scrollbar-width:thin; scrollbar-color:/);
   assert.match(css,/\.method-dialog::-webkit-scrollbar-thumb/);
