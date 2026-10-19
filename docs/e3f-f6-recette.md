@@ -1,19 +1,28 @@
 # Commerce 360 — E3.F / F6 : consolidation et recette
 
-**Livraison :** branche de travail `feature/demo-web-interactive`, [PR #7](https://github.com/sogoyou8/commerce-360/pull/7) vers `main`. **Date :** 19 octobre 2026. **Validation visuelle et autorisation explicite de fusion obtenues** ; l'état de fusion est consultable sur GitHub.
+**Livraison :** [PR #7](https://github.com/sogoyou8/commerce-360/pull/7) (cinq vues) et [PR #9](https://github.com/sogoyou8/commerce-360/pull/9) (panneau À propos) **fusionnées dans `main` le 19 octobre 2026**. Production : https://commerce-360-explorer.vercel.app/.
 
 ## Recette finale de publication — 19 octobre 2026
 
-**Statut : recette technique favorable, validation visuelle du propriétaire obtenue, fusion expressément autorisée.**
+**Statut : recette technique favorable, validation visuelle du propriétaire obtenue, deux PR fusionnées et site publié.**
 
 - Les cinq vues et les lots **E0–E8**, **F0–F6**, **P1–P5** sont livrés. Les agrégats Olist demeurent inchangés.
-- Sur le commit de recette `ccb0c34f`, GitHub Actions **Web demo** et **Python quality** ont réussi et Vercel a répondu **READY**. La publication de `main` doit être recontrôlée après la fusion.
+- Sur le commit de recette `ccb0c34f`, GitHub Actions **Web demo** et **Python quality** ont réussi et Vercel a répondu **READY**. La publication de `main` a ensuite été vérifiée après fusion des PR #7 et #9.
 - **axe-core 4.10.3** : 10 scans (5 vues × 1440×810 et 390×844), **aucune violation détectée** ; aucun débordement horizontal. Les contrôles automatiques `color-contrast` et `aria-valid-attr-value` comprennent des cas `incomplete`, qui ne constituent ni une réussite ni une violation.
 - **Contrastes du rendu échantillonné** : 35 captures sur les cinq vues (320×740, 1180×750, 1440×810, 1920×1080, 390×844 en trois positions de défilement), 2 693 portions de texte visibles ; **aucun échec mesuré** par rapport aux seuils 4,5:1 pour le texte ordinaire et 3:1 pour le grand texte. Mesure par pixels et échantillonnage, pas une certification WCAG.
 - **Navigation clavier** : Home/End, focus visible 2px sur cinq vues ; carte SVG Brésil End/Entrée, tableau alternatif des 27 États lisible dans l'arbre d'accessibilité, sélecteur mobile de 27 options ; fenêtre Données, fermeture Échap et retour du focus.
 - **Confidentialité de la livraison** : la PR ajoute des fichiers statiques et des agrégats ; aucun CSV brut, XLSX, PBIX, ZIP ou `.env` parmi les fichiers modifiés.
 - **Réserve explicite et persistante : aucun essai humain avec un véritable lecteur d'écran NVDA ou VoiceOver n'a été effectué.** Les tests du DOM, de l'arbre d'accessibilité et d'axe-core ne remplacent pas ce contrôle. Aucune certification WCAG n'est revendiquée.
 - Défaut esthétique non bloquant connu : la ligne SE est partiellement visible en bas du classement interne défilant sur une capture Livraisons ; le classement est accessible par défilement.
+
+## Contrôle complémentaire après PR #9 — publication définitive
+
+- **Commit de production :** `239cb0650a1170990311fb282440629c2ba94005`, Vercel **READY**, alias https://commerce-360-explorer.vercel.app/.
+- **Site public testé** à 1649 × 928 et 390 × 844 : cinq vues chargées (20 / 8 / 27 / 3 / 7 lignes de tableaux alternatifs), trois panneaux inférieurs par vue, aucun débordement horizontal ni erreur JavaScript détectée, `data/public.json` en HTTP 200 et totaux vérifiés (96 211 commandes, 13 181 027,13 BRL, 93 104 clients).
+- **Panneau À propos :** 640 px sur desktop, marges verticales symétriques de 37 px à 1649 × 928 ; largeur adaptée et marges haut/bas de 14 px sur mobile 390 × 844. L'enseignement sur les avis négatifs (9,20 % ponctuelles notées / 54,05 % tardives notées) est présenté comme descriptif, sans causalité.
+- **Interactions** : ouverture, défilement interne, fermeture Échap et restitution du focus vérifiés sur les cinq vues et les deux formats. Avant fusion de la PR #9, dix scans axe-core du dialogue ouvert (desktop/mobile) n'avaient détecté aucune violation ; `color-contrast` restait `incomplete` pour certains fonds complexes.
+- **Portfolio** : quatre captures JPEG de la démo publique (Vue d'ensemble, Livraisons, Qualité, Clients) ajoutées dans `docs/assets/`, ainsi qu'une [étude de cas prête à publier](e8-portfolio.md).
+- **Réserve inchangée : aucun test humain NVDA/VoiceOver réalisé et aucune certification WCAG revendiquée.**
 
 ## État du produit
 
@@ -38,7 +47,7 @@ Socle : F0 (responsive), F1 (structure des panneaux), F2 (proportions), F3 (glob
 
 ## Vérifications CI / déploiement
 
-Pour chaque dernier commit, exiger **Commerce 360 / Web demo** et **Commerce 360 / Python quality** en succès, et **Vercel READY** sur exactement le même SHA. Vérifier la branche preview via [Commerce 360 sur Vercel](https://commerce-360-explorer-git-featu-9178df-yoanns-projects-e74472b3.vercel.app/). Ne pas déduire la conformité visuelle du seul état READY.
+Pour chaque nouveau commit, exiger **Commerce 360 / Web demo** et **Commerce 360 / Python quality** en succès, et **Vercel READY** sur le SHA attendu. Vérifier le [site de production](https://commerce-360-explorer.vercel.app/) dans le navigateur ; l'état READY ne suffit pas à conclure à une conformité visuelle.
 
 ## Limites et décisions de publication
 
@@ -50,4 +59,4 @@ Pour chaque dernier commit, exiger **Commerce 360 / Web demo** et **Commerce 360
 
 ## Phase suivante
 
-**E3.P / P1–P5 terminées** : Vue d'ensemble, Ventes, Livraisons, Qualité, Clients et cohortes. Publication du site à vérifier après fusion, sans considérer le test humain de lecteur d'écran comme réalisé.
+**E3.P / P1–P5 terminées** : Vue d'ensemble, Ventes, Livraisons, Qualité, Clients et cohortes. **Publication vérifiée après fusion**, sans considérer le test humain de lecteur d'écran comme réalisé. Voir [la présentation portfolio et les captures de production](e8-portfolio.md).
