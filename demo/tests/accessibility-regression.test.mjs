@@ -4,6 +4,26 @@ import {readFileSync} from "node:fs";
 
 const html=readFileSync(new URL("../index.html",import.meta.url),"utf8");
 const js=readFileSync(new URL("../app.js",import.meta.url),"utf8");
+const css=readFileSync(new URL("../styles.css",import.meta.url),"utf8");
+
+function contrast(hexA,hexB){
+  const lum=hex=>{
+    const channels=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255)
+      .map(x=>x<=0.04045?x/12.92:((x+0.055)/1.055)**2.4);
+    return 0.2126*channels[0]+0.7152*channels[1]+0.0722*channels[2];
+  };
+  const a=lum(hexA),b=lum(hexB);
+  return (Math.max(a,b)+0.05)/(Math.min(a,b)+0.05);
+}
+
+test("Accessibilité — étiquettes des mois contrastées sur fond opaque",()=>{
+  const base=css.match(/\.combo-month-label\{color:(#[0-9a-f]{6});background:(#[0-9a-f]{6});padding:1px 2px/);
+  const selected=css.match(/\.combo-month\[aria-pressed="true"\] \.combo-month-label\{color:(#[0-9a-f]{3,6});background:(#[0-9a-f]{6})\}/);
+  assert.ok(base,"Fond opaque attendu pour les mois");
+  assert.ok(selected,"Fond opaque attendu pour le mois sélectionné");
+  assert.ok(contrast(base[1],base[2])>=4.5);
+  assert.ok(contrast(selected[1]==="#fff"?"#ffffff":selected[1],selected[2])>=4.5);
+});
 
 test("Accessibilité — inspecteur et commandes ont des rôles ARIA valides",()=>{
   assert.match(html,/<section class="story-panel" aria-label="Inspecteur contextuel" aria-live="polite">/);
