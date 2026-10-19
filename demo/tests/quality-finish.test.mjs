@@ -28,7 +28,7 @@ test("Jalon 4/5 — notes and negative rates retain their observed denominators"
 });
 
 test("Jalon 4/5 — visual comparison has a structured accessible table and keyboard selection",()=>{
-  assert.match(html,/quality-finish\.css\?v=quality-20261019-4/);
+  assert.match(html,/quality-finish\.css\?v=quality-20261019-4b/);
   assert.match(html,/app\.js\?v=customers-20261019-5b/);
   assert.match(js,/function selectQualityGroup\(code, focus=false\)/);
   assert.match(js,/card\.dataset\.groupCode=group\.code/);
@@ -49,6 +49,8 @@ test("Jalon 4/5 — Quality finish is scoped, focus-visible and responsive",()=>
   assert.match(css,/\.group-card:focus-visible/);
   assert.match(css,/@media \(min-width:1180px\) and \(max-height:850px\)/);
   assert.match(css,/@media \(max-width:480px\)/);
+  assert.match(css,/\.analysis:has\(\.story-panel\[data-mode="quality"\]\) \.analysis-main\{/);
+  assert.match(css,/height:510px;\s*min-height:510px/);
   assert.match(css,/@media \(prefers-contrast:more\)/);
   assert.match(css,/@media \(prefers-reduced-motion:reduce\)/);
   assert.doesNotMatch(css,/\.workspace\s*\{|\.metric\s*\{|\.dock-panel\s*\{/);
