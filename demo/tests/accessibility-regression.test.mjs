@@ -48,8 +48,8 @@ test("Accessibilité — carte : navigation clavier et alternative tabulaire san
   assert.match(js,/path\.addEventListener\("click",\(\)=>openDeliveryState\(code\)\)/);
 });
 
-test("Accessibilité — le quatrième KPI reste lisible sur la Terre lumineuse",()=>{
-  assert.match(css,/\.metric:last-child \.metric-label,\s*\.metric:last-child \.metric-note\{[\s\S]*?background:rgba\(4,11,24,\.94\)/);
+test("Accessibilité — les KPI 3 et 4 restent lisibles sur la Terre lumineuse",()=>{
+  assert.match(css,/\.metric:nth-child\(n\+3\) \.metric-label,\s*\.metric:nth-child\(n\+3\) \.metric-note\{[\s\S]*?background:rgba\(4,11,24,\.94\)/);
   // Conservative case: white pixels from the globe, with the 94%-opaque caption background.
   const bg=[4,11,24].map(v=>Math.round(v*0.94+255*0.06));
   const hex="#"+bg.map(v=>v.toString(16).padStart(2,"0")).join("");
