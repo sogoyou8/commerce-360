@@ -29,7 +29,7 @@ test("Jalon 4/5 — notes and negative rates retain their observed denominators"
 
 test("Jalon 4/5 — visual comparison has a structured accessible table and keyboard selection",()=>{
   assert.match(html,/quality-finish\.css\?v=quality-20261019-4/);
-  assert.match(html,/app\.js\?v=customers-20261019-5/);
+  assert.match(html,/app\.js\?v=customers-20261019-5b/);
   assert.match(js,/function selectQualityGroup\(code, focus=false\)/);
   assert.match(js,/card\.dataset\.groupCode=group\.code/);
   assert.match(js,/card\.tabIndex=group\.code===selected\.code\?0:-1/);
