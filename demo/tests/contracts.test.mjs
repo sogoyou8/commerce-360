@@ -93,7 +93,7 @@ test("E1 explains the independent Olist study in the UI without exposing raw dat
   assert.match(html, /https:\/\/github.com\/sogoyou8\/commerce-360\/blob\/main\/docs\/e8-bilan.md/);
   assert.match(js, /Explorer le commerce/);
   assert.match(js, /aria-expanded", "false"/);
-  assert.match(css, /\.method-dialog \{ position: fixed/);
+  assert.match(css, /\.method-dialog\s*\{[^}]*position:\s*fixed/);
 });
 
 test("E2 rejects misleading partial/full coverage, incorrect totals and fabricated regions", () => {

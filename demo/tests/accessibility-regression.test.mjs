@@ -5,6 +5,7 @@ import {readFileSync} from "node:fs";
 const html=readFileSync(new URL("../index.html",import.meta.url),"utf8");
 const js=readFileSync(new URL("../app.js",import.meta.url),"utf8");
 const css=readFileSync(new URL("../styles.css",import.meta.url),"utf8");
+const data=JSON.parse(readFileSync(new URL("../data/public.json",import.meta.url),"utf8"));
 
 function contrast(hexA,hexB){
   const lum=hex=>{
@@ -55,4 +56,26 @@ test("Accessibilité — les KPI 3 et 4 restent lisibles sur la Terre lumineuse"
   const hex="#"+bg.map(v=>v.toString(16).padStart(2,"0")).join("");
   assert.ok(contrast("#91aed5",hex)>=4.5);
   assert.ok(contrast("#94b0d6",hex)>=4.5);
+});
+
+test("À propos — géométrie équilibrée, défilement discret et mise en page mobile",()=>{
+  assert.match(css,/\.method-dialog \{ --method-edge:clamp\(16px,4vh,40px\)/);
+  assert.match(css,/max-width:none; width:min\(640px,calc\(100% - var\(--method-side\) - var\(--method-side\)\)\)/);
+  assert.match(css,/max-height:calc\(100dvh - var\(--method-edge\) - var\(--method-edge\)\)/);
+  assert.match(css,/scrollbar-width:thin; scrollbar-color:/);
+  assert.match(css,/\.method-dialog::-webkit-scrollbar-thumb/);
+  assert.match(css,/--method-edge:14px;--method-side:14px/);
+  assert.match(html,/<dialog id="method-dialog"[^>]*aria-labelledby="method-title"[^>]*aria-describedby="method-intro"/);
+  assert.match(html,/<button id="method-close"[^>]*aria-label="Fermer À propos \/ Données"/);
+});
+
+test("À propos — enseignement chiffré exact et non causal",()=>{
+  const onTime=data.satisfaction.find(x=>x.code==="on_time");
+  const late=data.satisfaction.find(x=>x.code==="late");
+  assert.equal(onTime.negativeRate,9.2);
+  assert.equal(late.negativeRate,54.05);
+  assert.match(html,/Ce que montrent les données/);
+  assert.match(html,/9,20&nbsp;%/);
+  assert.match(html,/54,05&nbsp;%/);
+  assert.match(html,/ne démontre pas de causalité/);
 });
