@@ -245,7 +245,7 @@ test("F3 HD asset dimensions and native alpha are validated",()=>{
 
 test("F5 upgrades all three exploration cards without altering the cockpit or data",()=>{
   const f5=readFileSync(new URL("../dock-f5.css",import.meta.url),"utf8");
-  assert.match(html,/dock-f5\.css\?v=e3-f5-20261019-polish2/);
+  assert.match(html,/dock-f5\.css\?v=e3-f5-20261019-polish3/);
   assert.match(html,/app\.js\?v=e3-20261019-f5-accessible/);
   assert.match(f5,/#dock-categories \.dock-category-row/);
   assert.match(f5,/#dock-states \.dock-state-layout/);
@@ -302,6 +302,7 @@ test("F5.2 legible dock rows and mobile map layout stay isolated",()=>{
  assert.match(f5,/#dock-categories \.dock-category-row \.dock-track\{height:9px\}/);
  assert.match(f5,/#dock-states \.brazil-map path\.is-map-active/);
  assert.match(f5,/\.dock-state-row:focus-visible/);
+ assert.match(f5,/#dock-states \.dock-state-row\{padding:1px 2px\}/);
  assert.match(f5,/@media \(forced-colors:active\)/);
  assert.doesNotMatch(f5,/\.workspace\s*\{|\.analysis\s*\{|\.metric\s*\{/);
 });

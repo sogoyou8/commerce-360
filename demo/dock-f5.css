@@ -218,6 +218,9 @@
   #dock-states .dock-state-layout{
     grid-template-columns:minmax(0,1.03fr) minmax(0,.97fr);
   }
+  /* Keep six verified ranking lines inside 205px docks at 1440×900. */
+  #dock-states .dock-state-row{padding:1px 2px}
+  #dock-states .dock-state-row--other{padding-top:2px}
   #dock-states .brazil-map{
     max-height:clamp(165px,23vh,230px);
     filter:drop-shadow(0 0 13px rgba(54,135,255,.29));
