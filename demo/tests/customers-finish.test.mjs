@@ -20,8 +20,8 @@ test("Jalon 5/5 — segments and cohorts reconcile against actual Olist aggregat
 });
 
 test("Jalon 5/5 — RFM has keyboard navigation with focus and selected-row visibility",()=>{
-  assert.match(html,/customers-finish\.css\?v=customers-20261019-5/);
-  assert.match(html,/app\.js\?v=customers-20261019-5/);
+  assert.match(html,/customers-finish\.css\?v=customers-20261019-5b/);
+  assert.match(html,/app\.js\?v=customers-20261019-5b/);
   assert.match(js,/function selectCustomerItem\(code, focusRank=false\)/);
   assert.match(js,/if\(state\.customersView==="cohorts"\)state\.selectedCohort=code/);
   assert.match(js,/if\(focusRank\)selected\.focus\(\{preventScroll:true\}\)/);
@@ -50,4 +50,15 @@ test("Jalon 5/5 — compact responsive rank list and visible keyboard focus",()=
   assert.match(css,/@media \(max-width:480px\)/);
   assert.match(css,/@media \(prefers-reduced-motion:reduce\)/);
   assert.doesNotMatch(css,/\.workspace\s*\{|\.metric\s*\{|\.dock-panel\s*\{/);
+});
+
+test("P5 visual finish — 7 segments are compact only on spacious desktop; cohorts remain scrollable",()=>{
+  assert.match(js,/rank-chart--cohorts":"rank-chart--segments"/);
+  assert.match(css,/@media \(min-width:1400px\) and \(min-height:920px\) and \(max-height:1000px\)/);
+  assert.match(css,/\.rank-chart--segments \.rank-row--customer\{/);
+  assert.match(css,/flex:0 0 40px/);
+  assert.ok(7*40+6*2<=300,"seven rows plus gaps fit the observed 300px desktop list area");
+  assert.match(css,/\.story-panel\[data-mode="customers"\] \.story-foot p\{/);
+  assert.match(css,/\.story-panel\[data-mode="customers"\] \.comparison-note\{/);
+  assert.match(css,/\.analysis:has\(\.story-panel\[data-mode="customers"\]\) \.viz-footer\{/);
 });
