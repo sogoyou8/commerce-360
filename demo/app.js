@@ -513,14 +513,32 @@ function selectDeliveryState(code, focusRank=false) {
     if(focusRank)selected.focus({preventScroll:true});
   }
 }
+function selectCustomerItem(code, focusRank=false) {
+  if(state.customersView==="cohorts")state.selectedCohort=code;
+  else state.selectedSegment=code;
+  render();
+  const list=$("viz-container").querySelector(".rank-chart");
+  const selected=[...list?.querySelectorAll(".rank-row")||[]].find(row=>row.dataset.itemCode===code);
+  if(list&&selected){
+    const bounds=list.getBoundingClientRect(),row=selected.getBoundingClientRect();
+    list.scrollTop+=row.top-bounds.top+row.height/2-bounds.height/2;
+    if(focusRank)selected.focus({preventScroll:true});
+  }
+}
 function renderRankRows(items, getLabel, getValue, selectedId, onSelect, formatterFn, getSubtitle) {
   const max=Math.max(1,...items.map(getValue));
   const wrap=node("div","rank-chart");
+  if(state.view==="customers"){
+    wrap.setAttribute("role","group");
+    wrap.setAttribute("aria-label",state.customersView==="cohorts"?
+      "20 cohortes historiques : utiliser les flèches haut et bas, Début et Fin pour changer de mois.":
+      "7 segments RFM observés : utiliser les flèches haut et bas, Début et Fin pour changer de profil.");
+  }
   for(const item of items) {
     const row=node("button","rank-row");
     row.type="button";
     row.setAttribute("aria-pressed",String(item.code===selectedId));
-    if(state.view==="delivery"){
+    if(state.view==="delivery"||state.view==="customers"){
       row.dataset.itemCode=item.code;
       row.tabIndex=item.code===selectedId?0:-1;
       row.addEventListener("keydown",event=>{
@@ -538,7 +556,7 @@ function renderRankRows(items, getLabel, getValue, selectedId, onSelect, formatt
     const track=append(node("span","rank-track"),node("i"));
     track.firstChild.style.setProperty("--w",Math.max(1,(getValue(item)/max*100))+"%");
     append(row,name,track,node("strong","rank-value",formatterFn(getValue(item))));
-    row.setAttribute("aria-label",`${getLabel(item)} : ${formatterFn(getValue(item))}`);
+    row.setAttribute("aria-label",`${getLabel(item)} : ${formatterFn(getValue(item))}${getSubtitle?", "+getSubtitle(item):""}`);
     row.addEventListener("click",()=>onSelect(item.code,true));
     wrap.append(row);
   }
@@ -701,9 +719,12 @@ function renderCustomerCohorts() {
     heading(measure==="salesBrl"?smallAmount(selected.salesBrl):n(selected[measure]),
       strMonth(selected.month,true)+" · "+(measure==="salesBrl"?"ventes des clients":measure==="repeats"?"réacheteurs":"clients observés")),
     renderRankRows(rows,c=>strMonth(c.month),c=>c[measure],selected.month,
-      month=>{state.selectedCohort=month;render();},
+      month=>selectCustomerItem(month,true),
       v=>measure==="salesBrl"?smallAmount(v):n(v),
-      c=>percent(observedShare(c.customers,t.customers))+" des clients")
+      c=>percent(observedShare(c.customers,t.customers))+" des clients"),
+    accessibleDataTable("Cohortes RFM Olist : les ventes cumulent les achats livrés des clients jusqu'au 31 août 2018",
+      ["Premier achat livré observé","Clients","Part des clients","Réacheteurs","Ventes cumulées hors fret"],
+      cohorts.map(c=>[strMonth(c.month,true),n(c.customers),percent(observedShare(c.customers,t.customers)),n(c.repeats),amount(c.salesBrl,true)]))
   );
   setStory({
     kicker:"COHORTE · PREMIER ACHAT OBSERVÉ",
@@ -743,9 +764,12 @@ function renderCustomers() {
   if(state.customersView==="cohorts"&&data.cohorts.length){renderCustomerCohorts();return;}
   $("viz-container").replaceChildren(
     heading(measure==="salesBrl"?smallAmount(selected.salesBrl):n(selected[measure]),`Segment sélectionné · ${selected.label}`),
-    renderRankRows(choices,s=>s.label,s=>s[measure],selected.code,key=>{state.selectedSegment=key;render();},
+    renderRankRows(choices,s=>s.label,s=>s[measure],selected.code,key=>selectCustomerItem(key,true),
       v=>measure==="salesBrl"?smallAmount(v):n(v),
       s=>`${percent(observedShare(s.customers,t.customers))} des clients`),
+    accessibleDataTable("Sept segments RFM Olist, exclusifs et historiques au 1er septembre 2018",
+      ["Segment observé","Clients","Part des clients","Réacheteurs","Ventes d'articles hors fret"],
+      choices.map(s=>[s.label,n(s.customers),percent(observedShare(s.customers,t.customers)),n(s.repeats),amount(s.salesBrl,true)]))
   );
   const share=observedShare(selected.salesBrl,t.salesBrl),repeatShare=observedShare(selected.repeats,selected.customers);
   setStory({
@@ -1047,14 +1071,16 @@ function renderInspectorDetails() {
       {label:"Réacheteurs de la cohorte",value:n(cohort.repeats),note:percent(observedShare(cohort.repeats,cohort.customers))+" des clients de la cohorte"},
       {label:"Ventes cumulées de la cohorte",value:smallAmount(cohort.salesBrl),note:"Achats livrés historiques des clients de cette cohorte"}
     ];
-    navigation={items:cohorts,id:cohort.month,getId:x=>x.month,change:month=>{state.selectedCohort=month;render();}};
+    navigation={items:cohorts,id:cohort.month,getId:x=>x.month,change:month=>selectCustomerItem(month),restoreFocus:true};
   } else if(state.view==="customers") {
     const segment=data.segments.find(x=>x.code===state.selectedSegment)||data.segments[0];
+    const orderedSegments=[...data.segments].sort((a,b)=>b[state.customersMeasure]-a[state.customersMeasure]);
     items=[
       {label:"Clients du segment",value:n(segment.customers),note:percent(observedShare(segment.customers,data.totals.customers))+" de la population"},
       {label:"Réacheteurs observés",value:n(segment.repeats),note:"Au moins deux commandes livrées"},
       {label:"Ventes d’articles",value:smallAmount(segment.salesBrl),note:"Hors frais de livraison"}
     ];
+    navigation={items:orderedSegments,id:segment.code,getId:x=>x.code,change:code=>selectCustomerItem(code),restoreFocus:true};
   }
   renderComparisonRows(items);
   if(navigation) setSelectionNavigation(navigation.items,navigation.id,navigation.getId,navigation.change,Boolean(navigation.restoreFocus));
