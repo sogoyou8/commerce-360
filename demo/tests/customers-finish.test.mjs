@@ -64,4 +64,8 @@ test("P5 visual finish — 7 segments are compact only on spacious desktop; coho
   assert.match(css,/\.story-panel\[data-mode="customers"\] \.story-foot p\{/);
   assert.match(css,/\.story-panel\[data-mode="customers"\] \.comparison-note\{/);
   assert.match(css,/\.analysis:has\(\.story-panel\[data-mode="customers"\]\) \.viz-footer\{/);
+  assert.match(css,/@media \(min-width:1400px\) and \(min-height:800px\) and \(max-height:850px\), \(max-width:800px\)/);
+  assert.match(css,/@media \(min-width:1180px\) and \(max-width:1399px\) and \(max-height:850px\)/);
+  assert.match(css,/\.story-panel\[data-mode="customers"\] \.story-inner\{padding-top:5px\}/);
+  assert.match(css,/\.story-panel\[data-mode="customers"\] \.story-foot\{padding:4px 0 0\}/);
 });
