@@ -88,10 +88,17 @@
   .analysis:has(.story-panel[data-mode="customers"]) .rank-track>i{transition:none}
 }
 
-/* Revue visuelle P5 : à ~1649 × 928, 7 lignes de 40 px + 6 intervalles
-   de 2 px tiennent dans la zone de classement observée (~300 px).
-   Les 20 cohortes gardent leur propre liste défilante. */
-@media (min-width:1400px) and (min-height:920px) and (max-height:1000px){
+/* Revue P5 : le navigateur peut afficher 1649 × 928 pixels physiques
+   à 110 % de zoom (~1500 × 844 pixels CSS). Rendre le graphique RFM
+   prioritaire sans tronquer les trois cartes de synthèse en dessous.
+   La modification de grille ne concerne que Clients, et les 20 cohortes
+   conservent leur défilement. */
+@media (min-width:1180px) and (min-height:851px) and (max-height:1000px){
+  .workspace:has(.story-panel[data-mode="customers"]){
+    grid-template-rows:clamp(86px,10.2vh,100px) minmax(0,1fr) clamp(218px,26vh,260px);
+  }
+}
+@media (min-width:1400px) and (min-height:840px) and (max-height:1000px){
   .analysis:has(.story-panel[data-mode="customers"]) .rank-chart--segments{
     gap:2px;
     scrollbar-gutter:auto;
