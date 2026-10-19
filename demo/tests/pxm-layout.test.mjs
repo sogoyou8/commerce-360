@@ -450,3 +450,21 @@ test("Jalon 2/5 audit — state rankings fit compact desktop without hiding metr
  assert.match(js,/plot\.setAttribute\("role","group"\)/);
  assert.match(js,/button\.setAttribute\("aria-label",`${shortMonth\[pair\.month-1\]\}/);
 });
+
+test("Jalon 3/5 — regional ranking focus, visible selection and map semantics",()=>{
+ const delivery=readFileSync(new URL("../delivery-finish.css",import.meta.url),"utf8");
+ assert.match(html,/delivery-finish\.css\?v=delivery-20261019-3/);
+ assert.match(js,/function selectDeliveryState\(code, focusRank=false\)/);
+ assert.match(js,/row\.dataset\.itemCode=item\.code/);
+ assert.match(js,/row\.tabIndex=item\.code===selectedId\?0:-1/);
+ assert.match(js,/\["ArrowUp","ArrowDown","Home","End"\]/);
+ assert.match(js,/onSelect\(items\[target\]\.code,true\)/);
+ assert.match(js,/\(code,focusRank\)=>selectDeliveryState\(code,focusRank\)/);
+ assert.match(js,/scrollList\.scrollTop\+=itemBounds\.top-listBounds\.top\+itemBounds\.height\/2-listBounds\.height\/2/);
+ assert.match(js,/change:code=>selectDeliveryState\(code\),restoreFocus:true/);
+ assert.match(js,/const focusedOnMap=document\.activeElement\?\.classList\?\.contains\("brazil-map"\)/);
+ assert.match(delivery,/\.delivery-rankings \.rank-row\{\s*min-height:44px/);
+ assert.match(delivery,/\.delivery-rankings-caption/);
+ assert.match(delivery,/\.delivery-map-explainer/);
+ assert.doesNotMatch(delivery,/\.workspace\s*\{|\.metric\s*\{|\.dock-panel\s*\{/);
+});

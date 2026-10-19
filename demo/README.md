@@ -1,3 +1,13 @@
+## Jalon 3/5 — Livraisons : sélection régionale et interaction (19/10/2026)
+
+Une inspection navigateur au dernier commit 2/5 a confirmé : carte SVG réelle (27 géométries, taux de retard, accessibilité F5), classement des 27 États triés par taux ou délai, carte toujours colorée **par le taux de retard**, même lorsque le classement est trié par délai. Défaut réel : le focus était perdu après la sélection d'un État dans la liste et via les flèches de l'inspecteur.
+
+Correctif : rang sélectionné toujours visible dans le classement défilant, 27 lignes pilotables au clavier (flèches haut/bas, Home/End, un seul Tab stop dans le groupe), focus restauré au clic, et clavier conservé lors de l'ouverture d'un État depuis la carte SVG. Mise en valeur des libellés « taux / délai / commandes » et des 27 lignes avec min-height 44px dans l'atlas principal, sans transformer les taux en volumes ni modifier les données. `delivery-finish.css` dédié, dossier de données Olist inchangé. Les deux cartes (atlas + dock) possèdent des IDs SVG uniques grâce à F5.
+
+Recette : 320,390,430,768,1180,1440,1649,1920px ; sélectionner un État en bas du classement et vérifier focus/scroll ; basculer Retard (%) → Délai (jours) ; inspecteur et classement cohérents ; préserver la mise en évidence de la carte ; vérifier clavier Home/End, flèches inspector, absence de débordement horizontal, desktop sans scroll, tests GitHub Web/Python et Vercel READY sur même SHA. PR #7 demeure draft et non fusionnée.
+
+---
+
 ## Jalon 2/5 — Vérification finale UX de Ventes (19/10/2026)
 
 Rapport de recherche approfondie relu contre le code actuel et la capture réelle. Les barres 2017/2018 sont déjà des boutons HTML avec `aria-label`, le clavier (flèches/Home/End), et un tableau natif de huit lignes (ventes BRL et commandes de 2017/2018) ; ajouter un SVG `role=img` ou dupliquer les marqueurs accessibles serait contre-productif.

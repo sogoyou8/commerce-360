@@ -501,6 +501,17 @@ function renderSales() {
   renderSalesBreakdown();
 }
 
+function selectDeliveryState(code, focusRank=false) {
+  state.selectedState=code;
+  render();
+  const list=$("viz-container").querySelector(".delivery-rankings .rank-chart");
+  const selected=[...list?.querySelectorAll(".rank-row")||[]].find(row=>row.dataset.itemCode===code);
+  if(list&&selected){
+    const bounds=list.getBoundingClientRect(),row=selected.getBoundingClientRect();
+    list.scrollTop+=row.top-bounds.top+row.height/2-bounds.height/2;
+    if(focusRank)selected.focus({preventScroll:true});
+  }
+}
 function renderRankRows(items, getLabel, getValue, selectedId, onSelect, formatterFn, getSubtitle) {
   const max=Math.max(1,...items.map(getValue));
   const wrap=node("div","rank-chart");
@@ -508,6 +519,18 @@ function renderRankRows(items, getLabel, getValue, selectedId, onSelect, formatt
     const row=node("button","rank-row");
     row.type="button";
     row.setAttribute("aria-pressed",String(item.code===selectedId));
+    if(state.view==="delivery"){
+      row.dataset.itemCode=item.code;
+      row.tabIndex=item.code===selectedId?0:-1;
+      row.addEventListener("keydown",event=>{
+        if(!["ArrowUp","ArrowDown","Home","End"].includes(event.key))return;
+        event.preventDefault();
+        const index=items.findIndex(x=>x.code===item.code);
+        const target=event.key==="Home"?0:event.key==="End"?items.length-1:
+          Math.max(0,Math.min(items.length-1,index+(event.key==="ArrowDown"?1:-1)));
+        onSelect(items[target].code,true);
+      });
+    }
     if(state.view==="customers")row.classList.add("rank-row--customer");
     const name=append(node("span","rank-name"),node("span","",getLabel(item)));
     if(getSubtitle)name.append(node("small","",getSubtitle(item)));
@@ -515,7 +538,7 @@ function renderRankRows(items, getLabel, getValue, selectedId, onSelect, formatt
     track.firstChild.style.setProperty("--w",Math.max(1,(getValue(item)/max*100))+"%");
     append(row,name,track,node("strong","rank-value",formatterFn(getValue(item))));
     row.setAttribute("aria-label",`${getLabel(item)} : ${formatterFn(getValue(item))}`);
-    row.addEventListener("click",()=>onSelect(item.code));
+    row.addEventListener("click",()=>onSelect(item.code,true));
     wrap.append(row);
   }
   return wrap;
@@ -540,7 +563,7 @@ function renderDelivery() {
   const ranked=append(node("div","delivery-rankings"),
     node("span","delivery-rankings-caption","LES 27 ÉTATS · "+(measure==="rate"?"TAUX DE RETARD":"DÉLAI MOYEN")),
     renderRankRows(choices,s=>s.code,s=>s[measure],stateChoice.code,
-      code=>{state.selectedState=code;render();},
+      (code,focusRank)=>selectDeliveryState(code,focusRank),
       v=>measure==="rate"?percent(v):decimal.format(v)+" j",
       s=>n(s.orders)+" commandes livrées"));
   $("viz-container").replaceChildren(
@@ -550,6 +573,12 @@ function renderDelivery() {
     append(node("div","rank-legend"),node("span","","ÉTAT SÉLECTIONNABLE SUR CARTE ET CLASSEMENT"),
       node("span","","KPI NATIONAUX INCHANGÉS"))
   );
+  const selectedRank=ranked.querySelector('.rank-row[aria-pressed="true"]');
+  const scrollList=ranked.querySelector(".rank-chart");
+  if(selectedRank&&scrollList){
+    const listBounds=scrollList.getBoundingClientRect(),itemBounds=selectedRank.getBoundingClientRect();
+    scrollList.scrollTop+=itemBounds.top-listBounds.top+itemBounds.height/2-listBounds.height/2;
+  }
   setStory({
     kicker:"ÉTAT SÉLECTIONNÉ · "+stateChoice.code,
     title:`Le territoire ${stateChoice.code}.`,
@@ -706,9 +735,12 @@ function dockRow(label,value,ratio,subtitle="") {
   return row;
 }
 function openDeliveryState(code) {
+  const focusedOnMap=document.activeElement?.classList?.contains("brazil-map");
   state.selectedState=code;
-  if(location.hash==="#delivery")render();
-  else location.hash="#delivery";
+  if(location.hash==="#delivery"){
+    render();
+    if(focusedOnMap)document.querySelector(".delivery-map-visual .brazil-map")?.focus({preventScroll:true});
+  }else location.hash="#delivery";
 }
 function loadBrazilMap() {
   if(brazilMapTemplate||brazilMapLoading)return;
@@ -957,7 +989,7 @@ function renderInspectorDetails() {
       {label:"Livraisons tardives",value:n(region.late),note:"Numérateur du taux de retard"},
       {label:"Délai moyen",value:decimal.format(region.days)+" j",note:"Délai nettoyé, périmètre régional"}
     ];
-    navigation={items:regions,id:region.code,getId:x=>x.code,change:code=>{state.selectedState=code;render();}};
+    navigation={items:regions,id:region.code,getId:x=>x.code,change:code=>selectDeliveryState(code),restoreFocus:true};
   } else if(state.view==="quality") {
     const chosen=data.satisfaction.find(x=>x.code===state.selectedQuality)||data.satisfaction[0];
     const other=data.satisfaction.find(x=>x.code===(chosen.code==="late"?"on_time":"late"));
