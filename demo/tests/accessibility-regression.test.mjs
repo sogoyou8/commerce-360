@@ -47,3 +47,12 @@ test("Accessibilité — carte : navigation clavier et alternative tabulaire san
   assert.match(js,/path\.removeAttribute\("aria-label"\)/);
   assert.match(js,/path\.addEventListener\("click",\(\)=>openDeliveryState\(code\)\)/);
 });
+
+test("Accessibilité — le quatrième KPI reste lisible sur la Terre lumineuse",()=>{
+  assert.match(css,/\.metric:last-child \.metric-label,\s*\.metric:last-child \.metric-note\{[\s\S]*?background:rgba\(4,11,24,\.94\)/);
+  // Conservative case: white pixels from the globe, with the 94%-opaque caption background.
+  const bg=[4,11,24].map(v=>Math.round(v*0.94+255*0.06));
+  const hex="#"+bg.map(v=>v.toString(16).padStart(2,"0")).join("");
+  assert.ok(contrast("#91aed5",hex)>=4.5);
+  assert.ok(contrast("#94b0d6",hex)>=4.5);
+});
