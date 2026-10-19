@@ -182,7 +182,7 @@ test("F1/F2 isolates independent desktop panels and grows the lower exploration 
 test("F3 builds a generated Earth atmosphere without altering layout or analytical data",()=>{
   const f3=readFileSync(new URL("../ambience-f3.css",import.meta.url),"utf8");
   assert.match(html,/ambience-f3\.css\?v=e3-f3-20261019-native1254/);
-  assert.match(f3,/création originale/);
+  assert.match(f3,/illustration originale/);
   assert.match(f3,/assets\/earth-f3-native\.webp/);
   assert.match(f3,/\.ambient::after \{/);
   assert.match(f3,/\.ambient::before \{/);
