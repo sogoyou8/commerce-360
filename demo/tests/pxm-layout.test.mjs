@@ -95,7 +95,7 @@ test("E3 selection, map and satisfaction use real public aggregates",()=>{
   assert.match(svg,/CC BY 4\.0/);
   assert.match(js,/tabIndex=active\?0:-1/);
   assert.match(js,/combo-selection-rule/);
-  assert.match(js,/function renderBrazilMap\(\)/);
+  assert.match(js,/function renderBrazilMap\(withMobilePicker=false\)/);
   assert.match(js,/data\.states\.map/);
   assert.match(js,/data\.totals\.negativeRate/);
   assert.match(js,/categories\.slice\(0,6\)/);
@@ -246,7 +246,7 @@ test("F3 HD asset dimensions and native alpha are validated",()=>{
 test("F5 upgrades all three exploration cards without altering the cockpit or data",()=>{
   const f5=readFileSync(new URL("../dock-f5.css",import.meta.url),"utf8");
   assert.match(html,/dock-f5\.css\?v=e3-f5-20261019-a11y5/);
-  assert.match(html,/app\.js\?v=e3-20261019-f5-map-picker/);
+  assert.match(html,/app\.js\?v=e3-20261019-f5-unique-map/);
   assert.match(f5,/#dock-categories \.dock-category-row/);
   assert.match(f5,/#dock-states \.dock-state-layout/);
   assert.match(f5,/#dock-quality \.score-ring/);
@@ -339,8 +339,8 @@ test("F5.4 interactive SVG has real descriptive title/desc without invented stat
  assert.match(js,/mapTitle\.textContent="Brésil : taux de retard des livraisons par État"/);
  assert.match(js,/mapDesc\.textContent="Carte interactive des 27 États du Brésil/);
  assert.match(js,/mapDesc\.textContent=[^;]*\+percent\(item\.rate\)[^;]*\+n\(item\.dated\)/);
- assert.match(js,/svg\.setAttribute\("aria-labelledby","dock-brazil-title"\)/);
- assert.match(js,/svg\.setAttribute\("aria-describedby","dock-brazil-desc"\)/);
+ assert.match(js,/svg\.setAttribute\("aria-labelledby",mapTitle\.id\)/);
+ assert.match(js,/svg\.setAttribute\("aria-describedby",mapDesc\.id\)/);
  assert.match(js,/svg\.setAttribute\("role","group"\)/);
  assert.match(js,/svg\.addEventListener\("keydown",event=>/);
  assert.doesNotMatch(js,/svg\.setAttribute\("role","img"\)/);
@@ -361,4 +361,14 @@ test("F5.5 native picker provides all 27 data-backed state touch alternatives",(
  assert.match(f5,/@media \(max-width:480px\)/);
  assert.match(f5,/\.dock-state-picker-select:focus-visible/);
  assert.doesNotMatch(js,/const option=node\("option","",.*?\+ [0-9]+/);
+});
+
+test("F5.6 map picker is dock-only and SVG labels are unique in delivery view",()=>{
+ assert.match(js,/let brazilMapRenderId = 0/);
+ assert.match(js,/const mapId=\+\+brazilMapRenderId/);
+ assert.match(js,/mapTitle\.id="brazil-map-"\+mapId\+"-title"/);
+ assert.match(js,/mapDesc\.id="brazil-map-"\+mapId\+"-desc"/);
+ assert.match(js,/append\(stateLayout,renderBrazilMap\(true\),stateRank\)/);
+ assert.match(js,/const mapStage=append\(node\("div","delivery-map-visual"\),renderBrazilMap\(\)/);
+ assert.match(js,/if\(withMobilePicker\)\{/);
 });

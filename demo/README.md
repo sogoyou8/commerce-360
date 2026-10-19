@@ -1,3 +1,9 @@
+## F5.6 — Composant de carte réutilisé sans fuite UI (19/10/2026)
+
+Recette navigateur F5.5 : la carte est utilisée **à la fois dans le dock et dans le graphique du mode Livraisons**. Le sélecteur des 27 États ne doit apparaître que sous la carte du dock sur mobile. `renderBrazilMap(withMobilePicker=false)` laisse le graphique détaillé inchangé ; seul l'appel du dock active le sélecteur. Des IDs SVG uniques (compteur de rendu) évitent les doublons de `title`/`desc` lorsque deux cartes existent dans le même DOM. Des tests de non-régression figent ces deux invariants. Données et autres couches inchangées. Valider en navigateur les deux cartes dans le mode Livraisons ainsi que le sélecteur mobile. PR #7 conservée draft.
+
+---
+
 ## F5.5 — Accès tactile à tous les États (19/10/2026)
 
 Une carte SVG choroplèthe ne peut pas garantir des zones de 44px pour ses 27 formes géographiques rapprochées. Pour conserver la vraie géographie sans grossir artificiellement les petits États, la carte affiche désormais sous 480px un **sélecteur natif « Choisir un État »**, entièrement libellé, de 44px, avec **27 options provenant de `data.states`** (code et taux de retard Olist réels). Son changement ouvre le mode Livraisons et sélectionne l'État concerné. Le SVG et ses raccourcis clavier restent inchangés, tout comme le classement des cinq États de plus fort volume.

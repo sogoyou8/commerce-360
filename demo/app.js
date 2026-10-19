@@ -17,6 +17,7 @@ function labelCategory(code) { return categoryLabels[code] || code.replaceAll("_
 let brazilMapTemplate = null;
 let brazilMapLoading = null;
 let brazilMapObserver = null;
+let brazilMapRenderId = 0;
 const chapters = {
   overview: { n: "01", category: "VUE D'ENSEMBLE", kicker: "20 MOIS · 2017–2018", title: "Explorer le commerce <em>brésilien.</em>", desc: "Ventes d'articles et commandes livrées · étude indépendante sur neuf sources Olist." },
   sales: { n: "02", category: "VENTES", kicker: "VENTES D'ARTICLES · HORS FRET", title: "Ventes et <em>catégories.</em>", desc: "Comparer janvier–août 2017 et 2018, puis explorer les catégories réellement documentées." },
@@ -664,7 +665,7 @@ function queueBrazilMap(holder) {
   },{rootMargin:"400px 0px"});
   brazilMapObserver.observe(holder);
 }
-function renderBrazilMap() {
+function renderBrazilMap(withMobilePicker=false) {
   const holder=node("div","dock-map-shell");
   if(!brazilMapTemplate){
     holder.append(node("span","map-placeholder","Carte des 27 États — chargement à l’affichage…"));
@@ -675,17 +676,18 @@ function renderBrazilMap() {
   // The map is a keyboard-operable group: role="img" would hide its
   // interaction semantics. Title and description describe real Olist data.
   const svgNs="http://www.w3.org/2000/svg";
+  const mapId=++brazilMapRenderId;
   const mapTitle=document.createElementNS(svgNs,"title");
-  mapTitle.id="dock-brazil-title";
+  mapTitle.id="brazil-map-"+mapId+"-title";
   mapTitle.textContent="Brésil : taux de retard des livraisons par État";
   const mapDesc=document.createElementNS(svgNs,"desc");
-  mapDesc.id="dock-brazil-desc";
+  mapDesc.id="brazil-map-"+mapId+"-desc";
   svg.insertBefore(mapDesc,svg.firstChild);
   svg.insertBefore(mapTitle,svg.firstChild);
   svg.removeAttribute("aria-label");
   svg.setAttribute("role","group");
-  svg.setAttribute("aria-labelledby","dock-brazil-title");
-  svg.setAttribute("aria-describedby","dock-brazil-desc");
+  svg.setAttribute("aria-labelledby",mapTitle.id);
+  svg.setAttribute("aria-describedby",mapDesc.id);
   svg.setAttribute("tabindex","0");
   svg.setAttribute("class","brazil-map");
   const regionsByCode=new Map(data.states.map(item=>[item.code,item]));
@@ -720,18 +722,23 @@ function renderBrazilMap() {
   updateActive();
   // Tiny SVG regions cannot all be 44px touch targets. Offer all 27 states
   // in a native, labelled control on narrow viewports without resizing paths.
-  const statePicker=node("label","dock-state-picker");
-  const statePickerSelect=node("select","dock-state-picker-select");
-  statePickerSelect.setAttribute("aria-label","Choisir un État du Brésil à explorer");
-  for(const item of [...data.states].sort((a,b)=>a.code.localeCompare(b.code))){
-    const option=node("option","",item.code+" — "+percent(item.rate,1)+" de retard");
-    option.value=item.code;
-    statePickerSelect.append(option);
+  if(withMobilePicker){
+    const statePicker=node("label","dock-state-picker");
+    const statePickerSelect=node("select","dock-state-picker-select");
+    statePickerSelect.setAttribute("aria-label","Choisir un État du Brésil à explorer");
+    for(const item of [...data.states].sort((a,b)=>a.code.localeCompare(b.code))){
+      const option=node("option","",item.code+" — "+percent(item.rate,1)+" de retard");
+      option.value=item.code;
+      statePickerSelect.append(option);
+    }
+    statePickerSelect.value=activeCode;
+    statePickerSelect.addEventListener("change",()=>openDeliveryState(statePickerSelect.value));
+    append(statePicker,node("span","","Choisir un État"),statePickerSelect);
+    holder.append(svg,statePicker);
+  }else{
+    holder.append(svg);
   }
-  statePickerSelect.value=activeCode;
-  statePickerSelect.addEventListener("change",()=>openDeliveryState(statePickerSelect.value));
-  append(statePicker,node("span","","Choisir un État"),statePickerSelect);
-  holder.append(svg,statePicker,node("span","map-legend","Carte : taux de retard"));
+  holder.append(node("span","map-legend","Carte : taux de retard"));
   return holder;
 }
 function renderDock() {
@@ -792,7 +799,7 @@ function renderDock() {
     append(node("span","state-rank-metrics"),node("strong","",n(otherOrders)),
       node("small","",percent(observedShare(otherOrders,data.totals.orders),1)+" du total")));
   stateRank.append(otherStates);
-  append(stateLayout,renderBrazilMap(),stateRank);
+  append(stateLayout,renderBrazilMap(true),stateRank);
   $("dock-states").replaceChildren(stateLayout);
   const onTime=data.satisfaction.find(x=>x.code==="on_time");
   const late=data.satisfaction.find(x=>x.code==="late");
