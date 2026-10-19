@@ -1,3 +1,11 @@
+## Jalon 2/5 — Vérification finale UX de Ventes (19/10/2026)
+
+Rapport de recherche approfondie relu contre le code actuel et la capture réelle. Les barres 2017/2018 sont déjà des boutons HTML avec `aria-label`, le clavier (flèches/Home/End), et un tableau natif de huit lignes (ventes BRL et commandes de 2017/2018) ; ajouter un SVG `role=img` ou dupliquer les marqueurs accessibles serait contre-productif.
+
+Correction visuelle mesurée : plus de contraste entre barres 2017/2018 et leurs libellés ; comparaisons d'inspecteur plus visibles, notes « Période comparable » maintenues. Défaut confirmé en navigateur à 1180×750 : classement d'États avec 19 px par ligne mais 22 px pour deux lignes de chiffres. La nouvelle couche `sales-audit.css` attribue 210 px au dock compact (au lieu de 180), préserve les six rangs et le contenu du graphique, et supprime l'écrasement sans cacher ni inventer de métrique. Contrôles exigés à 1180×750, 1440×900, 1649×928, 320×740, 390×844 et 1920×993 ; zéro débordement document et desktop sans scroll ; CI Web/Python et preview Vercel même SHA. PR #7 demeure en brouillon non fusionnée.
+
+---
+
 ## Jalon 2/5 — Ventes, comparaisons à mois équivalent (19/10/2026)
 
 Le jalon 1/5 est terminé techniquement (tests GitHub et navigateur, sans certification d'accessibilité). Ventes : 8 groupes janvier–août 2017/2018, chiffres réels Olist. Navigation clavier par flèches, Home/End, focus conservé après clic, navigation inspecteur et changement de mesure ; un tableau alternatif complet avec ventes BRL et commandes des deux années, 8 mois. Le graphique défile **en interne** sous 801px (8 groupes de 50px) ; les autres vues et les KPI nationaux restent indépendants.

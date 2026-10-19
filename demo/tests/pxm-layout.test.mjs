@@ -437,3 +437,16 @@ test("Jalon 2/5 — sales comparisons are keyboard accessible and truthful",()=>
  assert.match(sales,/\.year-pair:focus-visible/);
  assert.doesNotMatch(sales,/\.workspace\s*\{|\.metric\s*\{|\.combo-column\s*\{/);
 });
+
+test("Jalon 2/5 audit — state rankings fit compact desktop without hiding metrics",()=>{
+ const audit=readFileSync(new URL("../sales-audit.css",import.meta.url),"utf8");
+ assert.match(html,/sales-audit\.css\?v=sales-audit-20261019-a/);
+ assert.match(audit,/\.workspace\{grid-template-rows:82px minmax\(0,1fr\) 210px\}/);
+ assert.match(audit,/#dock-states \.dock-state-row--other\{[\s\S]*?min-height:22px/);
+ assert.match(audit,/#dock-states \.state-rank-metrics small\{font-size:9px;line-height:1\.15\}/);
+ assert.doesNotMatch(audit,/\.dock-state-row[^\n]*\{display:none/);
+ assert.match(audit,/\.story-panel\[data-mode="sales"\] \.comparison-note/);
+ assert.match(js,/accessibleDataTable\("Comparaison Olist à mois identique/);
+ assert.match(js,/plot\.setAttribute\("role","group"\)/);
+ assert.match(js,/button\.setAttribute\("aria-label",`${shortMonth\[pair\.month-1\]\}/);
+});
