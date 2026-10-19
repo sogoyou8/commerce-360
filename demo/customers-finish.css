@@ -98,15 +98,19 @@
     grid-template-rows:clamp(86px,10.2vh,100px) minmax(0,1fr) clamp(218px,26vh,260px);
   }
 }
-@media (min-width:1400px) and (min-height:840px) and (max-height:1000px){
+/* Même capture physique, mais viewport CSS parfois proche de 1440 × 810
+   avec le zoom navigateur : sept lignes à 34 px minimum, réparties
+   équitablement dans l'espace disponible, sans cacher les pourcentages.
+   Uniquement la liste des 7 segments, jamais les 20 cohortes. */
+@media (min-width:1180px) and (min-height:800px) and (max-height:1000px){
   .analysis:has(.story-panel[data-mode="customers"]) .rank-chart--segments{
     gap:2px;
     scrollbar-gutter:auto;
   }
   .analysis:has(.story-panel[data-mode="customers"]) .rank-chart--segments .rank-row--customer{
-    flex:0 0 40px;
-    min-height:40px;
-    padding:3px 8px;
+    flex:1 1 34px;
+    min-height:34px;
+    padding:3px 7px;
   }
   .analysis:has(.story-panel[data-mode="customers"]) .rank-chart--segments .rank-name small{
     margin-top:2px;
