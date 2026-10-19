@@ -485,6 +485,14 @@ a{color:inherit;text-decoration:none}
 .metric-label{font-size:10px;letter-spacing:.12em;color:#91aed5}
 .metric-value,.metric-value[data-variant="accent"]{color:#eaf3ff}
 .metric-note{color:#94b0d6;letter-spacing:.005em}
+/* Keep the Earth visible without sacrificing contrast of the fourth KPI captions. */
+@media (min-width:1180px){
+  .metric:last-child .metric-label,
+  .metric:last-child .metric-note{
+    width:max-content;max-width:100%;padding:1px 4px;border-radius:3px;
+    background:rgba(4,11,24,.94);box-shadow:0 0 7px rgba(4,11,24,.38);
+  }
+}
 .analysis,.dock-panel{border-color:rgba(92,149,235,.22);box-shadow:0 14px 30px rgba(0,5,15,.16)}
 .analysis{background:linear-gradient(125deg,rgba(6,17,36,.9),rgba(3,10,25,.84))}
 .analysis-main{background:linear-gradient(90deg,rgba(5,17,35,.18),transparent 60%)}
