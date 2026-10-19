@@ -1,3 +1,9 @@
+### Jalon 3/5 — redimensionnement (19/10/2026)
+
+Recette navigateur complète : 320/390/430/768/1024/1180/1440/1649/1920px sans overflow horizontal du document, ni vertical desktop ; 27 rangs, sélecteur mobile 27 options/44px ; focus conservé sur le SVG avec Entrée ; navigation Home/End dans les États, inspecteur et tri taux/délai vérifiés. Une dernière régression était visible lorsque la fenêtre passait directement du mobile au desktop après une sélection : le rang actif pouvait sortir de la fenêtre de défilement. `ResizeObserver` est maintenant limité au classement actif, déconnecté à chaque rendu et utilisé pour recentrer la sélection uniquement lors des changements de taille. Les KPI et données restent inchangés.
+
+---
+
 ## Jalon 3/5 — Livraisons : sélection régionale et interaction (19/10/2026)
 
 Une inspection navigateur au dernier commit 2/5 a confirmé : carte SVG réelle (27 géométries, taux de retard, accessibilité F5), classement des 27 États triés par taux ou délai, carte toujours colorée **par le taux de retard**, même lorsque le classement est trié par délai. Défaut réel : le focus était perdu après la sélection d'un État dans la liste et via les flèches de l'inspecteur.

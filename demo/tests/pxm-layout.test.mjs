@@ -468,3 +468,12 @@ test("Jalon 3/5 — regional ranking focus, visible selection and map semantics"
  assert.match(delivery,/\.delivery-map-explainer/);
  assert.doesNotMatch(delivery,/\.workspace\s*\{|\.metric\s*\{|\.dock-panel\s*\{/);
 });
+
+test("Jalon 3/5 — resized regional ranking retains the chosen state in view",()=>{
+ assert.match(js,/let deliveryRankObserver = null/);
+ assert.match(js,/const centerSelected=\(\)=>\{/);
+ assert.match(js,/deliveryRankObserver=new ResizeObserver\(centerSelected\)/);
+ assert.match(js,/deliveryRankObserver\.observe\(scrollList\)/);
+ assert.match(js,/deliveryRankObserver\?\.disconnect\(\)/);
+ assert.match(js,/scrollList\.scrollTop\+=itemBounds\.top-listBounds\.top\+itemBounds\.height\/2-listBounds\.height\/2/);
+});

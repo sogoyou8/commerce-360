@@ -18,6 +18,7 @@ let brazilMapTemplate = null;
 let brazilMapLoading = null;
 let brazilMapObserver = null;
 let brazilMapRenderId = 0;
+let deliveryRankObserver = null;
 const chapters = {
   overview: { n: "01", category: "VUE D'ENSEMBLE", kicker: "20 MOIS · 2017–2018", title: "Explorer le commerce <em>brésilien.</em>", desc: "Ventes d'articles et commandes livrées · étude indépendante sur neuf sources Olist." },
   sales: { n: "02", category: "VENTES", kicker: "VENTES D'ARTICLES · HORS FRET", title: "Ventes et <em>catégories.</em>", desc: "Comparer janvier–août 2017 et 2018, puis explorer les catégories réellement documentées." },
@@ -576,8 +577,17 @@ function renderDelivery() {
   const selectedRank=ranked.querySelector('.rank-row[aria-pressed="true"]');
   const scrollList=ranked.querySelector(".rank-chart");
   if(selectedRank&&scrollList){
-    const listBounds=scrollList.getBoundingClientRect(),itemBounds=selectedRank.getBoundingClientRect();
-    scrollList.scrollTop+=itemBounds.top-listBounds.top+itemBounds.height/2-listBounds.height/2;
+    const centerSelected=()=>{
+      if(!scrollList.isConnected)return;
+      const current=scrollList.querySelector('.rank-row[aria-pressed="true"]');
+      if(!current)return;
+      const listBounds=scrollList.getBoundingClientRect(),itemBounds=current.getBoundingClientRect();
+      scrollList.scrollTop+=itemBounds.top-listBounds.top+itemBounds.height/2-listBounds.height/2;
+    };
+    centerSelected();
+    // Resizing between phone/tablet/desktop changes the visible scroll area.
+    deliveryRankObserver=new ResizeObserver(centerSelected);
+    deliveryRankObserver.observe(scrollList);
   }
   setStory({
     kicker:"ÉTAT SÉLECTIONNÉ · "+stateChoice.code,
@@ -1023,6 +1033,8 @@ function renderInspectorDetails() {
 
 function render() {
   if (!data) return;
+  deliveryRankObserver?.disconnect();
+  deliveryRankObserver=null;
   focusView(state.view);
   document.querySelector(".story-panel").dataset.mode=state.view;
   ({overview:renderOverview,sales:renderSales,delivery:renderDelivery,quality:renderQuality,customers:renderCustomers})[state.view]();
