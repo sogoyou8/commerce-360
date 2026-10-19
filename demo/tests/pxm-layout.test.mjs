@@ -413,7 +413,7 @@ test("Jalon 1/5 — overview visual finish and complete data alternatives",()=>{
  assert.match(js,/\["Avis négatifs \(notes ≤ 2\)",percent\(data\.totals\.negativeRate\)\]/);
  assert.match(finish,/\.story-panel\[data-mode="overview"\] \.story-inner/);
  assert.match(finish,/#dock-states \.brazil-map\{max-height:clamp\(175px,24vh,236px\)\}/);
- assert.match(finish,/#dock-quality \.score-ring\{width:clamp\(124px,10vw,151px\)/);
+ assert.match(finish,/#dock-quality \.score-ring\{width:clamp\(112px,9vw,144px\)/);
  assert.match(finish,/@media \(max-width:480px\)/);
  assert.doesNotMatch(finish,/\.workspace\s*\{|\.metric\s*\{|\.analysis\s*\{|\.combo-column\s*\{/);
 });
