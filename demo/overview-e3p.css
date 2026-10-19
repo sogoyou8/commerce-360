@@ -1,0 +1,16 @@
+/* E3.P / P1 — Overview only; scoped independently of F1–F6. */
+.combo-month-label{left:50%;right:auto;transform:translateX(-50%);text-align:center}
+.combo-month:first-child .combo-month-label{left:0;right:auto;transform:none;text-align:left}
+.combo-month:last-child .combo-month-label{right:0;left:auto;transform:none;text-align:right}
+.combo-month:focus-visible .combo-column{box-shadow:0 0 0 2px #c4e1ff,0 0 16px rgba(96,165,250,.35)}
+@media (max-width:1179px){
+  /* 20 buttons of at least 44 CSS px; horizontal scroll stays inside graph. */
+  .combo-plot{min-width:880px}
+  .combo-scroll{overscroll-behavior-x:contain}
+}
+@media (max-width:480px){
+  .story-panel[data-mode="overview"] .inspector-arrow{
+    width:44px;height:44px;min-width:44px;min-height:44px;
+  }
+}
+@media (prefers-reduced-motion:reduce){.combo-scroll{scroll-behavior:auto}}

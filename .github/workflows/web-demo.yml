@@ -1,0 +1,49 @@
+name: Commerce 360 / Web demo
+
+on:
+  push:
+    branches:
+      - main
+      - feature/demo-web-interactive
+    paths:
+      - "demo/**"
+      - "scripts/build_web_data.py"
+      - ".github/workflows/web-demo.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "demo/**"
+      - "scripts/build_web_data.py"
+      - ".github/workflows/web-demo.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Demo publique · contrats et sécurité
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Syntaxe JavaScript et HTML de base
+        run: |
+          node --check demo/app.js
+          node --check demo/data-contract.mjs
+          node --check demo/tests/contracts.test.mjs
+      - name: Vérifier les données publiques, les taux et la confidentialité
+        run: node --test demo/tests/*.test.mjs
+      - name: Ne pas publier de sources détaillées dans la démo
+        shell: bash
+        run: |
+          if find demo -type f \( -iname "*.csv" -o -iname "*.xlsx" -o -iname "*.pbix" -o -iname "*.zip" -o -iname ".env" \) | grep -q . ; then
+            echo "::error::Un fichier de données locales est présent sous demo/"
+            exit 1
+          fi
+          test -s demo/index.html
+          test -s demo/data/public.json
+          test -s demo/styles.css

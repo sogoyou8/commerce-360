@@ -1,0 +1,181 @@
+/* Jalon 5/5 — Clients : sept segments exclusifs et vingt cohortes vérifiées.
+   Aucun état de fidélité actuel ni taux de churn déduit des données 2017–2018. */
+.analysis:has(.story-panel[data-mode="customers"]) .rank-chart{
+  min-width:0;
+  min-height:0;
+  overflow-y:auto;
+  scrollbar-gutter:stable;
+  overscroll-behavior-y:contain;
+}
+.analysis:has(.story-panel[data-mode="customers"]) .rank-row--customer{
+  min-width:0;
+  min-height:44px;
+  padding:8px 9px;
+  border-radius:3px;
+  color:#e9f2ff;
+}
+.analysis:has(.story-panel[data-mode="customers"]) .rank-row--customer[aria-pressed="true"]{
+  border-color:#8db8f2;
+  background:linear-gradient(90deg,rgba(62,115,197,.30),rgba(37,84,164,.07));
+}
+.analysis:has(.story-panel[data-mode="customers"]) .rank-row--customer:focus-visible{
+  outline:2px solid #d6eaff;
+  outline-offset:-2px;
+}
+.analysis:has(.story-panel[data-mode="customers"]) .rank-name{
+  color:#d8e9ff;
+  font-size:12px;
+  line-height:1.3;
+}
+.analysis:has(.story-panel[data-mode="customers"]) .rank-name small{
+  color:#b7cfed;
+  font-size:10px;
+  line-height:1.25;
+  margin-top:4px;
+}
+.analysis:has(.story-panel[data-mode="customers"]) .rank-value{
+  color:#ebf5ff;
+  font-size:12px;
+  font-weight:580;
+}
+.analysis:has(.story-panel[data-mode="customers"]) .rank-track{
+  height:8px;
+  background:rgba(95,140,210,.24);
+}
+.analysis:has(.story-panel[data-mode="customers"]) .rank-track>i{
+  background:linear-gradient(90deg,#508edc,#a2d4ff);
+}
+.story-panel[data-mode="customers"] .comparison-label{color:#c0d4f1;font-size:11px}
+.story-panel[data-mode="customers"] .comparison-value{color:#e8f3ff;font-size:13px}
+.story-panel[data-mode="customers"] .comparison-note{
+  display:block;
+  color:#b7cce7;
+  font-size:10px;
+  line-height:1.3;
+}
+@media (min-width:1180px) and (max-height:850px){
+  .analysis:has(.story-panel[data-mode="customers"]) .rank-row--customer{
+    min-height:44px;
+    padding:6px 6px;
+  }
+  .story-panel[data-mode="customers"] .comparison-row{padding:6px 0}
+  .story-panel[data-mode="customers"] .comparison-note{font-size:9px}
+}
+@media (max-width:800px){
+  .analysis:has(.story-panel[data-mode="customers"]) .rank-row--customer{
+    min-height:48px;
+    padding:9px 6px;
+  }
+}
+@media (max-width:480px){
+  .analysis:has(.story-panel[data-mode="customers"]) .rank-row--customer{
+    grid-template-columns:minmax(76px,1fr) minmax(36px,.65fr) minmax(62px,.65fr);
+    gap:6px;
+    padding:8px 5px;
+  }
+  .analysis:has(.story-panel[data-mode="customers"]) .rank-name{font-size:11px}
+  .analysis:has(.story-panel[data-mode="customers"]) .rank-name small{font-size:10px}
+  .analysis:has(.story-panel[data-mode="customers"]) .rank-value{font-size:11px}
+}
+@media (prefers-contrast:more){
+  .analysis:has(.story-panel[data-mode="customers"]) .rank-row--customer[aria-pressed="true"]{
+    border-color:#fff;
+  }
+  .analysis:has(.story-panel[data-mode="customers"]) .rank-name,
+  .analysis:has(.story-panel[data-mode="customers"]) .rank-value{color:#fff}
+}
+@media (prefers-reduced-motion:reduce){
+  .analysis:has(.story-panel[data-mode="customers"]) .rank-track>i{transition:none}
+}
+
+/* Revue P5 : le navigateur peut afficher 1649 × 928 pixels physiques
+   à 110 % de zoom (~1500 × 844 pixels CSS). Rendre le graphique RFM
+   prioritaire sans tronquer les trois cartes de synthèse en dessous.
+   La modification de grille ne concerne que Clients, et les 20 cohortes
+   conservent leur défilement. */
+@media (min-width:1180px) and (min-height:851px) and (max-height:1000px){
+  .workspace:has(.story-panel[data-mode="customers"]){
+    grid-template-rows:clamp(86px,10.2vh,100px) minmax(0,1fr) clamp(218px,26vh,260px);
+  }
+}
+/* Même capture physique, mais viewport CSS parfois proche de 1440 × 810
+   avec le zoom navigateur : sept lignes à 34 px minimum, réparties
+   équitablement dans l'espace disponible, sans cacher les pourcentages.
+   Uniquement la liste des 7 segments, jamais les 20 cohortes. */
+@media (min-width:1180px) and (min-height:800px) and (max-height:1000px){
+  .analysis:has(.story-panel[data-mode="customers"]) .rank-chart--segments{
+    gap:2px;
+    scrollbar-gutter:auto;
+  }
+  .analysis:has(.story-panel[data-mode="customers"]) .rank-chart--segments .rank-row--customer{
+    flex:1 1 34px;
+    min-height:34px;
+    padding:3px 7px;
+  }
+  .analysis:has(.story-panel[data-mode="customers"]) .rank-chart--segments .rank-name small{
+    margin-top:2px;
+    line-height:1.15;
+  }
+}
+/* Textes d'accompagnement plus lisibles, sans tasser les petits écrans. */
+@media (min-width:1180px) and (min-height:851px){
+  .analysis:has(.story-panel[data-mode="customers"]) .viz-footer{
+    font-size:11px;
+    color:#bed3f1;
+    line-height:1.4;
+  }
+  .story-panel[data-mode="customers"] .story-foot p{
+    font-size:11px;
+    line-height:1.38;
+    color:#bdd1ee;
+  }
+  .story-panel[data-mode="customers"] .comparison-note{
+    font-size:11px;
+    line-height:1.3;
+    color:#bdd2f0;
+  }
+}
+
+/* À 110 % de zoom (et sur mobile), les notes doivent rester lisibles. */
+@media (min-width:1400px) and (min-height:800px) and (max-height:850px), (max-width:800px){
+  .analysis:has(.story-panel[data-mode="customers"]) .viz-footer{
+    font-size:11px;
+    color:#bed3f1;
+    line-height:1.4;
+  }
+  .story-panel[data-mode="customers"] .story-foot p{
+    font-size:11px;
+    line-height:1.38;
+    color:#bdd1ee;
+  }
+  .story-panel[data-mode="customers"] .comparison-note{
+    font-size:11px;
+    line-height:1.3;
+    color:#bdd2f0;
+  }
+}
+/* Inspecteur à 1180 × 750 : réserver la place de la mise en garde finale. */
+@media (min-width:1180px) and (max-width:1399px) and (max-height:850px){
+  .story-panel[data-mode="customers"] .story-inner{padding-top:5px}
+  .story-panel[data-mode="customers"] .inspector-heading h2{
+    font-size:20px;
+    line-height:1.1;
+    margin:3px 0 5px;
+  }
+  .story-panel[data-mode="customers"] .story-stat{padding:5px 0}
+  .story-panel[data-mode="customers"] .comparison-row{padding:4px 0}
+  .story-panel[data-mode="customers"] .story-foot{padding:4px 0 0}
+  .story-panel[data-mode="customers"] .story-foot p{
+    font-size:9px;
+    line-height:1.3;
+  }
+}
+
+/* Mobile : le texte explicatif ne doit pas réduire le classement à une ligne.
+   La page reste scrollable ; seule la liste RFM a son défilement interne. */
+@media (max-width:480px){
+  .analysis:has(.story-panel[data-mode="customers"]) .analysis-main{
+    height:450px;
+    min-height:450px;
+  }
+}

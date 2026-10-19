@@ -1,0 +1,78 @@
+/* E3.F F3 — photographie Terre indépendante sur fond réellement transparent.
+   Asset produit pour Commerce 360 : version WebP RGBA 1254px de l'illustration originale.
+   La Terre est décorative (aria-hidden), jamais une carte de données.
+   Pas de découpe SVG, de masque radial ou de photographie NASA rectangulaire. */
+@media (min-width:1180px) {
+  .ambient {
+    isolation:isolate;
+    background:
+      radial-gradient(ellipse 43% 62% at 94% 9%,rgba(27,96,211,.15),transparent 84%),
+      radial-gradient(ellipse 48% 74% at 2% 90%,rgba(10,40,91,.17),transparent 82%),
+      #040914;
+  }
+  .ambient::before {
+    display:block;
+    content:"";
+    position:absolute;
+    width:clamp(480px,38vw,630px);
+    aspect-ratio:1;
+    top:clamp(-125px,-9vh,-82px);
+    right:clamp(-8px,-0.4vw,0px);
+    border:0;
+    border-radius:50%;
+    background:radial-gradient(circle,transparent 50%,rgba(48,125,240,.11) 59%,rgba(40,107,216,.06) 69%,transparent 82%);
+    filter:blur(14px);
+    opacity:.32;
+    box-shadow:none;
+    pointer-events:none;
+  }
+  .ambient::after {
+    display:block;
+    content:"";
+    position:absolute;
+    width:clamp(450px,35vw,565px);
+    aspect-ratio:1;
+    top:clamp(-130px,-9vh,-75px);
+    right:clamp(16px,1.8vw,34px);
+    border:0;
+    border-radius:0;
+    background:url("./assets/earth-f3-native.webp") center / contain no-repeat;
+    opacity:.57;
+    filter:saturate(1.16) brightness(.93) contrast(1.06);
+    mix-blend-mode:normal;
+    box-shadow:none;
+    -webkit-mask-image:none;
+    mask-image:none;
+    pointer-events:none;
+  }
+  /* Protect text, not a KPI rectangle which ends at the shell gutter. */
+  .metric:last-child {
+    background:transparent;
+  }
+  .metric:last-child :is(.metric-label,.metric-value,.metric-note) {
+    text-shadow:0 1px 7px rgba(2,7,19,.9),0 0 18px rgba(2,7,19,.78);
+  }
+  .story-panel {
+    background:linear-gradient(155deg,rgba(7,19,43,.94),rgba(4,12,29,.985) 85%);
+  }
+}
+@media (min-width:1180px) and (max-height:850px) {
+  .ambient::before {
+    width:clamp(460px,38vw,575px);
+    top:-87px;
+    right:0px;
+    opacity:.29;
+  }
+  .ambient::after {
+    width:clamp(440px,35vw,535px);
+    top:-75px;
+    right:16px;
+    opacity:.52;
+  }
+}
+@media (max-width:1179px), (prefers-reduced-data:reduce), (forced-colors:active) {
+  .ambient::before,.ambient::after { display:none }
+}
+@media (prefers-reduced-motion:reduce) {
+  .ambient::before,.ambient::after { transition:none;animation:none }
+}

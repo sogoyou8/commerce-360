@@ -1,0 +1,61 @@
+/* Jalon 1/5 — finition visuelle de Vue d'ensemble, après F5 et P1.
+   Présentation uniquement : les échelles, données, vues et modes ne changent pas.
+   La carte réelle et les 27 États restent interactifs. */
+@media (min-width:1180px) {
+  .story-panel[data-mode="overview"] .story-inner{padding-top:clamp(14px,1.9vh,23px)}
+  .story-panel[data-mode="overview"] .story-stat{padding:clamp(11px,1.45vh,17px) 0}
+  .story-panel[data-mode="overview"] .comparison-row{padding:clamp(8px,1.1vh,12px) 0}
+  .story-panel[data-mode="overview"] .comparison-label{font-size:11px}
+  .story-panel[data-mode="overview"] .comparison-value{font-size:13px}
+  .story-panel[data-mode="overview"] .story-foot p{font-size:10px;line-height:1.4}
+  .combo-axis{font-size:10px;color:#aec5e7}
+  .combo-legend{font-size:11px;color:#c6d8f1}
+  .combo-month-label{font-size:9px}
+  .exploration-dock .dock-coverage{font-size:10px;color:#b8cce7}
+  #dock-categories .dock-category-row .dock-item-label{font-size:clamp(11px,.77vw,13px)}
+  #dock-categories .dock-category-row .dock-item-value{font-size:clamp(10px,.7vw,12px)}
+  #dock-states .state-rank-code{font-size:12px}
+  #dock-states .state-rank-metrics strong{font-size:11px}
+  #dock-states .state-rank-metrics small{font-size:10px}
+  #dock-quality .quality-negative>span{font-size:12px}
+  #dock-quality .quality-negative small{font-size:11px}
+  #dock-quality .dock-row .dock-item-label{font-size:11px}
+  #dock-quality .dock-row .dock-item-value{font-size:11px}
+  .exploration-dock .dock-heading a{min-width:44px;min-height:32px;justify-content:center}
+}
+@media (min-width:1180px) and (min-height:851px) {
+  /* The dock already has ~288px at 1649x928; preserve the chart's height. */
+  #dock-states .dock-state-layout{grid-template-columns:minmax(0,1.09fr) minmax(0,.91fr)}
+  #dock-states .brazil-map{max-height:clamp(175px,24vh,236px)}
+  #dock-quality .score-ring{width:clamp(112px,9vw,144px);height:clamp(112px,9vw,144px)}
+  #dock-categories .dock-category-row{gap:clamp(7px,.8vw,12px)}
+}
+@media (min-width:1180px) and (max-height:850px) {
+  /* Compact screens: no clipped values or forced enlargement of fixed rows. */
+  .story-panel[data-mode="overview"] .story-inner{padding-top:9px}
+  .story-panel[data-mode="overview"] .story-stat{padding:7px 0}
+  .story-panel[data-mode="overview"] .comparison-row{padding:5px 0}
+  #dock-categories .dock-category-row .dock-item-value{font-size:9px}
+  #dock-states .state-rank-metrics small{font-size:9px}
+  #dock-quality .score-ring{width:64px;height:64px}
+  #dock-states .brazil-map{max-height:138px}
+}
+@media (max-width:1179px) {
+  .combo-axis{font-size:10px;color:#b4c9e6}
+  .combo-legend{font-size:11px;color:#c6d8f1}
+  .combo-month-label{font-size:9px}
+  .exploration-dock .dock-heading a{min-width:44px;min-height:44px;justify-content:center}
+  .exploration-dock .dock-coverage{font-size:11px}
+  #dock-categories .dock-category-row .dock-item-label{font-size:12px}
+  #dock-categories .dock-category-row .dock-item-value{font-size:11px}
+  #dock-quality .dock-row .dock-item-label{font-size:12px}
+}
+@media (max-width:480px) {
+  /* F5's 44px rows and state picker take priority; never shrink them. */
+  #dock-categories .dock-category-row .dock-item-label{font-size:11px}
+  #dock-categories .dock-category-row .dock-item-value{font-size:10px}
+  #dock-quality .dock-row .dock-item-label{font-size:11px}
+}
+@media (prefers-reduced-motion:reduce){
+  .exploration-dock .dock-heading a{transition:none}
+}

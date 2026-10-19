@@ -1,0 +1,167 @@
+/* E3.F — F4 / Commerce 360 visual system.
+   A single late-loaded layer for presentation tokens and consistent states.
+   No changes to F1/F2 geometry, data, document structure or business logic. */
+:root {
+  --ui-canvas:#040914;
+  --ui-text:#edf5ff;
+  --ui-primary:#bcd7ff;
+  --ui-secondary:#a7c0e2;
+  --ui-quiet:#8ea9cf;
+  --ui-accent:#76b0ff;
+  --ui-accent-strong:#a7d3ff;
+  --ui-positive:#72ddc5;
+  --ui-negative:#f5a6af;
+  --ui-line:rgba(129,175,244,.24);
+  --ui-line-focus:rgba(153,202,255,.72);
+  --ui-glass:rgba(7,19,40,.83);
+  --ui-hover:rgba(58,112,207,.15);
+  --ui-active:rgba(42,89,168,.27);
+  --ui-radius:8px;
+  --ui-speed:150ms;
+  --ui-ease:cubic-bezier(.2,.75,.25,1);
+}
+/* Typography: legible caption hierarchy without expanding the fixed cockpit. */
+html,body{color:var(--ui-text);font-variant-ligatures:common-ligatures}
+.metric-value,.story-stat strong,.comparison-value,.rank-value,
+.dock-item-value,.group-gauge-value,.score-ring-center strong {
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:"tnum" 1;
+}
+.metric-value{font-weight:520;letter-spacing:-.045em}
+.metric-label,.eyebrow,.analysis-top .eyebrow,
+.story-topline,.inspector-heading .eyebrow {
+  letter-spacing:.105em;
+}
+.metric-label,.eyebrow,.analysis-top .eyebrow,
+.story-topline,.inspector-heading .eyebrow {color:#9abce9}
+.metric-note,.analysis-top p:not(.eyebrow),.story-inner p,
+.dock-coverage,.viz-footer,.story-foot p {color:var(--ui-secondary)}
+.combo-axis,.year-caption,.combo-month-label,.rank-legend,
+.dock-item-label,.state-rank-index,.comparison-label {color:var(--ui-quiet)}
+.analysis-top h2,.dock-heading h2,.inspector-heading h2 {
+  color:var(--ui-text);
+  font-weight:620;
+  text-wrap:balance;
+}
+.analysis-top h2{letter-spacing:-.032em}
+.dock-heading h2{letter-spacing:-.022em}
+.story-stat strong,.metric-value[data-variant="accent"]{color:#e5efff}
+.comparison-value{color:#d3e6ff}
+.comparison-row--delta .comparison-value[data-trend="up"]{color:var(--ui-positive)}
+.comparison-row--delta .comparison-value[data-trend="down"]{color:#b6cced}
+/* One consistent surface language — quiet lines rather than dashboard shadows. */
+@media (min-width:1180px) {
+  .analysis-main,.story-panel,.dock-panel {
+    border-color:var(--ui-line);
+    border-radius:var(--ui-radius);
+    box-shadow:0 10px 27px rgba(0,4,16,.15);
+  }
+}
+.dock-panel{border-color:var(--ui-line);border-radius:var(--ui-radius)}
+.metric{border-left-color:var(--ui-line)}
+.story-stat,.story-comparisons,.story-foot,.viz-footer {border-color:var(--ui-line)}
+.dock-panel .dock-heading a,.text-button,.source-link,.period-chip {
+  color:var(--ui-secondary);
+}
+/* Shared controls — consistent hover, selected and keyboard focus. */
+.mode-nav .nav-items,.view-options,.period-chip {
+  border:1px solid var(--ui-line);
+  border-radius:6px;
+}
+.mode-nav a,.view-options button,.inspector-arrow,
+.text-button,.source-link,.dock-heading a,.dock-category-row,
+.dock-state-row,.rank-row,.group-card {
+  transition:background-color var(--ui-speed) var(--ui-ease),
+             color var(--ui-speed) var(--ui-ease),
+             border-color var(--ui-speed) var(--ui-ease),
+             box-shadow var(--ui-speed) var(--ui-ease);
+}
+.mode-nav a{color:#a5bfdf;font-weight:510}
+.mode-nav a[aria-current="page"]{
+  background:linear-gradient(145deg,rgba(36,72,140,.65),rgba(24,45,88,.28));
+  color:#f6faff;
+  border-bottom-color:var(--ui-accent);
+  box-shadow:inset 0 0 0 1px rgba(97,157,239,.08);
+}
+.mode-nav a:hover:not([aria-current="page"]),
+.text-button:hover,.source-link:hover,.dock-heading a:hover{
+  color:#fff;
+  background:var(--ui-hover);
+}
+.view-options{background:rgba(4,12,28,.45)}
+.view-options button,.inspector-arrow{min-height:32px}
+.view-options button{font-size:10px;line-height:1.25}
+.view-options button[aria-pressed="true"]{
+  background:linear-gradient(135deg,rgba(48,90,164,.62),rgba(33,59,104,.55));
+  color:#f6faff;
+}
+.view-options button:hover:not([aria-pressed="true"]),
+.inspector-arrow:hover:not(:disabled){background:var(--ui-hover);color:#fff}
+.inspector-arrow{border-color:var(--ui-line);color:#c6dafa}
+.inspector-arrow:disabled{color:#7892b5;opacity:.46}
+.dock-heading a{border-radius:4px;padding:4px 6px;margin:-4px -6px;color:#aaccf7}
+.dock-category-row:hover,.dock-state-row:hover,
+.rank-row:hover:not([aria-pressed="true"]),
+.group-card:hover:not([aria-pressed="true"]){
+  background:var(--ui-hover);
+}
+.rank-row[aria-pressed="true"],.group-card[aria-pressed="true"] {
+  border-color:rgba(151,203,255,.53);
+  box-shadow:inset 2px 0 0 var(--ui-accent);
+}
+.rank-row[aria-pressed="true"] .rank-value {color:#eff7ff}
+.group-card[aria-pressed="true"] .group-gauge{box-shadow:0 0 25px rgba(54,139,255,.2)}
+/* Shared visible focus on every interactive visualization, not only the nav. */
+:where(a,button,[tabindex="0"]):focus-visible{
+  outline:2px solid var(--ui-accent-strong);
+  outline-offset:3px;
+  border-radius:4px;
+}
+.brazil-map:focus-visible{outline-offset:1px}
+.brazil-map path.is-map-active{stroke:#d9ecff}
+.combo-month[aria-pressed="true"] .combo-column,
+.year-pair[aria-pressed="true"] .year-towers>i:last-child {
+  box-shadow:0 0 15px rgba(93,166,255,.25);
+}
+.dock-track,.rank-track,.group-track,.score-ring{
+  --ui-track:rgba(54,91,153,.28);
+}
+.dock-track,.rank-track,.group-track{background:var(--ui-track)}
+.dock-track>i,.rank-track>i,.group-track>i{
+  background:linear-gradient(90deg,#3b77d9,#76b5ff);
+}
+.dock-state-row .state-rank-metrics strong{color:#d9e8ff}
+.quality-negative strong{color:#edf5ff}
+.group-gauge-caption,.score-ring-center span{color:#a6c5ea}
+/* Keep the last notes readable without increasing compact desktop height. */
+@media (min-width:1180px) and (max-height:850px){
+  .metric-note{font-size:10px}
+  .analysis-top h2{font-size:18px}
+  .dock-item-label,.dock-state-row .state-rank-code{letter-spacing:0}
+  .view-options button{min-height:29px;padding:7px 9px}
+  .inspector-arrow{min-height:29px}
+}
+@media (max-width:1179px){
+  .mode-nav a{min-height:40px}
+  .view-options button{min-height:36px}
+  .inspector-arrow{min-height:36px}
+  .dock-panel{border-color:var(--ui-line)}
+}
+@media (max-width:460px){
+  .analysis-top h2{font-size:17px}
+  .dock-heading h2{font-size:14px}
+  .metric-value{letter-spacing:-.04em}
+}
+/* Accessibility settings are part of the design system. */
+@media (prefers-reduced-motion:reduce){
+  .mode-nav a,.view-options button,.inspector-arrow,
+  .text-button,.source-link,.dock-heading a,.dock-category-row,
+  .dock-state-row,.rank-row,.group-card {transition:none!important}
+}
+@media (forced-colors:active){
+  .mode-nav a[aria-current="page"],
+  .view-options button[aria-pressed="true"],
+  .rank-row[aria-pressed="true"],
+  .group-card[aria-pressed="true"]{outline:2px solid Highlight;outline-offset:-2px}
+  :where(a,button,[tabindex="0"]):focus-visible{outline:2px solid Highlight}
+}

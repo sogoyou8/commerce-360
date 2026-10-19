@@ -1,0 +1,501 @@
+/* E3.F / F5 — three permanent exploration cards.
+   All values and bar lengths come from the existing verified Olist aggregates.
+   This late-loaded visual layer does not change the cockpit grid, the globe,
+   the five modes or the interpretation of sales, delivery and review data. */
+.exploration-dock{--dock-highlight:#76b7ff;--dock-soft:rgba(109,168,245,.13)}
+.exploration-dock .dock-panel{
+  position:relative;
+  isolation:isolate;
+  background:linear-gradient(155deg,rgba(9,28,57,.94),rgba(4,14,31,.91));
+  border-color:rgba(119,170,245,.3);
+  box-shadow:0 12px 30px rgba(0,5,17,.18);
+}
+.exploration-dock .dock-panel::before{
+  content:"";position:absolute;inset:0 0 auto;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,rgba(112,180,255,.5),rgba(100,157,255,.1) 75%,transparent);
+}
+.exploration-dock .dock-heading h2{
+  font-size:clamp(14px,1.06vw,17px);font-weight:630;line-height:1.25;
+  color:#f0f6ff;letter-spacing:-.025em;
+}
+.exploration-dock .dock-heading a{
+  display:inline-flex;align-items:center;min-height:24px;
+  font-size:11px;color:#b0d3ff;text-decoration:none;
+}
+.exploration-dock .dock-heading a:hover{text-decoration:underline;text-underline-offset:3px}
+.exploration-dock .dock-coverage{
+  margin:5px 0 9px;font-size:10px;line-height:1.3;color:#a2b9d9;
+}
+.exploration-dock .dock-item-label{color:#c8d9f2}
+.exploration-dock .dock-track{
+  height:7px;border-radius:2px;background:rgba(65,104,174,.25);overflow:hidden;
+}
+.exploration-dock .dock-track>i{
+  background:linear-gradient(90deg,#2d6bd2,#70adff);border-radius:2px;
+}
+#dock-categories{grid-template-rows:repeat(7,minmax(0,1fr));gap:2px}
+#dock-categories .dock-category-row{
+  grid-template-columns:minmax(96px,1fr) minmax(48px,.78fr) auto;
+  gap:clamp(5px,.7vw,11px);padding:2px 3px;min-height:0;border-radius:4px;
+}
+#dock-categories .dock-category-row .dock-item-label{
+  font-size:clamp(10px,.75vw,12px);font-weight:490;line-height:1.25;
+}
+#dock-categories .dock-category-row .dock-item-value{
+  font-size:clamp(9px,.7vw,11px);font-weight:570;letter-spacing:-.015em;
+  color:#d9e9ff;font-variant-numeric:tabular-nums;
+}
+#dock-categories .dock-category-row:hover,
+#dock-categories .dock-category-row:focus-visible{background:var(--dock-soft)}
+#dock-categories .dock-category-row--other{
+  border-top:1px solid rgba(122,165,235,.21);margin-top:2px;
+}
+#dock-categories .dock-category-row--other .dock-row-note{
+  text-align:left;font-size:9px;color:#9db5d7;
+}
+#dock-states .dock-state-layout{
+  grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);
+  gap:clamp(7px,.9vw,15px);
+}
+#dock-states .dock-map-shell{min-height:0;overflow:hidden}
+#dock-states .brazil-map{
+  max-height:clamp(145px,22vh,218px);
+  filter:drop-shadow(0 0 10px rgba(48,130,251,.25));
+}
+#dock-states .dock-state-ranks{justify-content:space-evenly;gap:3px}
+#dock-states .dock-state-row{
+  grid-template-columns:11px 23px minmax(18px,1fr) auto;
+  gap:4px;min-height:0;padding:3px 2px;border-radius:4px;
+}
+#dock-states .dock-state-row:hover,
+#dock-states .dock-state-row:focus-visible{background:var(--dock-soft)}
+#dock-states .state-rank-index{font-size:10px;color:#91b6e8}
+#dock-states .state-rank-code{font-size:11px;color:#c9dfff;font-weight:540}
+#dock-states .state-rank-metrics strong{
+  font-size:11px;line-height:1.1;color:#e4f0ff;font-variant-numeric:tabular-nums;
+}
+#dock-states .state-rank-metrics small{
+  font-size:9px;line-height:1.2;color:#9dbbe0;white-space:nowrap;
+}
+#dock-states .dock-state-row--other{
+  grid-template-columns:0 42px minmax(20px,1fr) auto;
+  border-top:1px solid rgba(122,165,235,.21);padding-top:4px;
+}
+#dock-states .dock-state-row--other .state-rank-code{font-size:10px}
+#dock-states .dock-state-row--other .dock-row-note{
+  font-size:9px;color:#91acd0;text-align:left;white-space:nowrap;
+}
+#dock-quality>.dock-quality-layout{
+  grid-template-rows:minmax(0,1fr) 27px 27px;gap:5px;
+}
+#dock-quality .dock-quality-overview{
+  gap:clamp(12px,1.45vw,24px);min-height:0;
+}
+#dock-quality .score-ring{
+  width:clamp(94px,9.5vw,138px);height:clamp(94px,9.5vw,138px);
+  padding:11px;flex-shrink:0;
+  background:conic-gradient(from -90deg,#76baff 0 var(--score-pct),rgba(57,97,161,.3) var(--score-pct) 100%);
+  box-shadow:0 0 20px rgba(47,126,255,.14);
+}
+#dock-quality .score-ring-center{background:#07172c}
+#dock-quality .score-ring-center strong{
+  font-size:clamp(18px,1.55vw,25px);color:#eaf4ff;font-weight:620;
+}
+#dock-quality .score-ring-center span{font-size:9px;color:#b2c7e7}
+#dock-quality .quality-negative{gap:5px}
+#dock-quality .quality-negative>span{font-size:11px;line-height:1.3;color:#b6cbe8}
+#dock-quality .quality-negative strong{
+  font-size:clamp(25px,2.25vw,35px);line-height:1.1;color:#f0f6ff;font-weight:580;
+}
+#dock-quality .quality-negative small{font-size:10px;color:#a2bde0}
+#dock-quality>.dock-quality-layout>.dock-row{
+  height:auto;min-height:0;overflow:hidden;
+}
+#dock-quality .dock-row-line{min-height:16px}
+#dock-quality .dock-row .dock-item-label{font-size:10px}
+#dock-quality .dock-row .dock-item-value{font-size:11px;font-weight:580}
+#dock-quality .dock-row .dock-track{height:6px;margin-top:3px}
+@media (min-width:1180px) and (max-height:850px){
+  .exploration-dock .dock-panel{padding:9px 12px}
+  .exploration-dock .dock-heading h2{font-size:14px}
+  .exploration-dock .dock-heading a{min-height:19px;font-size:10px}
+  .exploration-dock .dock-coverage{margin:3px 0 4px;font-size:9px}
+  #dock-categories{grid-template-rows:repeat(7,minmax(0,1fr));gap:0}
+  #dock-categories .dock-category-row{padding:0 2px;gap:5px}
+  #dock-categories .dock-category-row .dock-item-label{font-size:10px}
+  #dock-categories .dock-category-row .dock-item-value{font-size:8px}
+  #dock-categories .dock-category-row--other{display:grid;margin-top:0}
+  #dock-categories .dock-category-row--other .dock-row-note{font-size:8px}
+  #dock-states .dock-state-layout{gap:7px}
+  #dock-states .dock-state-ranks{gap:0;justify-content:space-between}
+  #dock-states .dock-state-row{flex:0 0 19px;height:19px;min-height:0;overflow:hidden;padding:0 1px;gap:3px}
+  #dock-states .dock-state-row--other{display:grid;padding-top:0;border-top:0;box-shadow:inset 0 1px rgba(122,165,235,.21)}
+  #dock-states .dock-state-row--other .dock-row-note{font-size:8px}
+  #dock-states .state-rank-metrics strong{font-size:9px;line-height:1}
+  #dock-states .state-rank-metrics small{font-size:8px;line-height:1}
+  #dock-states .brazil-map{max-height:128px}
+  #dock-quality>.dock-quality-layout{
+    grid-template-rows:minmax(62px,1fr) 22px 22px;gap:2px;
+  }
+  #dock-quality .score-ring{width:68px;height:68px;padding:7px}
+  #dock-quality .score-ring-center strong{font-size:16px}
+  #dock-quality .score-ring-center span{font-size:8px}
+  #dock-quality .quality-negative>span{font-size:9px}
+  #dock-quality .quality-negative strong{font-size:22px}
+  #dock-quality .quality-negative small{font-size:8px}
+  #dock-quality>.dock-quality-layout>.dock-row{height:22px;min-height:0}
+  #dock-quality .dock-row .dock-item-value{font-size:9px}
+}
+@media (max-width:1179px){
+  .exploration-dock .dock-panel{min-height:260px}
+  #dock-categories{grid-template-rows:repeat(7,minmax(0,1fr))}
+  #dock-states .dock-state-layout{min-height:185px}
+  #dock-states .brazil-map{max-height:190px}
+  #dock-quality>.dock-quality-layout{
+    grid-template-rows:minmax(105px,1fr) 27px 27px;gap:5px;
+  }
+  #dock-quality .score-ring{width:110px;height:110px}
+}
+@media (max-width:460px){
+  .exploration-dock .dock-panel{min-height:245px;padding:12px 13px}
+  .exploration-dock .dock-heading h2{font-size:14px}
+  .exploration-dock .dock-coverage{font-size:9px}
+  #dock-categories .dock-category-row{
+    grid-template-columns:minmax(82px,1fr) minmax(28px,.55fr) auto;gap:5px;
+  }
+  #dock-categories .dock-category-row .dock-item-label{font-size:10px}
+  #dock-categories .dock-category-row .dock-item-value{font-size:9px}
+  #dock-categories .dock-category-row--other .dock-row-note{font-size:8px}
+  #dock-states .dock-state-layout{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:6px}
+  #dock-states .dock-state-row{gap:3px;padding:2px 0}
+  #dock-states .state-rank-metrics strong{font-size:9px}
+  #dock-states .state-rank-metrics small{font-size:8px}
+  #dock-states .dock-state-row--other{grid-template-columns:0 39px minmax(18px,1fr) auto}
+  #dock-quality .score-ring{width:98px;height:98px;padding:9px}
+  #dock-quality .quality-negative strong{font-size:27px}
+}
+@media (prefers-reduced-motion:reduce){
+  .exploration-dock .dock-panel,.exploration-dock .dock-track>i{transition:none}
+}
+@media (forced-colors:active){
+  .exploration-dock .dock-panel{background:Canvas;border-color:CanvasText}
+  .exploration-dock .dock-track{border:1px solid CanvasText}
+  .exploration-dock .dock-track>i{background:Highlight}
+  #dock-quality .score-ring{border:3px solid Highlight;background:Canvas}
+}
+
+/* F5.2 — finish the analytical dock, not a decorative dashboard.
+   Desktop: use the available card height for legible type; retain verified data.
+   Phone: the map and six state rows stack rather than squeezing into 114px. */
+.exploration-dock .dock-heading a:focus-visible,
+.exploration-dock .dock-category-row:focus-visible,
+.exploration-dock .dock-state-row:focus-visible,
+.exploration-dock .brazil-map:focus-visible{
+  outline:2px solid #b9d8ff;outline-offset:2px;
+}
+#dock-categories .dock-category-row .dock-track{
+  height:8px;
+}
+#dock-states .brazil-map path{
+  stroke:rgba(174,206,255,.79);
+  stroke-width:1.25;
+}
+#dock-states .brazil-map path.is-map-active{
+  stroke:#e0f1ff;stroke-width:2.4;
+  filter:drop-shadow(0 0 4px rgba(97,177,255,.85));
+}
+@media (min-width:1180px) and (min-height:851px){
+  #dock-categories .dock-category-row .dock-item-label{
+    font-size:clamp(11px,.78vw,13px);
+    color:#d2e2fa;
+  }
+  #dock-categories .dock-category-row .dock-item-value{
+    font-size:clamp(10px,.68vw,12px);
+    color:#e2edff;
+  }
+  #dock-categories .dock-category-row .dock-track{height:9px}
+  #dock-categories .dock-category-row--other .dock-row-note{font-size:10px}
+  #dock-states .dock-state-layout{
+    grid-template-columns:minmax(0,1.03fr) minmax(0,.97fr);
+  }
+  /* Keep six verified ranking lines inside 205px docks at 1440×900. */
+  #dock-states .dock-state-row{padding:1px 2px}
+  #dock-states .dock-state-row--other{padding-top:2px}
+  #dock-states .brazil-map{
+    max-height:clamp(165px,23vh,230px);
+    filter:drop-shadow(0 0 13px rgba(54,135,255,.29));
+  }
+  #dock-states .state-rank-metrics strong{font-size:clamp(11px,.67vw,12px)}
+  #dock-states .state-rank-metrics small{font-size:10px}
+  #dock-quality .score-ring{
+    width:clamp(115px,9.8vw,145px);
+    height:clamp(115px,9.8vw,145px);
+  }
+  #dock-quality .quality-negative strong{
+    font-size:clamp(28px,2.3vw,36px);
+  }
+  #dock-quality .dock-row .dock-item-label{font-size:11px}
+}
+@media (max-width:420px){
+  .exploration-dock .dock-panel:has(#dock-states){
+    min-height:410px;
+  }
+  #dock-states .dock-state-layout{
+    display:flex;
+    flex-direction:column;
+    grid-template-columns:none;
+    min-height:330px;
+    gap:10px;
+  }
+  #dock-states .dock-map-shell{
+    height:156px;
+    flex:0 0 156px;
+    overflow:visible;
+  }
+  #dock-states .brazil-map{
+    width:100%;height:156px;max-height:156px;
+  }
+  #dock-states .dock-state-ranks{
+    display:grid;
+    grid-template-rows:repeat(6,minmax(0,1fr));
+    flex:1 1 auto;
+    min-height:164px;
+    justify-content:stretch;
+    gap:3px;
+  }
+  #dock-states .dock-state-row{
+    grid-template-columns:14px 30px minmax(30px,1fr) 89px;
+    min-height:24px;
+    padding:2px 3px;
+    gap:5px;
+  }
+  #dock-states .state-rank-index{font-size:10px}
+  #dock-states .state-rank-code{font-size:11px}
+  #dock-states .state-rank-metrics strong{font-size:11px}
+  #dock-states .state-rank-metrics small{font-size:9px}
+  #dock-states .dock-state-row--other{
+    grid-template-columns:0 44px minmax(38px,1fr) auto;
+    padding-top:3px;
+  }
+  #dock-states .dock-state-row--other .dock-row-note{font-size:9px}
+}
+@media (max-width:340px){
+  #dock-states .dock-state-row{
+    grid-template-columns:12px 27px minmax(24px,1fr) 86px;
+    gap:4px;
+  }
+}
+@media (forced-colors:active){
+  #dock-states .brazil-map path.is-map-active{
+    stroke:Highlight;filter:none;
+  }
+}
+ 
+/* F5.3 — audit du rapport : real SVG, no chart-library/image conversions.
+   Visual contrasts use the bright end of each actual dark panel as a
+   conservative reference (#223d60); the palette is tested in node.
+   Phone-only min-heights deliberately allow vertical scrolling. */
+.exploration-dock{
+  --f5-fg:#dceaff;
+  --f5-sub:#b8d3f4;
+  --f5-mark:#7fb5fa;
+}
+.exploration-dock .dock-coverage,
+.exploration-dock .dock-category-row--other .dock-row-note,
+.exploration-dock .dock-heading a,
+#dock-states .state-rank-index,
+#dock-states .state-rank-metrics small,
+#dock-states .dock-state-row--other .dock-row-note,
+#dock-quality .quality-negative small,
+#dock-quality .score-ring-center span{
+  color:var(--f5-sub);
+}
+#dock-categories .dock-item-label,
+#dock-states .state-rank-code,
+#dock-quality .dock-item-label{color:var(--f5-fg)}
+#dock-categories .dock-track>i,
+#dock-states .dock-track>i,
+#dock-quality .dock-track>i{
+  background:linear-gradient(90deg,#4389ef,#88bdff);
+}
+#dock-states .brazil-map path{
+  stroke:#b8d3f4;
+  stroke-width:1.4;
+}
+#dock-states .brazil-map path.is-map-active{
+  stroke:#f0f6ff;
+  stroke-width:2.4;
+}
+.exploration-dock .dock-heading a:focus-visible,
+.exploration-dock .dock-category-row:focus-visible,
+.exploration-dock .dock-state-row:focus-visible,
+.exploration-dock .brazil-map:focus-visible{
+  outline:2px solid #dceaff;
+  outline-offset:2px;
+}
+@media (max-width:480px){
+  .exploration-dock .dock-heading a{
+    display:inline-flex;
+    min-height:38px;
+    min-width:52px;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+  }
+  .exploration-dock .dock-coverage{
+    font-size:11px;
+    line-height:1.35;
+    margin:5px 0 9px;
+  }
+  .exploration-dock .dock-panel:has(#dock-categories){min-height:380px}
+  #dock-categories{grid-template-rows:repeat(7,minmax(40px,1fr));gap:2px}
+  #dock-categories .dock-category-row{
+    min-height:40px;
+    padding:5px 3px;
+    align-items:center;
+  }
+  #dock-categories .dock-category-row .dock-item-label{
+    white-space:normal;
+    overflow:visible;
+    text-overflow:clip;
+    overflow-wrap:anywhere;
+    font-size:11px;
+    line-height:1.2;
+  }
+  #dock-categories .dock-category-row .dock-item-value{font-size:10px}
+  #dock-categories .dock-category-row--other .dock-row-note{font-size:10px}
+  .exploration-dock .dock-panel:has(#dock-states){min-height:500px}
+  #dock-states .dock-state-layout{
+    display:flex;
+    flex-direction:column;
+    grid-template-columns:none;
+    min-height:390px;
+    gap:10px;
+  }
+  #dock-states .dock-map-shell{
+    flex:0 0 158px;
+    height:158px;
+    min-height:158px;
+    overflow:visible;
+  }
+  #dock-states .brazil-map{width:100%;height:158px;max-height:158px}
+  #dock-states .dock-state-ranks{
+    display:grid;
+    flex:1 1 auto;
+    grid-template-rows:repeat(6,minmax(40px,1fr));
+    min-height:230px;
+    gap:3px;
+  }
+  #dock-states .dock-state-row{
+    min-height:40px;
+    padding:4px 5px;
+    gap:5px;
+  }
+  #dock-states .state-rank-code,
+  #dock-states .state-rank-metrics strong{font-size:12px}
+  #dock-states .state-rank-metrics small,
+  #dock-states .dock-state-row--other .dock-row-note{font-size:10px}
+  #dock-states .dock-state-row--other{min-height:40px;padding-top:4px}
+  .exploration-dock .dock-panel:has(#dock-quality){min-height:275px}
+  #dock-quality .quality-negative>span{font-size:12px}
+  #dock-quality .quality-negative small,
+  #dock-quality .dock-item-label{font-size:11px}
+}
+@media (max-width:340px){
+  #dock-categories .dock-category-row .dock-item-value{font-size:9.5px}
+  #dock-categories .dock-category-row{gap:4px}
+  #dock-states .dock-state-row{gap:4px}
+}
+@media (prefers-contrast:more){
+  .exploration-dock .dock-panel{border-color:#b8d3f4}
+  .exploration-dock .dock-coverage,
+  .exploration-dock .dock-row-note,
+  .exploration-dock .dock-item-label,
+  .exploration-dock .dock-item-value,
+  .exploration-dock .state-rank-metrics small{color:#f0f6ff}
+}
+@media (forced-colors:active){
+  #dock-states .brazil-map path{stroke:CanvasText}
+  #dock-states .brazil-map path.is-map-active{stroke:Highlight}
+  .exploration-dock .dock-track>i{background:Highlight}
+}
+
+/* F5.4 — target-size follow-up. Text remains fully visible, including
+   residual rows. These rules are mobile-only; compact desktop is unchanged. */
+@media (max-width:480px){
+  .exploration-dock .dock-heading a{
+    min-height:44px;
+    min-width:54px;
+  }
+  .exploration-dock .dock-panel:has(#dock-categories){min-height:424px}
+  #dock-categories{
+    grid-template-rows:repeat(7,minmax(44px,1fr));
+    gap:2px;
+  }
+  #dock-categories .dock-category-row{min-height:44px}
+  .exploration-dock .dock-panel:has(#dock-states){min-height:548px}
+  #dock-states .dock-state-layout{min-height:422px}
+  #dock-states .dock-state-ranks{
+    grid-template-rows:repeat(6,minmax(44px,1fr));
+    min-height:264px;
+  }
+  #dock-states .dock-state-row,
+  #dock-states .dock-state-row--other{min-height:44px}
+  /* Preserve the native map path geometry. On tightly packed small states,
+     the separate 44px state-ranking buttons are the accessible tap alternative. */
+  .exploration-dock .dock-panel:has(#dock-quality){min-height:285px}
+}
+@media (prefers-reduced-motion:reduce){
+  #dock-states .brazil-map path{transition:none}
+}
+
+/* F5.5 — full mobile access to all 27 states despite tiny SVG regions. */
+#dock-states .dock-state-picker{display:none}
+@media (max-width:480px){
+  .exploration-dock .dock-panel:has(#dock-states){min-height:624px}
+  #dock-states .dock-state-layout{min-height:495px}
+  #dock-states .dock-map-shell{
+    flex:0 0 auto;
+    height:auto;
+    min-height:226px;
+    flex-direction:column;
+    align-items:stretch;
+    justify-content:center;
+    gap:4px;
+  }
+  #dock-states .dock-state-picker{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+    width:100%;
+    color:#dceaff;
+    font-size:11px;
+    line-height:1.2;
+  }
+  #dock-states .dock-state-picker-select{
+    display:block;
+    width:100%;
+    min-width:0;
+    height:44px;
+    min-height:44px;
+    padding:0 12px;
+    border:1px solid #7fb5fa;
+    border-radius:5px;
+    color:#ecf5ff;
+    background:#10233e;
+    font:inherit;
+    font-size:13px;
+    cursor:pointer;
+  }
+  #dock-states .dock-state-picker-select:focus-visible{
+    outline:2px solid #dceaff;
+    outline-offset:2px;
+  }
+}
+@media (forced-colors:active){
+  #dock-states .dock-state-picker-select{
+    color:CanvasText;
+    background:Canvas;
+    border-color:CanvasText;
+  }
+}

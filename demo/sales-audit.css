@@ -1,0 +1,66 @@
+/* Jalon 2/5 — audit UX de Ventes (2026-10-19).
+   Les barres sont des éléments HTML interactifs, déjà étiquetés et accompagnés
+   d'un tableau natif. Ne pas remplacer par un SVG purement descriptif.
+   Surcharge de présentation uniquement : zéro chiffre ou filtre ajouté. */
+.analysis:has(.story-panel[data-mode="sales"]) .year-towers>i:first-child{
+  background:linear-gradient(180deg,#6d94d2,#344f85);
+}
+.analysis:has(.story-panel[data-mode="sales"]) .year-towers>i:last-child{
+  background:linear-gradient(180deg,#accfff,#4c80d7);
+}
+.story-panel[data-mode="sales"] .comparison-label{color:#c2d5f0}
+.story-panel[data-mode="sales"] .comparison-value{color:#e7f2ff}
+.story-panel[data-mode="sales"] .comparison-note{
+  display:block;
+  color:#acbfdc;
+  font-size:10px;
+  line-height:1.35;
+}
+@media (min-width:1180px) {
+  .analysis:has(.story-panel[data-mode="sales"]) .year-month-label{
+    font-size:12px;
+    color:#cfdef5;
+  }
+  .analysis:has(.story-panel[data-mode="sales"]) .year-caption{font-size:12px}
+  .story-panel[data-mode="sales"] .story-inner{padding-top:18px}
+  .story-panel[data-mode="sales"] .story-stat{padding:15px 0}
+  .story-panel[data-mode="sales"] .comparison-row{padding:10px 0}
+  #dock-states .state-rank-metrics{
+    min-width:0;
+    align-items:flex-end;
+    white-space:nowrap;
+  }
+  #dock-states .state-rank-metrics strong{font-variant-numeric:tabular-nums}
+}
+@media (min-width:1180px) and (max-height:850px) {
+  /* Exact deficit measured at 1180×750: 19px row vs 22px metrics.
+     Give the fixed-height dock 30px from the chart, not by hiding any data. */
+  .workspace{grid-template-rows:82px minmax(0,1fr) 210px}
+  .exploration-dock .dock-coverage{font-size:10px;line-height:1.2;margin:3px 0 5px}
+  #dock-states .dock-state-ranks{gap:0;justify-content:space-between}
+  #dock-states .dock-state-row,
+  #dock-states .dock-state-row--other{
+    flex:1 1 0;
+    height:auto;
+    min-height:22px;
+    overflow:visible;
+    padding:1px 1px;
+  }
+  #dock-states .state-rank-metrics strong{font-size:10px;line-height:1.15}
+  #dock-states .state-rank-metrics small{font-size:9px;line-height:1.15}
+  #dock-states .brazil-map{max-height:148px}
+  #dock-categories .dock-category-row .dock-item-value{font-size:9px}
+  #dock-quality .score-ring{width:83px;height:83px}
+  #dock-quality .score-ring-center strong{font-size:17px}
+  .story-panel[data-mode="sales"] .story-inner{padding-top:8px}
+  .story-panel[data-mode="sales"] .story-stat{padding:7px 0}
+  .story-panel[data-mode="sales"] .comparison-row{padding:5px 0}
+  .story-panel[data-mode="sales"] .comparison-note{font-size:9px}
+}
+@media (max-width:1179px){
+  .analysis:has(.story-panel[data-mode="sales"]) .year-month-label{color:#c5d9f3}
+  .story-panel[data-mode="sales"] .comparison-note{font-size:10px}
+}
+@media (prefers-reduced-motion:reduce){
+  .analysis:has(.story-panel[data-mode="sales"]) .year-towers>i{transition:none}
+}

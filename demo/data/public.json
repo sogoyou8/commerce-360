@@ -1,0 +1,665 @@
+{
+  "meta": {
+    "title": "Commerce 360",
+    "origin": "Olist · Brésil",
+    "start": "2017-01-01",
+    "endExclusive": "2018-09-01",
+    "currency": "BRL",
+    "source": "Références E3/E5/E7, rapport Power BI E6",
+    "mode": "Exports locaux agrégés validés",
+    "coverage": {
+      "states": "27 États vérifiés",
+      "categories": "12 catégories les plus vendues en prix d'articles",
+      "sellerStates": "15 États vendeurs agrégés (≥ 5 vendeurs)",
+      "cohorts": "20 cohortes mensuelles agrégées"
+    },
+    "caveat": "Données historiques. Agrégats descriptifs uniquement, aucune information client individuelle."
+  },
+  "totals": {
+    "orders": 96211,
+    "salesBrl": 13181027.13,
+    "averageBasket": 137,
+    "customers": 93104,
+    "repeatCustomers": 2789,
+    "late": 7822,
+    "dated": 96203,
+    "lateRate": 8.13,
+    "deliveryDays": 12.54,
+    "averageScore": 4.16,
+    "negativeRate": 12.8
+  },
+  "monthly": [
+    {
+      "month": "2017-01",
+      "orders": 750,
+      "salesBrl": 111798.36
+    },
+    {
+      "month": "2017-02",
+      "orders": 1653,
+      "salesBrl": 234223.4
+    },
+    {
+      "month": "2017-03",
+      "orders": 2546,
+      "salesBrl": 359198.85
+    },
+    {
+      "month": "2017-04",
+      "orders": 2303,
+      "salesBrl": 340669.68
+    },
+    {
+      "month": "2017-05",
+      "orders": 3546,
+      "salesBrl": 489338.25
+    },
+    {
+      "month": "2017-06",
+      "orders": 3135,
+      "salesBrl": 421923.37
+    },
+    {
+      "month": "2017-07",
+      "orders": 3872,
+      "salesBrl": 481604.52
+    },
+    {
+      "month": "2017-08",
+      "orders": 4193,
+      "salesBrl": 554699.7
+    },
+    {
+      "month": "2017-09",
+      "orders": 4150,
+      "salesBrl": 607399.67
+    },
+    {
+      "month": "2017-10",
+      "orders": 4478,
+      "salesBrl": 648247.65
+    },
+    {
+      "month": "2017-11",
+      "orders": 7289,
+      "salesBrl": 987765.37
+    },
+    {
+      "month": "2017-12",
+      "orders": 5513,
+      "salesBrl": 726033.19
+    },
+    {
+      "month": "2018-01",
+      "orders": 7069,
+      "salesBrl": 924645
+    },
+    {
+      "month": "2018-02",
+      "orders": 6555,
+      "salesBrl": 826437.13
+    },
+    {
+      "month": "2018-03",
+      "orders": 7003,
+      "salesBrl": 953356.25
+    },
+    {
+      "month": "2018-04",
+      "orders": 6798,
+      "salesBrl": 973534.09
+    },
+    {
+      "month": "2018-05",
+      "orders": 6749,
+      "salesBrl": 977544.69
+    },
+    {
+      "month": "2018-06",
+      "orders": 6099,
+      "salesBrl": 856077.86
+    },
+    {
+      "month": "2018-07",
+      "orders": 6159,
+      "salesBrl": 867953.46
+    },
+    {
+      "month": "2018-08",
+      "orders": 6351,
+      "salesBrl": 838576.64
+    }
+  ],
+  "states": [
+    {
+      "code": "SP",
+      "orders": 40406,
+      "dated": 40399,
+      "late": 2384,
+      "rate": 5.9,
+      "days": 8.74
+    },
+    {
+      "code": "RJ",
+      "orders": 12310,
+      "dated": 12310,
+      "late": 1664,
+      "rate": 13.52,
+      "days": 15.3
+    },
+    {
+      "code": "MG",
+      "orders": 11319,
+      "dated": 11319,
+      "late": 637,
+      "rate": 5.63,
+      "days": 11.99
+    },
+    {
+      "code": "RS",
+      "orders": 5328,
+      "dated": 5327,
+      "late": 382,
+      "rate": 7.17,
+      "days": 15.29
+    },
+    {
+      "code": "PR",
+      "orders": 4903,
+      "dated": 4903,
+      "late": 246,
+      "rate": 5.02,
+      "days": 11.97
+    },
+    {
+      "code": "SC",
+      "orders": 3537,
+      "dated": 3537,
+      "late": 346,
+      "rate": 9.78,
+      "days": 14.95
+    },
+    {
+      "code": "BA",
+      "orders": 3253,
+      "dated": 3253,
+      "late": 457,
+      "rate": 14.05,
+      "days": 19.33
+    },
+    {
+      "code": "DF",
+      "orders": 2074,
+      "dated": 2074,
+      "late": 147,
+      "rate": 7.09,
+      "days": 12.94
+    },
+    {
+      "code": "ES",
+      "orders": 1992,
+      "dated": 1992,
+      "late": 244,
+      "rate": 12.25,
+      "days": 15.78
+    },
+    {
+      "code": "GO",
+      "orders": 1950,
+      "dated": 1950,
+      "late": 160,
+      "rate": 8.21,
+      "days": 15.61
+    },
+    {
+      "code": "PE",
+      "orders": 1587,
+      "dated": 1587,
+      "late": 172,
+      "rate": 10.84,
+      "days": 18.45
+    },
+    {
+      "code": "CE",
+      "orders": 1273,
+      "dated": 1273,
+      "late": 196,
+      "rate": 15.4,
+      "days": 21.24
+    },
+    {
+      "code": "PA",
+      "orders": 942,
+      "dated": 942,
+      "late": 117,
+      "rate": 12.42,
+      "days": 23.76
+    },
+    {
+      "code": "MT",
+      "orders": 885,
+      "dated": 885,
+      "late": 60,
+      "rate": 6.78,
+      "days": 18.07
+    },
+    {
+      "code": "MA",
+      "orders": 713,
+      "dated": 713,
+      "late": 140,
+      "rate": 19.64,
+      "days": 21.54
+    },
+    {
+      "code": "MS",
+      "orders": 701,
+      "dated": 701,
+      "late": 81,
+      "rate": 11.55,
+      "days": 15.62
+    },
+    {
+      "code": "PB",
+      "orders": 516,
+      "dated": 516,
+      "late": 57,
+      "rate": 11.05,
+      "days": 20.39
+    },
+    {
+      "code": "PI",
+      "orders": 475,
+      "dated": 475,
+      "late": 76,
+      "rate": 16,
+      "days": 19.44
+    },
+    {
+      "code": "RN",
+      "orders": 470,
+      "dated": 470,
+      "late": 51,
+      "rate": 10.85,
+      "days": 19.21
+    },
+    {
+      "code": "AL",
+      "orders": 396,
+      "dated": 396,
+      "late": 95,
+      "rate": 23.99,
+      "days": 24.52
+    },
+    {
+      "code": "SE",
+      "orders": 332,
+      "dated": 332,
+      "late": 51,
+      "rate": 15.36,
+      "days": 21.44
+    },
+    {
+      "code": "TO",
+      "orders": 274,
+      "dated": 274,
+      "late": 35,
+      "rate": 12.77,
+      "days": 17.66
+    },
+    {
+      "code": "RO",
+      "orders": 243,
+      "dated": 243,
+      "late": 7,
+      "rate": 2.88,
+      "days": 19.37
+    },
+    {
+      "code": "AM",
+      "orders": 145,
+      "dated": 145,
+      "late": 6,
+      "rate": 4.14,
+      "days": 26.43
+    },
+    {
+      "code": "AC",
+      "orders": 80,
+      "dated": 80,
+      "late": 3,
+      "rate": 3.75,
+      "days": 21.04
+    },
+    {
+      "code": "AP",
+      "orders": 67,
+      "dated": 67,
+      "late": 3,
+      "rate": 4.48,
+      "days": 27.19
+    },
+    {
+      "code": "RR",
+      "orders": 40,
+      "dated": 40,
+      "late": 5,
+      "rate": 12.5,
+      "days": 29.91
+    }
+  ],
+  "categories": [
+    {
+      "label": "health_beauty",
+      "salesBrl": 1229557.5
+    },
+    {
+      "label": "watches_gifts",
+      "salesBrl": 1163465.91
+    },
+    {
+      "label": "bed_bath_table",
+      "salesBrl": 1022955.77
+    },
+    {
+      "label": "sports_leisure",
+      "salesBrl": 952840.4
+    },
+    {
+      "label": "computers_accessories",
+      "salesBrl": 888055.59
+    },
+    {
+      "label": "furniture_decor",
+      "salesBrl": 706237.17
+    },
+    {
+      "label": "housewares",
+      "salesBrl": 614341.62
+    },
+    {
+      "label": "cool_stuff",
+      "salesBrl": 609158
+    },
+    {
+      "label": "auto",
+      "salesBrl": 577838.39
+    },
+    {
+      "label": "garden_tools",
+      "salesBrl": 469135.4
+    },
+    {
+      "label": "toys",
+      "salesBrl": 467179.98
+    },
+    {
+      "label": "baby",
+      "salesBrl": 399050.67
+    }
+  ],
+  "sellerStates": [
+    {
+      "code": "SP",
+      "salesBrl": 8487299.48
+    },
+    {
+      "code": "PR",
+      "salesBrl": 1226347.62
+    },
+    {
+      "code": "MG",
+      "salesBrl": 975967.19
+    },
+    {
+      "code": "RJ",
+      "salesBrl": 813290.6
+    },
+    {
+      "code": "SC",
+      "salesBrl": 612709.38
+    },
+    {
+      "code": "RS",
+      "salesBrl": 372138.48
+    },
+    {
+      "code": "BA",
+      "salesBrl": 277763.96
+    },
+    {
+      "code": "DF",
+      "salesBrl": 94411.31
+    },
+    {
+      "code": "PE",
+      "salesBrl": 91164.15
+    },
+    {
+      "code": "GO",
+      "salesBrl": 64806.59
+    },
+    {
+      "code": "ES",
+      "salesBrl": 46922.74
+    },
+    {
+      "code": "CE",
+      "salesBrl": 19517.84
+    },
+    {
+      "code": "PB",
+      "salesBrl": 16395.5
+    },
+    {
+      "code": "RN",
+      "salesBrl": 9992.6
+    },
+    {
+      "code": "MS",
+      "salesBrl": 8027.49
+    }
+  ],
+  "satisfaction": [
+    {
+      "code": "on_time",
+      "label": "À l’heure",
+      "orders": 88381,
+      "scored": 87902,
+      "score": 4.29,
+      "negative": 8089,
+      "negativeRate": 9.2
+    },
+    {
+      "code": "late",
+      "label": "En retard",
+      "orders": 7822,
+      "scored": 7658,
+      "score": 2.57,
+      "negative": 4139,
+      "negativeRate": 54.05
+    },
+    {
+      "code": "undated",
+      "label": "Non daté",
+      "orders": 8,
+      "scored": 8,
+      "score": 4.5,
+      "negative": 1,
+      "negativeRate": 12.5
+    }
+  ],
+  "segments": [
+    {
+      "code": "champions_observed",
+      "label": "Champions observés",
+      "customers": 927,
+      "repeats": 927,
+      "salesBrl": 304205.92
+    },
+    {
+      "code": "repeat_recent",
+      "label": "Réacheteurs récents observés",
+      "customers": 872,
+      "repeats": 872,
+      "salesBrl": 174107.55
+    },
+    {
+      "code": "high_value_recent",
+      "label": "Forte valeur récente observée",
+      "customers": 10257,
+      "repeats": 0,
+      "salesBrl": 4044067.98
+    },
+    {
+      "code": "single_recent",
+      "label": "Premier achat unique récent observé",
+      "customers": 29166,
+      "repeats": 0,
+      "salesBrl": 2243672.51
+    },
+    {
+      "code": "repeat_less_recent",
+      "label": "Réacheteurs moins récents",
+      "customers": 990,
+      "repeats": 990,
+      "salesBrl": 247041.57
+    },
+    {
+      "code": "single_less_recent",
+      "label": "Achat unique moins récent",
+      "customers": 36145,
+      "repeats": 0,
+      "salesBrl": 5041879.93
+    },
+    {
+      "code": "other_observed",
+      "label": "Autres profils observés",
+      "customers": 14747,
+      "repeats": 0,
+      "salesBrl": 1126051.67
+    }
+  ],
+  "cohorts": [
+    {
+      "month": "2017-01",
+      "customers": 718,
+      "repeats": 52,
+      "salesBrl": 114607.34
+    },
+    {
+      "month": "2017-02",
+      "customers": 1628,
+      "repeats": 66,
+      "salesBrl": 239788.46
+    },
+    {
+      "month": "2017-03",
+      "customers": 2503,
+      "repeats": 121,
+      "salesBrl": 371645.15
+    },
+    {
+      "month": "2017-04",
+      "customers": 2257,
+      "repeats": 102,
+      "salesBrl": 351596.78
+    },
+    {
+      "month": "2017-05",
+      "customers": 3451,
+      "repeats": 182,
+      "salesBrl": 502508.72
+    },
+    {
+      "month": "2017-06",
+      "customers": 3037,
+      "repeats": 161,
+      "salesBrl": 434368.18
+    },
+    {
+      "month": "2017-07",
+      "customers": 3753,
+      "repeats": 175,
+      "salesBrl": 491075.52
+    },
+    {
+      "month": "2017-08",
+      "customers": 4057,
+      "repeats": 191,
+      "salesBrl": 566249.59
+    },
+    {
+      "month": "2017-09",
+      "customers": 4005,
+      "repeats": 181,
+      "salesBrl": 613931.98
+    },
+    {
+      "month": "2017-10",
+      "customers": 4328,
+      "repeats": 160,
+      "salesBrl": 652054.08
+    },
+    {
+      "month": "2017-11",
+      "customers": 7061,
+      "repeats": 223,
+      "salesBrl": 992099.05
+    },
+    {
+      "month": "2017-12",
+      "customers": 5338,
+      "repeats": 139,
+      "salesBrl": 721523.22
+    },
+    {
+      "month": "2018-01",
+      "customers": 6843,
+      "repeats": 208,
+      "salesBrl": 921941.15
+    },
+    {
+      "month": "2018-02",
+      "customers": 6288,
+      "repeats": 236,
+      "salesBrl": 827691.11
+    },
+    {
+      "month": "2018-03",
+      "customers": 6775,
+      "repeats": 162,
+      "salesBrl": 946999.05
+    },
+    {
+      "month": "2018-04",
+      "customers": 6582,
+      "repeats": 129,
+      "salesBrl": 962225.03
+    },
+    {
+      "month": "2018-05",
+      "customers": 6508,
+      "repeats": 109,
+      "salesBrl": 964173.36
+    },
+    {
+      "month": "2018-06",
+      "customers": 5879,
+      "repeats": 70,
+      "salesBrl": 834842.85
+    },
+    {
+      "month": "2018-07",
+      "customers": 5949,
+      "repeats": 88,
+      "salesBrl": 851647.43
+    },
+    {
+      "month": "2018-08",
+      "customers": 6144,
+      "repeats": 34,
+      "salesBrl": 820059.08
+    }
+  ]
+}
