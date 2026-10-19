@@ -739,6 +739,32 @@ function renderBrazilMap(withMobilePicker=false) {
     holder.append(svg);
   }
   holder.append(node("span","map-legend","Carte : taux de retard"));
+  // Screen-reader equivalent. All values use the same verified state data.
+  const table=node("table","sr-only");
+  table.setAttribute("aria-label","Données Olist des 27 États du Brésil");
+  const caption=node("caption","","Commandes livrées, livraisons datées, retards et taux de retard par État");
+  const thead=node("thead");
+  const header=node("tr");
+  for(const label of ["État","Commandes livrées","Livraisons datées","Retards","Taux de retard"]){
+    const th=node("th","",label);
+    th.setAttribute("scope","col");
+    header.append(th);
+  }
+  thead.append(header);
+  const tbody=node("tbody");
+  for(const item of [...data.states].sort((a,b)=>a.code.localeCompare(b.code))){
+    const tr=node("tr");
+    const th=node("th","",item.code);
+    th.setAttribute("scope","row");
+    append(tr,th,
+      node("td","",n(item.orders)),
+      node("td","",n(item.dated)),
+      node("td","",n(item.late)),
+      node("td","",percent(item.rate,1)));
+    tbody.append(tr);
+  }
+  append(table,caption,thead,tbody);
+  holder.append(table);
   return holder;
 }
 function renderDock() {

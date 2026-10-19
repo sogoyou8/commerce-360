@@ -246,7 +246,7 @@ test("F3 HD asset dimensions and native alpha are validated",()=>{
 test("F5 upgrades all three exploration cards without altering the cockpit or data",()=>{
   const f5=readFileSync(new URL("../dock-f5.css",import.meta.url),"utf8");
   assert.match(html,/dock-f5\.css\?v=e3-f5-20261019-a11y5/);
-  assert.match(html,/app\.js\?v=e3-20261019-f5-unique-map/);
+  assert.match(html,/app\.js\?v=e3-20261019-f5-state-table/);
   assert.match(f5,/#dock-categories \.dock-category-row/);
   assert.match(f5,/#dock-states \.dock-state-layout/);
   assert.match(f5,/#dock-quality \.score-ring/);
@@ -371,4 +371,17 @@ test("F5.6 map picker is dock-only and SVG labels are unique in delivery view",(
  assert.match(js,/append\(stateLayout,renderBrazilMap\(true\),stateRank\)/);
  assert.match(js,/const mapStage=append\(node\("div","delivery-map-visual"\),renderBrazilMap\(\)/);
  assert.match(js,/if\(withMobilePicker\)\{/);
+});
+
+test("F5.7 the 27-state SVG has a complete screen-reader data table",()=>{
+ assert.match(js,/const table=node\("table","sr-only"\)/);
+ assert.match(js,/table\.setAttribute\("aria-label","Données Olist des 27 États du Brésil"\)/);
+ assert.match(js,/for\(const item of \[\.\.\.data\.states\]\.sort\(\(a,b\)=>a\.code\.localeCompare\(b\.code\)\)\)/);
+ assert.match(js,/node\("td","",n\(item\.orders\)\)/);
+ assert.match(js,/node\("td","",n\(item\.dated\)\)/);
+ assert.match(js,/node\("td","",n\(item\.late\)\)/);
+ assert.match(js,/node\("td","",percent\(item\.rate,1\)\)/);
+ assert.match(js,/holder\.append\(table\)/);
+ assert.match(css,/\.sr-only\{position:absolute!important/);
+ assert.match(html,/app\.js\?v=e3-20261019-f5-state-table/);
 });
