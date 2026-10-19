@@ -183,3 +183,107 @@
   .exploration-dock .dock-track>i{background:Highlight}
   #dock-quality .score-ring{border:3px solid Highlight;background:Canvas}
 }
+
+/* F5.2 — finish the analytical dock, not a decorative dashboard.
+   Desktop: use the available card height for legible type; retain verified data.
+   Phone: the map and six state rows stack rather than squeezing into 114px. */
+.exploration-dock .dock-heading a:focus-visible,
+.exploration-dock .dock-category-row:focus-visible,
+.exploration-dock .dock-state-row:focus-visible,
+.exploration-dock .brazil-map:focus-visible{
+  outline:2px solid #b9d8ff;outline-offset:2px;
+}
+#dock-categories .dock-category-row .dock-track{
+  height:8px;
+}
+#dock-states .brazil-map path{
+  stroke:rgba(174,206,255,.79);
+  stroke-width:1.25;
+}
+#dock-states .brazil-map path.is-map-active{
+  stroke:#e0f1ff;stroke-width:2.4;
+  filter:drop-shadow(0 0 4px rgba(97,177,255,.85));
+}
+@media (min-width:1180px) and (min-height:851px){
+  #dock-categories .dock-category-row .dock-item-label{
+    font-size:clamp(11px,.78vw,13px);
+    color:#d2e2fa;
+  }
+  #dock-categories .dock-category-row .dock-item-value{
+    font-size:clamp(10px,.68vw,12px);
+    color:#e2edff;
+  }
+  #dock-categories .dock-category-row .dock-track{height:9px}
+  #dock-categories .dock-category-row--other .dock-row-note{font-size:10px}
+  #dock-states .dock-state-layout{
+    grid-template-columns:minmax(0,1.03fr) minmax(0,.97fr);
+  }
+  #dock-states .brazil-map{
+    max-height:clamp(165px,23vh,230px);
+    filter:drop-shadow(0 0 13px rgba(54,135,255,.29));
+  }
+  #dock-states .state-rank-metrics strong{font-size:clamp(11px,.67vw,12px)}
+  #dock-states .state-rank-metrics small{font-size:10px}
+  #dock-quality .score-ring{
+    width:clamp(115px,9.8vw,145px);
+    height:clamp(115px,9.8vw,145px);
+  }
+  #dock-quality .quality-negative strong{
+    font-size:clamp(28px,2.3vw,36px);
+  }
+  #dock-quality .dock-row .dock-item-label{font-size:11px}
+}
+@media (max-width:420px){
+  .exploration-dock .dock-panel:has(#dock-states){
+    min-height:410px;
+  }
+  #dock-states .dock-state-layout{
+    display:flex;
+    flex-direction:column;
+    grid-template-columns:none;
+    min-height:330px;
+    gap:10px;
+  }
+  #dock-states .dock-map-shell{
+    height:156px;
+    flex:0 0 156px;
+    overflow:visible;
+  }
+  #dock-states .brazil-map{
+    width:100%;height:156px;max-height:156px;
+  }
+  #dock-states .dock-state-ranks{
+    display:grid;
+    grid-template-rows:repeat(6,minmax(0,1fr));
+    flex:1 1 auto;
+    min-height:164px;
+    justify-content:stretch;
+    gap:3px;
+  }
+  #dock-states .dock-state-row{
+    grid-template-columns:14px 30px minmax(30px,1fr) 89px;
+    min-height:24px;
+    padding:2px 3px;
+    gap:5px;
+  }
+  #dock-states .state-rank-index{font-size:10px}
+  #dock-states .state-rank-code{font-size:11px}
+  #dock-states .state-rank-metrics strong{font-size:11px}
+  #dock-states .state-rank-metrics small{font-size:9px}
+  #dock-states .dock-state-row--other{
+    grid-template-columns:0 44px minmax(38px,1fr) auto;
+    padding-top:3px;
+  }
+  #dock-states .dock-state-row--other .dock-row-note{font-size:9px}
+}
+@media (max-width:340px){
+  #dock-states .dock-state-row{
+    grid-template-columns:12px 27px minmax(24px,1fr) 86px;
+    gap:4px;
+  }
+}
+@media (forced-colors:active){
+  #dock-states .brazil-map path.is-map-active{
+    stroke:Highlight;filter:none;
+  }
+}

@@ -245,7 +245,7 @@ test("F3 HD asset dimensions and native alpha are validated",()=>{
 
 test("F5 upgrades all three exploration cards without altering the cockpit or data",()=>{
   const f5=readFileSync(new URL("../dock-f5.css",import.meta.url),"utf8");
-  assert.match(html,/dock-f5\.css\?v=e3-f5-20261019-cards3/);
+  assert.match(html,/dock-f5\.css\?v=e3-f5-20261019-polish2/);
   assert.match(html,/app\.js\?v=e3-20261019-f5-accessible/);
   assert.match(f5,/#dock-categories \.dock-category-row/);
   assert.match(f5,/#dock-states \.dock-state-layout/);
@@ -292,4 +292,16 @@ test("F6 removes redundant remote Earth and preserves layer ordering",()=>{
  const positions=order.map(name=>html.indexOf('href="./'+name+'?'));
  assert.ok(positions.every(x=>x>=0)&&positions.every((x,i)=>i===0||x>positions[i-1]));
  assert.doesNotMatch(f3,/\.workspace\s*\{|\.analysis\s*\{|\.dock-panel\s*\{/);
+});
+
+test("F5.2 legible dock rows and mobile map layout stay isolated",()=>{
+ const f5=readFileSync(new URL("../dock-f5.css",import.meta.url),"utf8");
+ assert.match(f5,/#dock-states \.dock-state-layout\s*\{\s*display:flex;\s*flex-direction:column/);
+ assert.match(f5,/@media \(max-width:420px\)/);
+ assert.match(f5,/\.dock-panel:has\(#dock-states\)/);
+ assert.match(f5,/#dock-categories \.dock-category-row \.dock-track\{height:9px\}/);
+ assert.match(f5,/#dock-states \.brazil-map path\.is-map-active/);
+ assert.match(f5,/\.dock-state-row:focus-visible/);
+ assert.match(f5,/@media \(forced-colors:active\)/);
+ assert.doesNotMatch(f5,/\.workspace\s*\{|\.analysis\s*\{|\.metric\s*\{/);
 });

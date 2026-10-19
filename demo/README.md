@@ -1,3 +1,11 @@
+## F5.2 — Finition des trois cartes permanentes (19/10/2026)
+
+Améliorations **strictement de présentation** dans `demo/dock-f5.css` : libellés, valeurs et barres des catégories plus lisibles en grand viewport ; carte du Brésil mise en valeur (les couleurs restent fondées sur les taux Olist réels) ; classement d'États moins comprimé en desktop ; anneau de satisfaction un peu plus lisible, sans prétendre disposer d'une comparaison temporelle absente. Un nouvel affichage sur téléphone **≤420px** empile la carte du Brésil et son classement au lieu de réduire le texte et les barres à quelques pixels. Le défilement vertical mobile est autorisé, contrairement au cockpit desktop qui reste sans scroll. Les boutons conservent un focus clavier visible, y compris en contraste forcé.
+
+**Données :** aucun changement de `demo/data/public.json`, des calculs, des mois, des États, des avis ou des sélections. Les trois cartes restent des raccourcis vers les modes correspondants. **Périmètre :** aucun changement F1/F2, F3, F4, F6 ni structure/JS. CI et prévisualisation multi-tailles requises avant validation visuelle ; PR #7 maintenue en brouillon.
+
+---
+
 ## E3.F — F6 : consolidation et recette technique (19/10/2026)
 
 La base `demo/styles.css` ne dépend plus de l'ancienne image NASA distante (ou de son masque radial), remplacée par l'illustration originale transparente `demo/assets/earth-f3-native.webp` depuis F3. Ordre explicite des couches CSS conservé : **styles → F1/F2 → F3 → F4 → F5**. La base est versionnée afin de contourner les caches du navigateur. Aucun regroupement risqué des nombreuses autres règles historiques de `styles.css` : elles restent testées par la CI et par la recette visuelle, pour ne pas introduire de régression.
