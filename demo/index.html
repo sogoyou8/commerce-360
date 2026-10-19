@@ -40,7 +40,7 @@
       </div>
     </nav>
     <div class="masthead-actions">
-      <span class="period-chip" aria-label="Période des données">◷ <span>Jan 2017 — Aoû 2018</span></span>
+      <span class="period-chip"><span aria-hidden="true">◷</span> <span>Jan 2017 — Aoû 2018</span></span>
       <button id="method-open" class="text-button method-trigger" type="button" aria-label="À propos / Données" aria-haspopup="dialog" aria-controls="method-dialog" aria-expanded="false"><span class="method-trigger-icon" aria-hidden="true">i</span><span class="method-trigger-label">Données</span></button>
       <a class="source-link" href="https://github.com/sogoyou8/commerce-360" target="_blank" rel="noopener noreferrer" aria-label="Voir le code sur GitHub">GitHub ↗</a>
     </div>
@@ -78,16 +78,16 @@
           <div id="viz-container" class="viz-container" aria-live="polite"><div class="loading">Chargement des agrégats vérifiés…</div></div>
           <footer class="viz-footer"><span class="viz-caption-mark" aria-hidden="true">●</span><span id="viz-note">Sélectionner un élément pour explorer.</span></footer>
         </div>
-        <aside class="story-panel" aria-label="Inspecteur contextuel" aria-live="polite">
+        <section class="story-panel" aria-label="Inspecteur contextuel" aria-live="polite">
           <div class="story-topline"><span class="story-dot" aria-hidden="true"></span>INSPECTEUR <span id="story-count">01 / 05</span></div>
           <div class="story-inner">
-            <div class="inspector-heading"><div><span class="eyebrow" id="story-kicker">SÉLECTION</span><h2 id="story-title">Mois sélectionné.</h2></div><div id="story-navigation" class="story-navigation" aria-label="Changer la sélection"></div></div>
+            <div class="inspector-heading"><div><span class="eyebrow" id="story-kicker">SÉLECTION</span><h2 id="story-title">Mois sélectionné.</h2></div><div id="story-navigation" class="story-navigation" role="group" aria-label="Changer la sélection"></div></div>
             <p id="story-description">Sélectionnez un mois ou un indicateur pour explorer.</p>
             <div class="story-stat"><span id="story-stat-label">VALEUR SÉLECTIONNÉE</span><strong id="story-stat-value">—</strong><span id="story-stat-sub">Agrégats historiques</span></div>
-            <div id="story-comparisons" class="story-comparisons" aria-label="Comparaisons vérifiées"></div>
+            <div id="story-comparisons" class="story-comparisons" role="group" aria-label="Comparaisons vérifiées"></div>
           </div>
           <div class="story-foot"><span>CADRE D'INTERPRÉTATION</span><p id="story-caveat">Données historiques, sans mesure de l'activité actuelle.</p></div>
-        </aside>
+        </section>
       </section>
 
       <section class="exploration-dock" aria-label="Explorer les autres dimensions de Commerce 360">
