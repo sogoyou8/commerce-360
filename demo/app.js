@@ -419,21 +419,19 @@ function renderYearBars() {
   );
   // On phones, show the chosen comparison immediately inside the chart scroll.
   const yearScroll=$("viz-container").querySelector(".year-chart");
-  if(window.matchMedia("(max-width:800px)").matches){
-    const centerActive=()=>{
-      if(!yearScroll.isConnected)return true;
-      if(yearScroll.scrollWidth<=yearScroll.clientWidth)return false;
-      const active=plot.querySelector('.year-pair[aria-pressed="true"]');
-      yearScroll.scrollLeft=Math.max(0,active.offsetLeft+active.offsetWidth/2-yearScroll.clientWidth/2);
-      return true;
-    };
-    // Width can settle after fonts and the inspector/dock have rendered.
-    const observer=new ResizeObserver(()=>{if(centerActive())observer.disconnect();});
-    observer.observe(yearScroll);
-    requestAnimationFrame(()=>{if(centerActive())observer.disconnect();});
-    // Font/layout stabilization may occur after the first frame on a cold load.
-    setTimeout(()=>{if(centerActive())observer.disconnect();},120);
-  }
+  const centerActive=()=>{
+    if(!yearScroll.isConnected)return true;
+    if(yearScroll.scrollWidth<=yearScroll.clientWidth)return false;
+    const active=plot.querySelector('.year-pair[aria-pressed="true"]');
+    yearScroll.scrollLeft=Math.max(0,active.offsetLeft+active.offsetWidth/2-yearScroll.clientWidth/2);
+    return true;
+  };
+  // Respond even when a viewport changes immediately after navigation.
+  const observer=new ResizeObserver(()=>{if(centerActive())observer.disconnect();});
+  observer.observe(yearScroll);
+  requestAnimationFrame(()=>{if(centerActive())observer.disconnect();});
+  setTimeout(()=>{if(centerActive())observer.disconnect();},120);
+  setTimeout(()=>observer.disconnect(),1200);
   const selectedDiff=(chosen.current[measure]/chosen.previous[measure]-1)*100;
   setStory({
     kicker:"COMPARAISON À MOIS ÉQUIVALENT",
