@@ -114,7 +114,12 @@ function setOptions(options, selected, onSelect) {
     const button = node("button", "", item.title);
     button.type = "button";
     button.setAttribute("aria-pressed", String(selected===item.key));
-    button.addEventListener("click", () => onSelect(item.key));
+    button.dataset.measure=item.key;
+    button.addEventListener("click", () => {
+      const hadFocus=document.activeElement===button;
+      onSelect(item.key);
+      if(hadFocus) [...wrap.querySelectorAll("button")].find(x=>x.dataset.measure===item.key)?.focus({preventScroll:true});
+    });
     return button;
   }));
   wrap.setAttribute("aria-label", "Choisir une mesure du graphique");
@@ -361,11 +366,18 @@ function yearPairs() {
   return result;
 }
 
+function selectSalesMonth(month, focus=false) {
+  state.salesMonth=month;
+  render();
+  if(focus) document.querySelector('.year-pair[data-month="'+month+'"]')?.focus({preventScroll:true});
+}
 function renderYearBars() {
   const pairs=yearPairs(), measure=state.salesMeasure;
   const max=Math.max(...pairs.flatMap(x=>[x.previous[measure],x.current[measure]]));
   const chosen=pairs.find(x=>x.month===state.salesMonth)||pairs[7];
   const plot=node("div","year-plot");
+  plot.setAttribute("role","group");
+  plot.setAttribute("aria-label","Comparer les mêmes mois de janvier à août en 2017 et 2018. Au clavier : flèches gauche et droite, Début et Fin.");
   const legend=append(node("div","year-legend"),
     append(node("span"),node("i"),node("span","", "2017")),
     append(node("span"),node("i","this-year"),node("span","", "2018"))
@@ -373,6 +385,8 @@ function renderYearBars() {
   const yearLabel=measure==="salesBrl"?"BRL":"commandes";
   for(const pair of pairs){
     const button=node("button","year-pair");button.type="button";
+    button.dataset.month=String(pair.month);
+    button.tabIndex=pair.month===chosen.month?0:-1;
     button.setAttribute("aria-pressed",String(pair.month===chosen.month));
     button.setAttribute("aria-label",`${shortMonth[pair.month-1]} : 2017 ${measure==="salesBrl"?amount(pair.previous.salesBrl):n(pair.previous.orders)}, 2018 ${measure==="salesBrl"?amount(pair.current.salesBrl):n(pair.current.orders)}`);
     button.title=button.getAttribute("aria-label");
@@ -381,7 +395,14 @@ function renderYearBars() {
       const bar=node("i");bar.style.setProperty("--h",Math.max(1,100*val/max)+"%");towers.append(bar);
     }
     append(button,towers,node("span","year-month-label",shortMonth[pair.month-1]));
-    button.addEventListener("click",()=>{state.salesMonth=pair.month;render();});
+    button.addEventListener("click",()=>selectSalesMonth(pair.month,true));
+    button.addEventListener("keydown",event=>{
+      if(!["ArrowLeft","ArrowRight","Home","End"].includes(event.key))return;
+      event.preventDefault();
+      const next=event.key==="Home"?1:event.key==="End"?8:
+        Math.max(1,Math.min(8,pair.month+(event.key==="ArrowRight"?1:-1)));
+      selectSalesMonth(next,true);
+    });
     plot.append(button);
   }
   const year2017=pairs.reduce((sum,p)=>sum+p.previous[measure],0);
@@ -391,7 +412,10 @@ function renderYearBars() {
   const yearlyValue=v=>measure==="salesBrl"?smallAmount(v):n(v);
   $("viz-container").replaceChildren(
     heading(growth,`${yearlyLabel} · jan–août 2017 vs jan–août 2018`),
-    append(node("div","year-chart"),legend,plot,append(node("div","year-caption"),node("span","",`2017 · ${yearlyValue(year2017)}`),node("span","",`2018 · ${yearlyValue(year2018)}`)))
+    append(node("div","year-chart"),legend,plot,append(node("div","year-caption"),node("span","",`2017 · ${yearlyValue(year2017)}`),node("span","",`2018 · ${yearlyValue(year2018)}`))),
+    accessibleDataTable("Comparaison Olist à mois identique : ventes d’articles et commandes livrées en 2017 et 2018",
+      ["Mois","Ventes 2017 (BRL)","Ventes 2018 (BRL)","Commandes 2017","Commandes 2018"],
+      pairs.map(pair=>[shortMonth[pair.month-1],amount(pair.previous.salesBrl,true),amount(pair.current.salesBrl,true),n(pair.previous.orders),n(pair.current.orders)]))
   );
   const selectedDiff=(chosen.current[measure]/chosen.previous[measure]-1)*100;
   setStory({
@@ -908,7 +932,7 @@ function renderInspectorDetails() {
       {label:"Même mois 2017",value:chosenMetric==="salesBrl"?smallAmount(pair.previous.salesBrl):n(pair.previous.orders),note:"Période comparable"},
       {label:"Même mois 2018",value:chosenMetric==="salesBrl"?smallAmount(pair.current.salesBrl):n(pair.current.orders),note:"Période comparable"}
     ];
-    navigation={items:pairs,id:pair.month,getId:x=>x.month,change:month=>{state.salesMonth=month;render();}};
+    navigation={items:pairs,id:pair.month,getId:x=>x.month,change:month=>selectSalesMonth(month),restoreFocus:true};
   } else if(state.view==="delivery") {
     const measure=state.deliveryMeasure;
     const regions=[...data.states].sort((a,b)=>b[measure]-a[measure]);
@@ -946,7 +970,7 @@ function renderInspectorDetails() {
     ];
   }
   renderComparisonRows(items);
-  if(navigation) setSelectionNavigation(navigation.items,navigation.id,navigation.getId,navigation.change);
+  if(navigation) setSelectionNavigation(navigation.items,navigation.id,navigation.getId,navigation.change,Boolean(navigation.restoreFocus));
   else $("story-navigation").replaceChildren();
 }
 

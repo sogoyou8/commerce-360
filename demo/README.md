@@ -1,3 +1,11 @@
+## Jalon 2/5 — Ventes, comparaisons à mois équivalent (19/10/2026)
+
+Le jalon 1/5 est terminé techniquement (tests GitHub et navigateur, sans certification d'accessibilité). Ventes : 8 groupes janvier–août 2017/2018, chiffres réels Olist. Navigation clavier par flèches, Home/End, focus conservé après clic, navigation inspecteur et changement de mesure ; un tableau alternatif complet avec ventes BRL et commandes des deux années, 8 mois. Le graphique défile **en interne** sous 801px (8 groupes de 50px) ; les autres vues et les KPI nationaux restent indépendants.
+
+Les variations affichées proviennent exclusivement des mêmes agrégats publics et comparent **janvier–août** des deux années, pas 2017 complet vs 2018 partiel. Aucun filtre transversal fictif, aucun fichier `data/public.json` modifié. Couche `sales-finish.css` séparée, PR #7 toujours draft. Recette navigateur 320–1920px, focus, inspecteur, sélection, 8 lignes du tableau, aucun overflow document, CI Web/Python et Vercel READY même SHA.
+
+---
+
 ## Jalon 1/5 — Vue d'ensemble, finition visuelle (19/10/2026)
 
 **Nomenclature unique à compter de maintenant :** Jalon 1/5 Vue d'ensemble ; 2/5 Ventes ; 3/5 Livraisons ; 4/5 Qualité ; 5/5 Clients. Les anciens E3/F1–F6 et P1 sont des noms de lots historiques, pas des étapes supplémentaires.

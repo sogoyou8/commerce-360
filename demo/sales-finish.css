@@ -1,0 +1,40 @@
+/* Jalon 2/5 — Ventes : lecture comparée 2017/2018, sans modifier les agrégats. */
+.analysis:has(.story-panel[data-mode="sales"]) .year-legend{
+  font-size:12px;color:#c2d6f2;gap:20px;
+}
+.analysis:has(.story-panel[data-mode="sales"]) .year-legend i{width:11px;height:11px}
+.analysis:has(.story-panel[data-mode="sales"]) .year-month-label{
+  font-size:11px;color:#b4cbea;font-variant-numeric:tabular-nums;
+}
+.analysis:has(.story-panel[data-mode="sales"]) .year-pair[aria-pressed="true"]{
+  background:rgba(70,132,224,.14);
+}
+.analysis:has(.story-panel[data-mode="sales"]) .year-pair:focus-visible{
+  outline:2px solid #d4e9ff;outline-offset:-2px;
+}
+.analysis:has(.story-panel[data-mode="sales"]) .year-caption{
+  font-size:11px;color:#c2d6f2;
+}
+.story-panel[data-mode="sales"] .comparison-label{font-size:11px}
+.story-panel[data-mode="sales"] .comparison-value{font-size:13px}
+@media (min-width:1180px) {
+  .story-panel[data-mode="sales"] .story-inner{padding-top:clamp(14px,1.9vh,23px)}
+  .story-panel[data-mode="sales"] .story-stat{padding:clamp(11px,1.45vh,17px) 0}
+  .story-panel[data-mode="sales"] .comparison-row{padding:clamp(8px,1.1vh,12px) 0}
+}
+@media (max-width:800px) {
+  /* 8 groups of 50px; the chart scrolls internally, never the page. */
+  .analysis:has(.story-panel[data-mode="sales"]) .year-chart{
+    overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;
+    scrollbar-color:#4978bb transparent;
+  }
+  .analysis:has(.story-panel[data-mode="sales"]) .year-plot{min-width:400px}
+  .analysis:has(.story-panel[data-mode="sales"]) .year-legend,
+  .analysis:has(.story-panel[data-mode="sales"]) .year-caption{min-width:400px}
+}
+@media (max-width:460px) {
+  .analysis:has(.story-panel[data-mode="sales"]) .year-month-label{font-size:10px}
+}
+@media (prefers-reduced-motion:reduce){
+  .analysis:has(.story-panel[data-mode="sales"]) .year-chart{scroll-behavior:auto}
+}
