@@ -181,7 +181,7 @@ test("F1/F2 isolates independent desktop panels and grows the lower exploration 
 
 test("F3 builds a generated Earth atmosphere without altering layout or analytical data",()=>{
   const f3=readFileSync(new URL("../ambience-f3.css",import.meta.url),"utf8");
-  assert.match(html,/ambience-f3\.css\?v=e3-f3-20261019-native1254/);
+  assert.match(html,/ambience-f3\.css\?v=e3-f3-20261019-seamless/);
   assert.match(f3,/illustration originale/);
   assert.match(f3,/assets\/earth-f3-native\.webp/);
   assert.match(f3,/\.ambient::after \{/);
@@ -197,10 +197,10 @@ test("F3 builds a generated Earth atmosphere without altering layout or analytic
 
 test("F3 framing: smaller spherical photo, protected KPI and complete layout isolation",()=>{
   const f3=readFileSync(new URL("../ambience-f3.css",import.meta.url),"utf8");
-  assert.match(f3,/width:clamp\(455px,38vw,620px\)/);
-  assert.match(f3,/right:clamp\(10px,1\.2vw,24px\)/);
+  assert.match(f3,/width:clamp\(450px,35vw,565px\)/);
+  assert.match(f3,/right:clamp\(16px,1\.8vw,34px\)/);
   assert.match(f3,/mask-image:none/);
-  assert.match(f3,/\.metric:last-child \{\s*background:linear-gradient/);
+  assert.match(f3,/\.metric:last-child \{\s*background:transparent/);
   assert.match(f3,/\.story-panel \{/);
   assert.doesNotMatch(f3,/grid-template|\.workspace\s*\{|\.analysis-main\s*\{|\.analysis\s*\{/);
 });
@@ -264,10 +264,20 @@ test("F5 upgrades all three exploration cards without altering the cockpit or da
 
 test("F3 globe is fully within viewport and does not redefine F5",()=>{
   const f3=readFileSync(new URL("../ambience-f3.css",import.meta.url),"utf8");
-  assert.match(f3,/right:clamp\(10px,1\.2vw,24px\)/);
-  assert.match(f3,/width:clamp\(455px,38vw,620px\)/);
+  assert.match(f3,/right:clamp\(16px,1\.8vw,34px\)/);
+  assert.match(f3,/width:clamp\(450px,35vw,565px\)/);
   assert.match(f3,/max-width:1179px/);
-  assert.match(f3,/\.metric:last-child\s*\{\s*background:linear-gradient/);
+  assert.match(f3,/\.metric:last-child\s*\{\s*background:transparent/);
   assert.match(f3,/\.story-panel\s*\{\s*background:linear-gradient/);
   assert.doesNotMatch(f3,/\.dock-panel|\.exploration-dock|\.workspace\s*\{|\.analysis\s*\{/);
+});
+
+test("F3 seamless globe never ends a KPI overlay in the right gutter",()=>{
+ const f3=readFileSync(new URL("../ambience-f3.css",import.meta.url),"utf8");
+ assert.match(f3,/\.metric:last-child\s*\{\s*background:transparent/);
+ assert.match(f3,/\.metric:last-child :is\(\.metric-label,\.metric-value,\.metric-note\)/);
+ assert.match(f3,/text-shadow:0 1px 7px/);
+ assert.doesNotMatch(f3,/\.metric:last-child\s*\{\s*background:linear-gradient/);
+ assert.match(f3,/background:url\("\.\/assets\/earth-f3-native\.webp"\) center \/ contain no-repeat/);
+ assert.doesNotMatch(f3,/\.workspace\s*\{|\.analysis\s*\{|\.dock-panel\s*\{/);
 });

@@ -1,3 +1,11 @@
+## F3 — Raccord KPI / globe corrigé (19/10/2026)
+
+Le quatrième KPI avait un **fond rectangulaire** qui s'arrêtait au bord du cockpit, révélant un raccord vertical contre la Terre décorative dans la marge. Ce fond a été retiré au profit d'une ombre de texte douce, qui protège la lecture sans interrompre le décor. Globe natif WebP transparent **1254×1254** conservé, largeur réduite à 450–565px, ancrage positif 16–34px ; halo et opacité plus discrets. Le fond de l'inspecteur reste indépendant et plus opaque pour la lisibilité des chiffres.
+
+Seule F3 est retouchée. F1/F2, F4, F5, interactions et `data/public.json` inchangés. Le globe reste masqué sur mobile, économie de données et contraste forcé. PR #7 draft ; recette technique et validation visuelle requises avant fusion.
+
+---
+
 ## F3 — Source native et cadrage complet (19/10/2026)
 
 L'illustration originale disponible mesure **1254×1254 RGBA** et non 2048 px comme l'indiquait le rapport de recherche. Elle a été exportée en WebP transparent **1254×1254**, `demo/assets/earth-f3-native.webp` (~379 KiB), sans agrandissement artificiel. L'ancienne variante WebP 1024px n'est plus référencée par le CSS actif.
