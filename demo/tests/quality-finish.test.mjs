@@ -49,6 +49,7 @@ test("Jalon 4/5 — Quality finish is scoped, focus-visible and responsive",()=>
   assert.match(css,/\.group-card:focus-visible/);
   assert.match(css,/@media \(min-width:1180px\) and \(max-height:850px\)/);
   assert.match(css,/@media \(max-width:480px\)/);
+  assert.match(css,/@media \(max-width:540px\)/);
   assert.match(css,/\.analysis:has\(\.story-panel\[data-mode="quality"\]\) \.analysis-main\{/);
   assert.match(css,/height:510px;\s*min-height:510px/);
   assert.match(css,/@media \(prefers-contrast:more\)/);
