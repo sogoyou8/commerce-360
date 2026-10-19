@@ -1,3 +1,13 @@
+## E3.P / P1 — Vue d'ensemble (19/10/2026)
+
+Après validation technique de F5, la finition du graphique mensuel corrige trois problèmes observés sur le navigateur : sur mobile 320px les barres ne font que ~31px, le graphique ouvert sur janvier cache le dernier mois pourtant sélectionné (août 2018), et les sélections par clic perdent le focus lorsque l'interface est reconstruite.
+
+Correctifs isolés : largeur de frise de 880px sous 1180px (20 mois ×44px), défilement horizontal **dans** le graphique et recentrage du mois actif après rendu ; focus conservé après clic sur une colonne et après navigation par flèches de l'inspecteur ; consignes clavier dans la légende accessible des boutons ; libellés de janvier 2017 et août 2018 ancrés vers l'intérieur pour éviter la troncature ; flèches d'inspecteur 44px sur mobile. Couche `overview-e3p.css` séparée. Aucun KPI ou pourcentage nouveau, aucun fichier `demo/data/public.json` modifié. Conserver la PR #7 en brouillon, sans fusion.
+
+Recette : navigateur sur 320,390,430,768,1180,1440,1920px ; état initial août 2018 visible en mobile ; flèches, Home/End et focus clavier ; mois sélectionné reflété dans l'inspecteur ; pas de débordement horizontal du document, desktop sans scroll ; Web+Python CI, Vercel READY même SHA. Les autres modes sont conservés mais non encore polis.
+
+---
+
 ## F5.6 — Composant de carte réutilisé sans fuite UI (19/10/2026)
 
 Recette navigateur F5.5 : la carte est utilisée **à la fois dans le dock et dans le graphique du mode Livraisons**. Le sélecteur des 27 États ne doit apparaître que sous la carte du dock sur mobile. `renderBrazilMap(withMobilePicker=false)` laisse le graphique détaillé inchangé ; seul l'appel du dock active le sélecteur. Des IDs SVG uniques (compteur de rendu) évitent les doublons de `title`/`desc` lorsque deux cartes existent dans le même DOM. Des tests de non-régression figent ces deux invariants. Données et autres couches inchangées. Valider en navigateur les deux cartes dans le mode Livraisons ainsi que le sélecteur mobile. PR #7 conservée draft.

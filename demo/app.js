@@ -147,7 +147,7 @@ function heading(value, subtitle) {
 }
 
 
-function setSelectionNavigation(items, selectedId, getId, onSelect) {
+function setSelectionNavigation(items, selectedId, getId, onSelect, restoreFocus = false) {
   const nav = $("story-navigation");
   const index = items.findIndex(item => getId(item) === selectedId);
   nav.replaceChildren();
@@ -157,7 +157,17 @@ function setSelectionNavigation(items, selectedId, getId, onSelect) {
     btn.type = "button";
     btn.disabled = index+direction<0 || index+direction>=items.length;
     btn.setAttribute("aria-label",name+" : "+(items[index+direction]?getId(items[index+direction]):""));
-    btn.addEventListener("click",()=>onSelect(getId(items[index+direction])));
+    btn.dataset.direction=String(direction);
+    btn.addEventListener("click",()=>{
+      onSelect(getId(items[index+direction]));
+      // Rerender replaces the previous arrows; restore keyboard focus.
+      if(restoreFocus){
+        const arrows=[...document.querySelectorAll("#story-navigation .inspector-arrow")];
+        const next=arrows.find(x=>x.dataset.direction===String(direction)&&!x.disabled)
+          ||arrows.find(x=>!x.disabled);
+        next?.focus({preventScroll:true});
+      }
+    });
     nav.append(btn);
   }
 }
@@ -209,6 +219,8 @@ function renderMonthBars() {
   const shell=node("div","combo-graph"),axisLeft=node("div","combo-axis combo-axis-left");
   const axisRight=node("div","combo-axis combo-axis-right"),scroll=node("div","combo-scroll");
   const plot=node("div","combo-plot"),bars=node("div","combo-bars");
+  bars.setAttribute("role","group");
+  bars.setAttribute("aria-label","Sélectionner un mois. Au clavier : flèches gauche et droite, Début et Fin. Chaque bouton annonce les ventes d’articles hors fret et les commandes livrées.");
   const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
   svg.setAttribute("class","combo-line");
   svg.setAttribute("viewBox","0 0 1000 300");
@@ -240,7 +252,7 @@ function renderMonthBars() {
     button.setAttribute("aria-label",strMonth(entry.month,true)+" : "+amount(entry.salesBrl,true)+", "+n(entry.orders)+" commandes");
     button.title=button.getAttribute("aria-label");
     button.style.setProperty("--h",Math.max(1,100*entry.salesBrl/salesCeil)+"%");
-    button.addEventListener("click",()=>selectOverviewMonth(entry.month));
+    button.addEventListener("click",()=>selectOverviewMonth(entry.month,true));
     button.addEventListener("keydown",event=>{
       if(!["ArrowLeft","ArrowRight","Home","End"].includes(event.key))return;
       event.preventDefault();
@@ -271,6 +283,11 @@ function renderMonthBars() {
     append(node("span",""),node("i","legend-sales"),node("span","","Ventes (BRL) · colonnes")),
     append(node("span",""),node("i","legend-orders"),node("span","","Commandes · courbe")));
   root.replaceChildren(legend,shell);
+  // The selected month must be visible when the timeline scrolls internally.
+  if(scroll.scrollWidth>scroll.clientWidth){
+    const activeButton=bars.children[index];
+    scroll.scrollLeft=Math.max(0,activeButton.offsetLeft+activeButton.offsetWidth/2-scroll.clientWidth/2);
+  }
   const previous=index>0?items[index-1]:null;
   const previousYear=items.find(x=>x.month===String(Number(chosen.month.slice(0,4))-1)+chosen.month.slice(4));
   const compare=[
@@ -288,7 +305,7 @@ function renderMonthBars() {
     caveat:"Les taux de retard et les avis nationaux ne sont pas filtrés par mois.",
   });
   renderComparisonRows(compare);
-  setSelectionNavigation(items,chosen.month,x=>x.month,month=>selectOverviewMonth(month));
+  setSelectionNavigation(items,chosen.month,x=>x.month,month=>selectOverviewMonth(month),true);
 }
 
 function renderOverview() {

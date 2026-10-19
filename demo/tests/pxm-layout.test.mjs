@@ -246,7 +246,7 @@ test("F3 HD asset dimensions and native alpha are validated",()=>{
 test("F5 upgrades all three exploration cards without altering the cockpit or data",()=>{
   const f5=readFileSync(new URL("../dock-f5.css",import.meta.url),"utf8");
   assert.match(html,/dock-f5\.css\?v=e3-f5-20261019-a11y5/);
-  assert.match(html,/app\.js\?v=e3-20261019-f5-state-table/);
+  assert.match(html,/app\.js\?v=e3p-20261019-p1/);
   assert.match(f5,/#dock-categories \.dock-category-row/);
   assert.match(f5,/#dock-states \.dock-state-layout/);
   assert.match(f5,/#dock-quality \.score-ring/);
@@ -383,5 +383,21 @@ test("F5.7 the 27-state SVG has a complete screen-reader data table",()=>{
  assert.match(js,/node\("td","",percent\(item\.rate,1\)\)/);
  assert.match(js,/holder\.append\(table\)/);
  assert.match(css,/\.sr-only\{position:absolute!important/);
- assert.match(html,/app\.js\?v=e3-20261019-f5-state-table/);
+ assert.match(html,/app\.js\?v=e3p-20261019-p1/);
+});
+
+test("E3.P overview timeline keeps month focused and accessible",()=>{
+ const p1=readFileSync(new URL("../overview-e3p.css",import.meta.url),"utf8");
+ assert.match(html,/overview-e3p\.css\?v=e3p-20261019-p1/);
+ assert.match(html,/app\.js\?v=e3p-20261019-p1/);
+ assert.match(js,/bars\.setAttribute\("role","group"\)/);
+ assert.match(js,/button\.addEventListener\("click",\(\)=>selectOverviewMonth\(entry\.month,true\)\)/);
+ assert.match(js,/scroll\.scrollLeft=Math\.max\(0,activeButton\.offsetLeft\+activeButton\.offsetWidth\/2-scroll\.clientWidth\/2\)/);
+ assert.match(js,/setSelectionNavigation\(items,chosen\.month,x=>x\.month,month=>selectOverviewMonth\(month\),true\)/);
+ assert.match(js,/next\?\.focus\(\{preventScroll:true\}\)/);
+ assert.match(p1,/\.combo-plot\{min-width:880px\}/);
+ assert.match(p1,/\.combo-month:last-child \.combo-month-label/);
+ assert.match(p1,/\.combo-month:first-child \.combo-month-label/);
+ assert.match(p1,/\.inspector-arrow\{\s*width:44px/);
+ assert.doesNotMatch(p1,/\.workspace\s*\{|\.analysis\s*\{|\.metric\s*\{|\.dock-panel\s*\{/);
 });
