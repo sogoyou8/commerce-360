@@ -1,3 +1,13 @@
+## E3.F — F6 : consolidation et recette technique (19/10/2026)
+
+La base `demo/styles.css` ne dépend plus de l'ancienne image NASA distante (ou de son masque radial), remplacée par l'illustration originale transparente `demo/assets/earth-f3-native.webp` depuis F3. Ordre explicite des couches CSS conservé : **styles → F1/F2 → F3 → F4 → F5**. La base est versionnée afin de contourner les caches du navigateur. Aucun regroupement risqué des nombreuses autres règles historiques de `styles.css` : elles restent testées par la CI et par la recette visuelle, pour ne pas introduire de régression.
+
+**Contrôles avant clôture :** mode Vue d'ensemble / Ventes / Livraisons / Qualité / Clients en navigateur ; viewport 1180×750, 1440×900, 1920×993, 320×740, 390×844, 430×932 ; aucun scroll de page desktop ni débordement horizontal mobile ; cinq KPI adaptés, trois cartes inférieures et interactions intactes. Le globe 1254 px se limite au desktop, l'ancienne surcouche rectangulaire du quatrième KPI est absente. Rapport détaillé : `docs/e3f-f6-recette.md`.
+
+**Statut :** validation technique prévue sur commit F6 ; validation esthétique finale du propriétaire et autorisation de fusion distincte toujours nécessaires. Aucun fichier `demo/data/public.json` modifié.
+
+---
+
 ## F3 — Raccord KPI / globe corrigé (19/10/2026)
 
 Le quatrième KPI avait un **fond rectangulaire** qui s'arrêtait au bord du cockpit, révélant un raccord vertical contre la Terre décorative dans la marge. Ce fond a été retiré au profit d'une ombre de texte douce, qui protège la lecture sans interrompre le décor. Globe natif WebP transparent **1254×1254** conservé, largeur réduite à 450–565px, ancrage positif 16–34px ; halo et opacité plus discrets. Le fond de l'inspecteur reste indépendant et plus opaque pour la lisibilité des chiffres.

@@ -139,7 +139,7 @@ test("E3 reference-compliant detail remains grounded in national aggregates",()=
   assert.match(js,/otherOrders=data\.totals\.orders-volumeTop5/);
   assert.match(js,/group-secondary/);
   assert.match(html,/Visuel terrestre généré pour Commerce 360/);
-  assert.match(css,/city_lights_namerica_8k\.jpg/);
+  assert.doesNotMatch(css,/city_lights_namerica_8k\.jpg/);
 });
 
 test("E3 compact satisfaction dock avoids subpixel row clipping",()=>{
@@ -164,7 +164,7 @@ test("F0 allows reflow at 320px including browser scrollbar, without forcing pag
   assert.match(css,/html,body\{margin:0;min-width:0;min-height:100%/);
   assert.doesNotMatch(css,/html,body\{margin:0;min-width:320px/);
   assert.match(css,/\.mode-nav\{order:3;flex-basis:100%;justify-content:flex-start;overflow-x:auto/);
-  assert.match(html,/styles\.css\?v=f0-20261018-reflow/);
+  assert.match(html,/styles\.css\?v=f6-20261019-legacy-clean/);
 });
 
 test("F1/F2 isolates independent desktop panels and grows the lower exploration row",()=>{
@@ -279,5 +279,17 @@ test("F3 seamless globe never ends a KPI overlay in the right gutter",()=>{
  assert.match(f3,/text-shadow:0 1px 7px/);
  assert.doesNotMatch(f3,/\.metric:last-child\s*\{\s*background:linear-gradient/);
  assert.match(f3,/background:url\("\.\/assets\/earth-f3-native\.webp"\) center \/ contain no-repeat/);
+ assert.doesNotMatch(f3,/\.workspace\s*\{|\.analysis\s*\{|\.dock-panel\s*\{/);
+});
+
+test("F6 removes redundant remote Earth and preserves layer ordering",()=>{
+ const css=readFileSync(new URL("../styles.css",import.meta.url),"utf8");
+ const f3=readFileSync(new URL("../ambience-f3.css",import.meta.url),"utf8");
+ assert.doesNotMatch(css,/city_lights_namerica_8k|nasa\.gov|mask-image:radial-gradient/);
+ assert.match(f3,/earth-f3-native\.webp/);
+ assert.match(f3,/\.metric:last-child\s*\{\s*background:transparent/);
+ const order=["styles.css","layout-f1f2.css","ambience-f3.css","design-system-f4.css","dock-f5.css"];
+ const positions=order.map(name=>html.indexOf('href="./'+name+'?'));
+ assert.ok(positions.every(x=>x>=0)&&positions.every((x,i)=>i===0||x>positions[i-1]));
  assert.doesNotMatch(f3,/\.workspace\s*\{|\.analysis\s*\{|\.dock-panel\s*\{/);
 });
