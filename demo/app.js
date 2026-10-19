@@ -605,6 +605,13 @@ function renderDelivery() {
   ]);
 }
 
+function selectQualityGroup(code, focus=false) {
+  state.selectedQuality=code;
+  render();
+  if(focus){
+    document.querySelector('.group-card[data-group-code="'+code+'"]')?.focus({preventScroll:true});
+  }
+}
 function renderQuality() {
   const t=data.totals,measure=state.qualityMeasure;
   const groups=data.satisfaction.filter(x=>x.code!=="undated");
@@ -619,11 +626,15 @@ function renderQuality() {
   setViz("04 · SATISFACTION CLIENT","Deux expériences de livraison.","Note moyenne ou proportion d'avis ≤ 2 parmi les commandes notées.","Cliquez sur un groupe : seules ses propres mesures sont détaillées. Huit commandes non datées sont exclues du comparatif.");
   setOptions([{key:"negativeRate",title:"Avis ≤ 2"},{key:"score",title:"Note / 5"}],measure,key=>{state.qualityMeasure=key;render();});
   const chart=node("div","group-chart");
+  chart.setAttribute("role","group");
+  chart.setAttribute("aria-label","Comparer les avis selon la ponctualité. Utiliser les flèches gauche et droite, ou Début et Fin, pour sélectionner un groupe.");
   for(const group of groups) {
     const value=group[measure], max=measure==="score"?5:100;
     const card=node("button","group-card"); card.type="button";
+    card.dataset.groupCode=group.code;
+    card.tabIndex=group.code===selected.code?0:-1;
     card.setAttribute("aria-pressed",String(group.code===selected.code));
-    card.setAttribute("aria-label",`${group.label} : ${measure==="score"?decimal.format(value)+" sur 5":percent(value)}`);
+    card.setAttribute("aria-label",`${group.label} : ${n(group.negative)} avis négatifs sur ${n(group.scored)} commandes notées (${percent(group.negativeRate)}), note moyenne ${decimal.format(group.score)} sur 5. ${measure==="score"?"Note moyenne affichée.":"Taux d'avis négatifs affiché."}`);
     const track=append(node("span","group-track"),node("i"));
     track.firstChild.style.setProperty("--w",100*value/max+"%");
     const gauge=node("span","group-gauge");
@@ -634,10 +645,29 @@ function renderQuality() {
     append(card,node("small","",group.label.toUpperCase()),gauge,
       node("span","group-secondary",measure==="score"?`${percent(group.negativeRate)} d'avis ≤ 2`:`Note moyenne : ${decimal.format(group.score)} / 5`),
       track,node("em","",`${n(group.scored)} commandes notées`));
-    card.addEventListener("click",()=>{state.selectedQuality=group.code;render();});
+    card.addEventListener("click",()=>selectQualityGroup(group.code,true));
+    card.addEventListener("keydown",event=>{
+      const index=groups.findIndex(item=>item.code===group.code);
+      let target=null;
+      if(event.key==="ArrowRight"||event.key==="ArrowDown")target=Math.min(groups.length-1,index+1);
+      if(event.key==="ArrowLeft"||event.key==="ArrowUp")target=Math.max(0,index-1);
+      if(event.key==="Home")target=0;
+      if(event.key==="End")target=groups.length-1;
+      if(target===null)return;
+      event.preventDefault();
+      if(target!==index)selectQualityGroup(groups[target].code,true);
+    });
     chart.append(card);
   }
-  $("viz-container").replaceChildren(heading(measure==="score"?"ÉCHELLE : 0 À 5":"ÉCHELLE : 0 À 100 %",`Groupe actif · ${selected.label}`),chart);
+  const qualityTable=accessibleDataTable(
+    "Satisfaction Olist par ponctualité : les taux utilisent les commandes notées de chaque groupe ; les 8 livraisons non datées sont hors comparaison.",
+    ["Ponctualité","Commandes livrées","Commandes notées","Avis négatifs ≤ 2","Taux d'avis négatifs","Note moyenne / 5"],
+    data.satisfaction.map(group=>[
+      group.label,n(group.orders),n(group.scored),n(group.negative),
+      percent(group.negativeRate),decimal.format(group.score)+" / 5"
+    ])
+  );
+  $("viz-container").replaceChildren(heading(measure==="score"?"ÉCHELLE : 0 À 5":"ÉCHELLE : 0 À 100 %",`Groupe actif · ${selected.label}`),chart,qualityTable);
   setStory({
     kicker:"PONCTUALITÉ · "+selected.label.toUpperCase(),
     title:selected.code==="late"?"Quand la livraison tarde.":"Quand la livraison est ponctuelle.",
@@ -1008,7 +1038,7 @@ function renderInspectorDetails() {
       {label:"Note moyenne du groupe",value:decimal.format(chosen.score)+" / 5",note:"Moyenne parmi les commandes notées"},
       {label:"Écart d’avis ≤ 2",value:(chosen.negativeRate-other.negativeRate>0?"+":"")+decimal.format(chosen.negativeRate-other.negativeRate)+" pts",note:"Versus autre groupe de ponctualité · descriptif"}
     ];
-    navigation={items:data.satisfaction.filter(x=>x.code!=="undated"),id:chosen.code,getId:x=>x.code,change:code=>{state.selectedQuality=code;render();}};
+    navigation={items:data.satisfaction.filter(x=>x.code!=="undated"),id:chosen.code,getId:x=>x.code,change:code=>selectQualityGroup(code),restoreFocus:true};
   } else if(state.view==="customers" && state.customersView==="cohorts" && data.cohorts.length) {
     const cohorts=[...data.cohorts].sort((a,b)=>a.month.localeCompare(b.month));
     const cohort=cohorts.find(c=>c.month===state.selectedCohort)||cohorts[0];
