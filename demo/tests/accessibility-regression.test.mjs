@@ -23,5 +23,6 @@ test("Accessibilité — carte : navigation clavier et alternative tabulaire san
   assert.match(js,/const table=node\("table","sr-only"\)/);
   assert.match(js,/table\.setAttribute\("aria-label","Données Olist des 27 États du Brésil"\)/);
   assert.doesNotMatch(js,/path\.setAttribute\("aria-label"/);
+  assert.match(js,/path\.removeAttribute\("aria-label"\)/);
   assert.match(js,/path\.addEventListener\("click",\(\)=>openDeliveryState\(code\)\)/);
 });
