@@ -494,8 +494,9 @@ a{color:inherit;text-decoration:none}
 .combo-column{background:linear-gradient(180deg,#2357a4 0%,#102b58 100%);box-shadow:inset 1px 0 rgba(139,185,255,.08)}
 .combo-month:hover .combo-column{background:linear-gradient(180deg,#488ff1,#1a4690)}
 .combo-month[aria-pressed="true"] .combo-column{background:linear-gradient(180deg,#82baff 0%,#2963c2 100%);box-shadow:0 0 24px rgba(70,148,255,.28)}
-.combo-month-label{color:#7e9ec8}
-.combo-month[aria-pressed="true"] .combo-month-label{color:#fff}
+/* Opaque label backplates prevent bar gradients from reducing axis-text contrast. */
+.combo-month-label{color:#e7f1ff;background:#07152c;padding:1px 2px;border-radius:2px;line-height:1.1}
+.combo-month[aria-pressed="true"] .combo-month-label{color:#fff;background:#0b244a}
 .combo-axis{font-size:10px;color:#8eacd1}
 .combo-selection-rule{opacity:.75;stroke:#bbd9ff}
 .combo-legend{color:#a9c4e6}
