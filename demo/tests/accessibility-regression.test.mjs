@@ -12,6 +12,7 @@ test("Accessibilité — inspecteur et commandes ont des rôles ARIA valides",()
   assert.match(html,/id="story-comparisons" class="story-comparisons" role="group" aria-label="Comparaisons vérifiées"/);
   assert.match(html,/<span class="period-chip"><span aria-hidden="true">◷<\/span>/);
   assert.match(html,/<dialog id="method-dialog"[^>]*aria-labelledby="method-title"/);
+  assert.match(html,/<div class="method-facts" role="group" aria-label="Chiffres de référence historiques">/);
 });
 
 test("Accessibilité — carte : navigation clavier et alternative tabulaire sans attribut ARIA invalide sur les chemins",()=>{
