@@ -245,8 +245,8 @@ test("F3 HD asset dimensions and native alpha are validated",()=>{
 
 test("F5 upgrades all three exploration cards without altering the cockpit or data",()=>{
   const f5=readFileSync(new URL("../dock-f5.css",import.meta.url),"utf8");
-  assert.match(html,/dock-f5\.css\?v=e3-f5-20261019-a11y4/);
-  assert.match(html,/app\.js\?v=e3-20261019-f5-map-desc/);
+  assert.match(html,/dock-f5\.css\?v=e3-f5-20261019-a11y5/);
+  assert.match(html,/app\.js\?v=e3-20261019-f5-map-picker/);
   assert.match(f5,/#dock-categories \.dock-category-row/);
   assert.match(f5,/#dock-states \.dock-state-layout/);
   assert.match(f5,/#dock-quality \.score-ring/);
@@ -348,4 +348,17 @@ test("F5.4 interactive SVG has real descriptive title/desc without invented stat
  assert.match(f5,/#dock-states \.dock-state-row,\s*#dock-states \.dock-state-row--other\{min-height:44px\}/);
  assert.match(f5,/\.dock-heading a\{\s*min-height:44px/);
  assert.doesNotMatch(f5,/\.workspace\s*\{|\.analysis\s*\{|\.metric\s*\{/);
+});
+
+test("F5.5 native picker provides all 27 data-backed state touch alternatives",()=>{
+ const f5=readFileSync(new URL("../dock-f5.css",import.meta.url),"utf8");
+ assert.match(js,/const statePicker=node\("label","dock-state-picker"\)/);
+ assert.match(js,/const statePickerSelect=node\("select","dock-state-picker-select"\)/);
+ assert.match(js,/for\(const item of \[\.\.\.data\.states\]\.sort/);
+ assert.match(js,/statePickerSelect\.addEventListener\("change",\(\)=>openDeliveryState\(statePickerSelect\.value\)\)/);
+ assert.match(f5,/#dock-states \.dock-state-picker-select\s*\{/);
+ assert.match(f5,/height:44px;\s*min-height:44px/);
+ assert.match(f5,/@media \(max-width:480px\)/);
+ assert.match(f5,/\.dock-state-picker-select:focus-visible/);
+ assert.doesNotMatch(js,/const option=node\("option","",.*?\+ [0-9]+/);
 });

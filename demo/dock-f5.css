@@ -448,3 +448,54 @@
 @media (prefers-reduced-motion:reduce){
   #dock-states .brazil-map path{transition:none}
 }
+
+/* F5.5 — full mobile access to all 27 states despite tiny SVG regions. */
+#dock-states .dock-state-picker{display:none}
+@media (max-width:480px){
+  .exploration-dock .dock-panel:has(#dock-states){min-height:624px}
+  #dock-states .dock-state-layout{min-height:495px}
+  #dock-states .dock-map-shell{
+    flex:0 0 auto;
+    height:auto;
+    min-height:226px;
+    flex-direction:column;
+    align-items:stretch;
+    justify-content:center;
+    gap:4px;
+  }
+  #dock-states .dock-state-picker{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+    width:100%;
+    color:#dceaff;
+    font-size:11px;
+    line-height:1.2;
+  }
+  #dock-states .dock-state-picker-select{
+    display:block;
+    width:100%;
+    min-width:0;
+    height:44px;
+    min-height:44px;
+    padding:0 12px;
+    border:1px solid #7fb5fa;
+    border-radius:5px;
+    color:#ecf5ff;
+    background:#10233e;
+    font:inherit;
+    font-size:13px;
+    cursor:pointer;
+  }
+  #dock-states .dock-state-picker-select:focus-visible{
+    outline:2px solid #dceaff;
+    outline-offset:2px;
+  }
+}
+@media (forced-colors:active){
+  #dock-states .dock-state-picker-select{
+    color:CanvasText;
+    background:Canvas;
+    border-color:CanvasText;
+  }
+}

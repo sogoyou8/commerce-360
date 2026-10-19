@@ -1,3 +1,11 @@
+## F5.5 — Accès tactile à tous les États (19/10/2026)
+
+Une carte SVG choroplèthe ne peut pas garantir des zones de 44px pour ses 27 formes géographiques rapprochées. Pour conserver la vraie géographie sans grossir artificiellement les petits États, la carte affiche désormais sous 480px un **sélecteur natif « Choisir un État »**, entièrement libellé, de 44px, avec **27 options provenant de `data.states`** (code et taux de retard Olist réels). Son changement ouvre le mode Livraisons et sélectionne l'État concerné. Le SVG et ses raccourcis clavier restent inchangés, tout comme le classement des cinq États de plus fort volume.
+
+Le sélecteur est masqué sur desktop et uniquement visible en version mobile. Les cartes s'agrandissent naturellement, sans raccourcir les chiffres ni provoquer de défilement horizontal. Contrôler les 27 options, un État absent du top 5, le retour à Livraisons, et les viewports 320–480px après déploiement. Les données Olist restent intactes.
+
+---
+
 ## F5.4 — Fin de l'audit accessibilité (19/10/2026)
 
 À la suite de la recherche approfondie, le dépôt confirme que les contrastes, les focus et l'absence de débordements étaient déjà traités ; la balise `<meta name="viewport">` était déjà présente. Corrections ciblées : la carte interactive du Brésil conserve `role="group"` et son fonctionnement flèches/Entrée ; elle comprend désormais des éléments SVG `<title>` et `<desc>` liés par `aria-labelledby`/`aria-describedby`. La description de l'État actif affiche uniquement le **taux de retard observé** et le nombre de **livraisons datées** du véritable jeu de données Olist, sans inventer de chiffres. Sur mobile ≤480px, les liens « Explorer » et les boutons de catégories et d'États passent à **44 px minimum**. La carte reste vectorielle, les petites zones géographiques restent la géométrie native, et la liste d'États offre l'alternative tactile de 44 px. Des cartes mobiles plus hautes autorisent un défilement vertical naturel, sans tronquer les chiffres.

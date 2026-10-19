@@ -718,7 +718,20 @@ function renderBrazilMap() {
     updateActive();
   });
   updateActive();
-  holder.append(svg,node("span","map-legend","Carte : taux de retard"));
+  // Tiny SVG regions cannot all be 44px touch targets. Offer all 27 states
+  // in a native, labelled control on narrow viewports without resizing paths.
+  const statePicker=node("label","dock-state-picker");
+  const statePickerSelect=node("select","dock-state-picker-select");
+  statePickerSelect.setAttribute("aria-label","Choisir un État du Brésil à explorer");
+  for(const item of [...data.states].sort((a,b)=>a.code.localeCompare(b.code))){
+    const option=node("option","",item.code+" — "+percent(item.rate,1)+" de retard");
+    option.value=item.code;
+    statePickerSelect.append(option);
+  }
+  statePickerSelect.value=activeCode;
+  statePickerSelect.addEventListener("change",()=>openDeliveryState(statePickerSelect.value));
+  append(statePicker,node("span","","Choisir un État"),statePickerSelect);
+  holder.append(svg,statePicker,node("span","map-legend","Carte : taux de retard"));
   return holder;
 }
 function renderDock() {
