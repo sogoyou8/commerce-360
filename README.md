@@ -53,11 +53,11 @@ Ces chiffres sont rapprochés entre les références indépendantes, PostgreSQL 
 |---|---|
 | **Pipeline analytique E0–E8** | Réalisé, testé et intégré dans `main` ; [bilan et niveaux de preuve](docs/e8-bilan.md) |
 | **Rapport Power BI** | Cinq pages réalisées dans Power BI Desktop, **fichier PBIX conservé localement** |
-| **Démo web** | Prévisualisation interactive à cinq thèmes disponible sur Vercel ; [PR #7](https://github.com/sogoyou8/commerce-360/pull/7) **en brouillon**, non fusionnée |
+| **Démo web** | Démo interactive à cinq vues disponible sur Vercel ; [PR #7](https://github.com/sogoyou8/commerce-360/pull/7) (historique de livraison et de validation) |
 | **Couverture de la démo actuelle** | 20 mois, 7 segments RFM, 27 États clients vérifiés, 12 catégories commerciales, 15 États vendeurs agrégés et 20 cohortes ; exports E4/E5 et manifestes SHA-256 validés le 18 octobre 2026 |
 | **Code et documentation** | Scripts SQL/Python, requêtes Power Query et DAX, tests, protocole de reproduction et références agrégées publics |
 
-La démo web est **une exploration des agrégats historiques**, pas une connexion en temps réel à PostgreSQL ni une publication du PBIX. Aucun CSV brut, donnée client individuelle, classeur détaillé ou PBIX n'est rendu public. L'interface et la couverture de la démo sont encore en cours de finalisation.
+La démo web est **une exploration des agrégats historiques**, pas une connexion en temps réel à PostgreSQL ni une publication du PBIX. Aucun CSV brut, donnée client individuelle, classeur détaillé ou PBIX n'est rendu public. Les cinq vues ont été validées visuellement et techniquement. **Réserve d'accessibilité : le test humain avec NVDA ou VoiceOver n'a pas été effectué ; aucune certification WCAG n'est revendiquée.**
 
 **Pour la démo web :** [guide de démarrage et de lecture](demo/README.md) · [agrégats vérifiés](demo/data/public.json) · [contrôles Node](demo/tests/contracts.test.mjs) · [exporteur pour enrichir les données à partir des agrégats locaux](scripts/build_web_data.py). Le contenu est statique, sans connexion publique à PostgreSQL.
 
@@ -68,11 +68,11 @@ La démo web est **une exploration des agrégats historiques**, pas une connexio
 - **[Contrôles croisés E7 SQL ↔ Power BI](docs/e7-validation.md)** et **[référence indépendante E3](docs/e3-reference-offline.md)**.
 - **[Méthodologie RFM E5](docs/e5-rfm.md)** et **[construction Power BI E6](docs/e6-powerbi.md)**.
 - **[Présentation portfolio et CV](docs/e8-portfolio.md)** ; **[mesures historiques agrégées](docs/e8-public-metrics.json)**.
-- **[PR #1 à #6 fusionnées](https://github.com/sogoyou8/commerce-360/pulls?q=is%3Apr+is%3Amerged)** : étapes E3–E8 ; le travail de démo web se poursuit dans la PR #7.
+- **[PR #1 à #6 fusionnées](https://github.com/sogoyou8/commerce-360/pulls?q=is%3Apr+is%3Amerged)** : étapes E3–E8 ; la démo web est livrée par la PR #7, avec la réserve d'accessibilité précisée ci-dessus.
 
 ## Technologies
 
-**PostgreSQL 16, SQL, Python, Docker, Excel, Power Query, Power BI Desktop, DAX, GitHub Actions, HTML/CSS/JavaScript** pour la démo en préparation.
+**PostgreSQL 16, SQL, Python, Docker, Excel, Power Query, Power BI Desktop, DAX, GitHub Actions, HTML/CSS/JavaScript** pour la démo web interactive.
 
 ---
  
