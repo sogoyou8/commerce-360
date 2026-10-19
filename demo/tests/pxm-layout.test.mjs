@@ -430,7 +430,7 @@ test("Jalon 2/5 — sales comparisons are keyboard accessible and truthful",()=>
  assert.match(js,/pairs\.map\(pair=>\[shortMonth\[pair\.month-1\],amount\(pair\.previous\.salesBrl,true\),amount\(pair\.current\.salesBrl,true\),n\(pair\.previous\.orders\),n\(pair\.current\.orders\)\]\)/);
  assert.match(js,/change:month=>selectSalesMonth\(month\),restoreFocus:true/);
  assert.match(js,/button\.dataset\.measure=item\.key/);
- assert.match(sales,/\.year-plot\{min-width:400px\}/);
+ assert.match(sales,/\.year-plot\{min-width:416px;position:relative\}/);\n assert.match(js,/yearScroll\.scrollLeft=Math\.max\(0,active\.offsetLeft\+active\.offsetWidth\/2-yearScroll\.clientWidth\/2\)/);
  assert.match(sales,/\.year-pair:focus-visible/);
  assert.doesNotMatch(sales,/\.workspace\s*\{|\.metric\s*\{|\.combo-column\s*\{/);
 });

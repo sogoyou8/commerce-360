@@ -28,7 +28,7 @@
     overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;
     scrollbar-color:#4978bb transparent;
   }
-  .analysis:has(.story-panel[data-mode="sales"]) .year-plot{min-width:400px}
+  .analysis:has(.story-panel[data-mode="sales"]) .year-plot{min-width:416px;position:relative}
   .analysis:has(.story-panel[data-mode="sales"]) .year-legend,
   .analysis:has(.story-panel[data-mode="sales"]) .year-caption{min-width:400px}
 }

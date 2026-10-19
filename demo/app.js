@@ -417,6 +417,12 @@ function renderYearBars() {
       ["Mois","Ventes 2017 (BRL)","Ventes 2018 (BRL)","Commandes 2017","Commandes 2018"],
       pairs.map(pair=>[shortMonth[pair.month-1],amount(pair.previous.salesBrl,true),amount(pair.current.salesBrl,true),n(pair.previous.orders),n(pair.current.orders)]))
   );
+  // On phones, show the chosen comparison immediately inside the chart scroll.
+  const yearScroll=$("viz-container").querySelector(".year-chart");
+  if(yearScroll.scrollWidth>yearScroll.clientWidth){
+    const active=plot.querySelector('.year-pair[aria-pressed="true"]');
+    yearScroll.scrollLeft=Math.max(0,active.offsetLeft+active.offsetWidth/2-yearScroll.clientWidth/2);
+  }
   const selectedDiff=(chosen.current[measure]/chosen.previous[measure]-1)*100;
   setStory({
     kicker:"COMPARAISON À MOIS ÉQUIVALENT",
