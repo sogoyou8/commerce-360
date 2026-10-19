@@ -328,7 +328,7 @@ test("F5.3 contrast palette and touch zones preserve data without chart librarie
  assert.match(js,/new IntersectionObserver\(entries=>/);
  assert.match(js,/rootMargin:"400px 0px"/);
  assert.match(js,/queueBrazilMap\(holder\)/);
- assert.match(js,/Toucher un État pour explorer/);
+ assert.match(js,/Toucher un État ou utiliser les flèches/);
  assert.doesNotMatch(js,/Chart\.js|Recharts|chart\.js/);
  assert.doesNotMatch(f5,/\.workspace\s*\{|\.analysis\s*\{|\.metric\s*\{/);
 });
