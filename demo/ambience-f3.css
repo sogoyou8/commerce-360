@@ -14,14 +14,14 @@
     display:block;
     content:"";
     position:absolute;
-    width:clamp(500px,42vw,670px);
+    width:clamp(480px,38vw,630px);
     aspect-ratio:1;
-    top:clamp(-150px,-10.5vh,-94px);
-    right:clamp(-26px,-1.4vw,-14px);
+    top:clamp(-125px,-9vh,-82px);
+    right:clamp(-8px,-0.4vw,0px);
     border:0;
     border-radius:50%;
-    background:radial-gradient(circle,transparent 42%,rgba(40,128,248,.13) 48%,rgba(40,128,248,.11) 57%,transparent 76%);
-    filter:blur(17px);
+    background:radial-gradient(circle,transparent 50%,rgba(48,125,240,.11) 59%,rgba(40,107,216,.06) 69%,transparent 82%);
+    filter:blur(14px);
     opacity:.32;
     box-shadow:none;
     pointer-events:none;
@@ -30,23 +30,27 @@
     display:block;
     content:"";
     position:absolute;
-    width:clamp(455px,38vw,620px);
+    width:clamp(450px,35vw,565px);
     aspect-ratio:1;
-    top:clamp(-140px,-10vh,-85px);
-    right:clamp(10px,1.2vw,24px);
+    top:clamp(-130px,-9vh,-75px);
+    right:clamp(16px,1.8vw,34px);
     border:0;
     border-radius:0;
     background:url("./assets/earth-f3-native.webp") center / contain no-repeat;
-    opacity:.62;
-    filter:saturate(1.14) brightness(.94) contrast(1.04);
+    opacity:.57;
+    filter:saturate(1.16) brightness(.93) contrast(1.06);
     mix-blend-mode:normal;
     box-shadow:none;
     -webkit-mask-image:none;
     mask-image:none;
     pointer-events:none;
   }
+  /* Protect text, not a KPI rectangle which ends at the shell gutter. */
   .metric:last-child {
-    background:linear-gradient(90deg,rgba(4,10,23,.42),rgba(4,10,24,.91));
+    background:transparent;
+  }
+  .metric:last-child :is(.metric-label,.metric-value,.metric-note) {
+    text-shadow:0 1px 7px rgba(2,7,19,.9),0 0 18px rgba(2,7,19,.78);
   }
   .story-panel {
     background:linear-gradient(155deg,rgba(7,19,43,.94),rgba(4,12,29,.985) 85%);
@@ -54,16 +58,16 @@
 }
 @media (min-width:1180px) and (max-height:850px) {
   .ambient::before {
-    width:clamp(485px,41vw,605px);
-    top:-90px;
-    right:-15px;
+    width:clamp(460px,38vw,575px);
+    top:-87px;
+    right:0px;
     opacity:.29;
   }
   .ambient::after {
-    width:clamp(450px,38vw,560px);
-    top:-85px;
-    right:10px;
-    opacity:.55;
+    width:clamp(440px,35vw,535px);
+    top:-75px;
+    right:16px;
+    opacity:.52;
   }
 }
 @media (max-width:1179px), (prefers-reduced-data:reduce), (forced-colors:active) {
