@@ -117,11 +117,11 @@
   }
 }
 
-/* Recette P4 mobile : à 320–430 px le bandeau de titres peut prendre
+/* Recette P4 mobile : à 320–540 px le bandeau de titres peut prendre
    deux lignes et réduire la zone des anneaux sous leur hauteur intrinsèque.
    Donner la hauteur nécessaire aux deux cartes ; la page mobile reste
    naturellement défilante, sans masquer les valeurs ou les légendes. */
-@media (max-width:480px){
+@media (max-width:540px){
   .analysis:has(.story-panel[data-mode="quality"]) .analysis-main{
     height:510px;
     min-height:510px;
