@@ -224,7 +224,7 @@ a{color:inherit;text-decoration:none}
 .method-trigger .method-trigger-label { color: inherit; padding: 0; }
 .method-trigger[aria-expanded="true"] .method-trigger-icon { background: rgba(141, 172, 255, .15); border-color: var(--blue); }
 /* Balanced desktop spacing: wider panel, equal top/bottom breathing room, native scrolling. */
-.method-dialog { --method-edge:clamp(16px,4vh,40px); --method-side:clamp(16px,3vw,48px); position:fixed; inset:var(--method-edge) var(--method-side) auto auto; margin:0; width:min(640px,calc(100vw - var(--method-side) - var(--method-side))); max-height:calc(100dvh - var(--method-edge) - var(--method-edge)); overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:#455c7d transparent; border:1px solid var(--border-strong); border-radius:14px; background:linear-gradient(155deg,#101d32 0%,#0a1220 66%,#08101e 100%); color:var(--white); box-shadow:0 26px 75px rgba(0,0,0,.62),0 0 0 1px rgba(164,194,255,.035) inset; padding:28px 32px 30px; }
+.method-dialog { --method-edge:clamp(16px,4vh,40px); --method-side:clamp(16px,3vw,48px); position:fixed; inset:var(--method-edge) var(--method-side) auto auto; margin:0; max-width:none; width:min(640px,calc(100% - var(--method-side) - var(--method-side))); max-height:calc(100dvh - var(--method-edge) - var(--method-edge)); overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:#455c7d transparent; border:1px solid var(--border-strong); border-radius:14px; background:linear-gradient(155deg,#101d32 0%,#0a1220 66%,#08101e 100%); color:var(--white); box-shadow:0 26px 75px rgba(0,0,0,.62),0 0 0 1px rgba(164,194,255,.035) inset; padding:28px 32px 30px; }
 .method-dialog::-webkit-scrollbar{width:9px}
 .method-dialog::-webkit-scrollbar-track{background:transparent}
 .method-dialog::-webkit-scrollbar-thumb{background:#455c7d;border:2px solid #0c1626;border-radius:9px}
@@ -327,7 +327,7 @@ a{color:inherit;text-decoration:none}
   .exploration-dock{grid-template-columns:1fr;gap:12px}
   .dock-panel{min-height:195px}
   .dock-content{overflow:visible}
-  .method-dialog{--method-edge:14px;--method-side:14px;width:calc(100vw - var(--method-side) - var(--method-side));padding:22px 21px 25px}
+  .method-dialog{--method-edge:14px;--method-side:14px;width:calc(100% - var(--method-side) - var(--method-side));padding:22px 21px 25px}
 }
 @media (max-width:460px) {
   .identity-text small{display:none}
