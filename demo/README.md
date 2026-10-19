@@ -1,3 +1,15 @@
+# Commerce 360 — Démo web publique
+
+**État actuel (19 octobre 2026) :** [démo officielle en production](https://commerce-360-explorer.vercel.app/) · [PR #7 fusionnée](https://github.com/sogoyou8/commerce-360/pull/7) · [PR #9 fusionnée](https://github.com/sogoyou8/commerce-360/pull/9) · [galerie et présentation portfolio](../docs/e8-portfolio.md).
+
+Les cinq vues (Vue d'ensemble, Ventes, Livraisons, Qualité, Clients) sont publiées. Le panneau « À propos / Données » a été élargi et sa lisibilité améliorée. Les chiffres proviennent exclusivement d'agrégats historiques Olist (janvier 2017 – août 2018), pas de données actuelles ni d'une connexion SQL en temps réel.
+
+**Réserve d'accessibilité :** les tests automatisés ont été favorables, mais **aucun test humain NVDA/VoiceOver n'a été effectué** ; aucune certification WCAG n'est revendiquée.
+
+> **Archives de réalisation :** les jalons datés ci-dessous sont conservés pour la traçabilité. Les mentions « PR en brouillon » et « prévisualisation » décrivent leur état **à la date du jalon**, pas l'état actuel du projet.
+
+---
+
 ### Jalon 3/5 — redimensionnement (19/10/2026)
 
 Recette navigateur complète : 320/390/430/768/1024/1180/1440/1649/1920px sans overflow horizontal du document, ni vertical desktop ; 27 rangs, sélecteur mobile 27 options/44px ; focus conservé sur le SVG avec Entrée ; navigation Home/End dans les États, inspecteur et tri taux/délai vérifiés. Une dernière régression était visible lorsque la fenêtre passait directement du mobile au desktop après une sélection : le rang actif pouvait sortir de la fenêtre de défilement. `ResizeObserver` est maintenant limité au classement actif, déconnecté à chaque rendu et utilisé pour recentrer la sélection uniquement lors des changements de taille. Les KPI et données restent inchangés.
