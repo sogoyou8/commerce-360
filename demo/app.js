@@ -529,6 +529,7 @@ function renderRankRows(items, getLabel, getValue, selectedId, onSelect, formatt
   const max=Math.max(1,...items.map(getValue));
   const wrap=node("div","rank-chart");
   if(state.view==="customers"){
+    wrap.classList.add(state.customersView==="cohorts"?"rank-chart--cohorts":"rank-chart--segments");
     wrap.setAttribute("role","group");
     wrap.setAttribute("aria-label",state.customersView==="cohorts"?
       "20 cohortes historiques : utiliser les flèches haut et bas, Début et Fin pour changer de mois.":
@@ -753,7 +754,7 @@ function renderCustomers() {
     {label:"Réachat observé",value:percent(observedShare(t.repeatCustomers,t.customers)),note:"Fenêtre historique uniquement"},
     {label:"Segments RFM",value:n(data.segments.length),note:"Catégories mutuellement exclusives"},
   ]);
-  setViz("05 · SEGMENTATION RFM","Sept profils. Une même population.","Trier les profils selon le volume de clients ou la contribution en prix d'articles.","Sélectionner un segment pour voir son poids. Les ventes des segments s'additionnent, car les clients sont exclusifs.");
+  setViz("05 · SEGMENTATION RFM","Sept profils. Une même population.","Comparer les profils par nombre de clients, ventes d’articles ou réacheteurs observés.","Sélectionner un segment pour voir son poids. Les ventes des segments s'additionnent, car les clients sont exclusifs.");
   const customerOptions=[{key:"customers",title:"Clients"},{key:"salesBrl",title:"Ventes BRL"},{key:"repeats",title:"Réacheteurs"}];
   if(data.cohorts.length)customerOptions.push({key:"cohorts",title:"Cohortes"});
   setOptions(customerOptions,state.customersView==="cohorts"?"cohorts":measure,key=>{
