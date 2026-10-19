@@ -245,8 +245,8 @@ test("F3 HD asset dimensions and native alpha are validated",()=>{
 
 test("F5 upgrades all three exploration cards without altering the cockpit or data",()=>{
   const f5=readFileSync(new URL("../dock-f5.css",import.meta.url),"utf8");
-  assert.match(html,/dock-f5\.css\?v=e3-f5-20261019-a11y3/);
-  assert.match(html,/app\.js\?v=e3-20261019-f5-lazy-svg/);
+  assert.match(html,/dock-f5\.css\?v=e3-f5-20261019-a11y4/);
+  assert.match(html,/app\.js\?v=e3-20261019-f5-map-desc/);
   assert.match(f5,/#dock-categories \.dock-category-row/);
   assert.match(f5,/#dock-states \.dock-state-layout/);
   assert.match(f5,/#dock-quality \.score-ring/);
@@ -330,5 +330,22 @@ test("F5.3 contrast palette and touch zones preserve data without chart librarie
  assert.match(js,/queueBrazilMap\(holder\)/);
  assert.match(js,/Toucher un État pour explorer/);
  assert.doesNotMatch(js,/Chart\.js|Recharts|chart\.js/);
+ assert.doesNotMatch(f5,/\.workspace\s*\{|\.analysis\s*\{|\.metric\s*\{/);
+});
+
+test("F5.4 interactive SVG has real descriptive title/desc without invented statistics",()=>{
+ const f5=readFileSync(new URL("../dock-f5.css",import.meta.url),"utf8");
+ assert.match(html,/<meta name="viewport" content="width=device-width, initial-scale=1"/);
+ assert.match(js,/mapTitle\.textContent="Brésil : taux de retard des livraisons par État"/);
+ assert.match(js,/mapDesc\.textContent="Carte interactive des 27 États du Brésil/);
+ assert.match(js,/mapDesc\.textContent=[^;]*\+percent\(item\.rate\)[^;]*\+n\(item\.dated\)/);
+ assert.match(js,/svg\.setAttribute\("aria-labelledby","dock-brazil-title"\)/);
+ assert.match(js,/svg\.setAttribute\("aria-describedby","dock-brazil-desc"\)/);
+ assert.match(js,/svg\.setAttribute\("role","group"\)/);
+ assert.match(js,/svg\.addEventListener\("keydown",event=>/);
+ assert.doesNotMatch(js,/svg\.setAttribute\("role","img"\)/);
+ assert.match(f5,/#dock-categories \.dock-category-row\{min-height:44px\}/);
+ assert.match(f5,/#dock-states \.dock-state-row,\s*#dock-states \.dock-state-row--other\{min-height:44px\}/);
+ assert.match(f5,/\.dock-heading a\{\s*min-height:44px/);
  assert.doesNotMatch(f5,/\.workspace\s*\{|\.analysis\s*\{|\.metric\s*\{/);
 });

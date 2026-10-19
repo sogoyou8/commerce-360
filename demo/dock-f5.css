@@ -419,3 +419,32 @@
   #dock-states .brazil-map path.is-map-active{stroke:Highlight}
   .exploration-dock .dock-track>i{background:Highlight}
 }
+
+/* F5.4 — target-size follow-up. Text remains fully visible, including
+   residual rows. These rules are mobile-only; compact desktop is unchanged. */
+@media (max-width:480px){
+  .exploration-dock .dock-heading a{
+    min-height:44px;
+    min-width:54px;
+  }
+  .exploration-dock .dock-panel:has(#dock-categories){min-height:424px}
+  #dock-categories{
+    grid-template-rows:repeat(7,minmax(44px,1fr));
+    gap:2px;
+  }
+  #dock-categories .dock-category-row{min-height:44px}
+  .exploration-dock .dock-panel:has(#dock-states){min-height:548px}
+  #dock-states .dock-state-layout{min-height:422px}
+  #dock-states .dock-state-ranks{
+    grid-template-rows:repeat(6,minmax(44px,1fr));
+    min-height:264px;
+  }
+  #dock-states .dock-state-row,
+  #dock-states .dock-state-row--other{min-height:44px}
+  /* Preserve the native map path geometry. On tightly packed small states,
+     the separate 44px state-ranking buttons are the accessible tap alternative. */
+  .exploration-dock .dock-panel:has(#dock-quality){min-height:285px}
+}
+@media (prefers-reduced-motion:reduce){
+  #dock-states .brazil-map path{transition:none}
+}

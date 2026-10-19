@@ -1,3 +1,11 @@
+## F5.4 — Fin de l'audit accessibilité (19/10/2026)
+
+À la suite de la recherche approfondie, le dépôt confirme que les contrastes, les focus et l'absence de débordements étaient déjà traités ; la balise `<meta name="viewport">` était déjà présente. Corrections ciblées : la carte interactive du Brésil conserve `role="group"` et son fonctionnement flèches/Entrée ; elle comprend désormais des éléments SVG `<title>` et `<desc>` liés par `aria-labelledby`/`aria-describedby`. La description de l'État actif affiche uniquement le **taux de retard observé** et le nombre de **livraisons datées** du véritable jeu de données Olist, sans inventer de chiffres. Sur mobile ≤480px, les liens « Explorer » et les boutons de catégories et d'États passent à **44 px minimum**. La carte reste vectorielle, les petites zones géographiques restent la géométrie native, et la liste d'États offre l'alternative tactile de 44 px. Des cartes mobiles plus hautes autorisent un défilement vertical naturel, sans tronquer les chiffres.
+
+Tests source ajoutés. Vérifier en navigateur les tailles 320/390/430/480, les sept lignes de catégories et les six rangs d'États, les attributs SVG et la navigation clavier, ainsi que CI et Vercel READY sur le SHA du commit. F1–F4/F6 et `demo/data/public.json` sont inchangés. La PR #7 reste en brouillon et non fusionnée.
+
+---
+
 ## F5.3 — Accessibilité et coût réel de la carte (19/10/2026)
 
 Le rapport F5 recommandait couleurs WCAG, grandes cibles tactiles, performances et gestion des assets. La vérification du dépôt a révélé une **carte SVG native de 27 États (~65 Ko)**, des visualisations DOM/SVG, un `app.js` ES module d'environ 51 Ko et **aucune dépendance Chart.js/Recharts**, aucune rasterisation de carte et aucun bénéfice à imposer un build ou une conversion WebP.

@@ -672,8 +672,20 @@ function renderBrazilMap() {
     return holder;
   }
   const svg=document.importNode(brazilMapTemplate,true);
+  // The map is a keyboard-operable group: role="img" would hide its
+  // interaction semantics. Title and description describe real Olist data.
+  const svgNs="http://www.w3.org/2000/svg";
+  const mapTitle=document.createElementNS(svgNs,"title");
+  mapTitle.id="dock-brazil-title";
+  mapTitle.textContent="Brésil : taux de retard des livraisons par État";
+  const mapDesc=document.createElementNS(svgNs,"desc");
+  mapDesc.id="dock-brazil-desc";
+  svg.insertBefore(mapDesc,svg.firstChild);
+  svg.insertBefore(mapTitle,svg.firstChild);
   svg.removeAttribute("aria-label");
   svg.setAttribute("role","group");
+  svg.setAttribute("aria-labelledby","dock-brazil-title");
+  svg.setAttribute("aria-describedby","dock-brazil-desc");
   svg.setAttribute("tabindex","0");
   svg.setAttribute("class","brazil-map");
   const regionsByCode=new Map(data.states.map(item=>[item.code,item]));
@@ -684,7 +696,7 @@ function renderBrazilMap() {
     for(const path of svg.querySelectorAll("path[id]"))
       path.classList.toggle("is-map-active",path.id.toUpperCase()===activeCode);
     const item=regionsByCode.get(activeCode);
-    svg.setAttribute("aria-label","Carte interactive des 27 États. "+activeCode+" : "+percent(item.rate)+" de retard. Toucher un État pour explorer, ou utiliser les flèches et Entrée au clavier.");
+    mapDesc.textContent="Carte interactive des 27 États du Brésil. Les nuances bleues indiquent le taux de retard des livraisons datées, pas le volume. État sélectionné : "+activeCode+", "+percent(item.rate)+" de retard parmi "+n(item.dated)+" livraisons datées. Toucher un État ou utiliser les flèches, puis Entrée, pour explorer les données.";
   };
   for(const path of svg.querySelectorAll("path[id]")){
     const code=path.id.toUpperCase();
