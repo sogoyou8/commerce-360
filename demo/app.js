@@ -431,6 +431,8 @@ function renderYearBars() {
     const observer=new ResizeObserver(()=>{if(centerActive())observer.disconnect();});
     observer.observe(yearScroll);
     requestAnimationFrame(()=>{if(centerActive())observer.disconnect();});
+    // Font/layout stabilization may occur after the first frame on a cold load.
+    setTimeout(()=>{if(centerActive())observer.disconnect();},120);
   }
   const selectedDiff=(chosen.current[measure]/chosen.previous[measure]-1)*100;
   setStory({
